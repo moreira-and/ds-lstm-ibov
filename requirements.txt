@@ -18,6 +18,7 @@ ruff
 
 scikit-learn
 keras
+tensorflow
 
 tqdm
 typer
