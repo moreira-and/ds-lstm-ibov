@@ -5,7 +5,7 @@ from loguru import logger
 from tqdm import tqdm
 import typer
 
-from src.config import PROCESSED_DATA_DIR, RAW_DATA_DIR, CONFIG_DIR
+from src.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
 from src.utils.dataset_loader import MultiLoader
 from src.utils.clean_handler import CleanPipeline
 
