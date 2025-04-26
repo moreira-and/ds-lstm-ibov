@@ -4,12 +4,11 @@ import yaml
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Any, Dict, List
-
 import pandas as pd
 
 from src.config import CONFIG_DIR
 
-from src.utils.market_config import MarketConfig
+from src.utils.market_config_loader import MarketConfigLoader
 from src.utils.config_loader import ConfigLoader
 
 import yfinance as yf
@@ -33,29 +32,44 @@ class MultiLoader(DatasetLoader):
         self.end_date = end_date
 
     def load(self) -> Dict[str, pd.DataFrame]:
-        pass
-    
+        try:
+            dataset = {}
+            dataset['Yfinance'] = YfinanceLoader(self.start_date,self.end_date).load()
+            dataset['Bcb'] =  BcbLoader(self.start_date,self.end_date).load()
+            dataset['PandasReader'] = DataReaderLoader(self.start_date,self.end_date).load()
+
+            return dataset
+        
+        except Exception as e:
+            logger.error(f'Error loading data in {self.__class__}: {e}')
+
+
 class YfinanceLoader(DatasetLoader):
     def __init__(self, start_date: str, end_date: str):
         self.start_date = start_date
         self.end_date = end_date
-        self._config = MarketConfig().tickers
+        self._config = MarketConfigLoader().tickers
 
     def load(self) -> Dict[str, pd.DataFrame]:
-        yf_data = {}
+        try:
+            yf_data = {}
 
-        for nome, ticker in self._config.items():
-            print(f'Downloading {nome} ({ticker}) from yfinance...')
-            try:
-                df_ticker = pd.DataFrame(yf.download(ticker, start=self.start_date, end=self.end_date))
-                if not df_ticker.empty:
-                    yf_data[nome] = df_ticker
-                else:
-                    print(f'Warning: No data returned for {ticker}')
-            except Exception as e:
-                print(f'Error loading {ticker}: {e}')
+            for nome, ticker in self._config.items():
+                print(f'Downloading {nome} ({ticker}) from yfinance...')
 
-        return yf_data
+                try:
+                    df_ticker = yf.download(ticker, start=self.start_date, end=self.end_date)
+                    if (not df_ticker.empty):
+                        yf_data[nome] = df_ticker
+                    else:
+                        print(f'Warning: No data returned for {ticker}')
+                except Exception as e:
+                    print(f'Error loading {ticker}: {e}')
+
+            return yf_data
+        except Exception as e:
+            logger.error(f'Error loading data in {self.__class__}: {e}')
+            pass
     
 
     
@@ -63,23 +77,29 @@ class BcbLoader(DatasetLoader):
     def __init__(self, start_date: str, end_date: str):
         self.start_date = start_date
         self.end_date = end_date
-        self._config = MarketConfig().sgs_codes
+        self._config = MarketConfigLoader().sgs_codes
 
     def load(self) -> Dict[str, pd.DataFrame]:
-        bcb_data = {}
-        for name, ticker  in self._config.items():
-            print(f"Downloading {name} ({ticker}) from the Central Bank of Brazil API...")
-            try:
-                df_ticker = pd.DataFrame(self._request_bcb_series(ticker))
-                if not df_ticker.empty:
-                    bcb_data[name] = df_ticker
-                else:
-                    print(f'Warning: No data returned for {ticker}')
-            except Exception as e:
-                print(f'Error loading {ticker}: {e}')
+        try:
+            bcb_data = {}
+            for name, ticker  in self._config.items():
+                print(f"Downloading {name} ({ticker}) from the Central Bank of Brazil API...")
+                try:
+                    df_ticker = pd.DataFrame(self._request_bcb_series(ticker))
+                    if not df_ticker.empty:
+                        df_ticker['data'] = pd.to_datetime(df_ticker['data'])
+                        df_ticker.set_index('data',inplace=True)
+                        bcb_data[name] = df_ticker.rename(columns={"valor": name})
+                    else:
+                        print(f'Warning: No data returned for {ticker}')
+                except Exception as e:
+                    print(f'Error loading {ticker}: {e}')
+                    pass
 
-        return bcb_data
-
+            return bcb_data
+        except Exception as e:
+            logger.error(f'Error loading data in {self.__class__}: {e}')
+    
     def _request_bcb_series(self, sgs_code):
         url = f'https://api.bcb.gov.br/dados/serie/bcdata.sgs.{sgs_code}/dados'
         params = {
@@ -110,7 +130,7 @@ class DataReaderLoader(DatasetLoader):
     def __init__(self, start_date: str, end_date: str):
         self.start_date = start_date
         self.end_date = end_date
-        self._config = MarketConfig().datareader_codes
+        self._config = MarketConfigLoader().datareader_codes
 
     def load(self) -> Dict[str, pd.DataFrame]:
         dr_data = {}
@@ -118,7 +138,7 @@ class DataReaderLoader(DatasetLoader):
         for ticker, name in self._config.items():
             print(f'Downloading {name} ({ticker}) from DataReader...')
             try:
-                df_ticker =  pd.DataFrame(pdr.DataReader(ticker, 'fred', start=self.start_date, end=self.end_date))
+                df_ticker =  pdr.DataReader(ticker, 'fred', start=self.start_date, end=self.end_date)
                 if not df_ticker.empty:
                     dr_data[name] = df_ticker
                 else:

@@ -2,7 +2,7 @@ from typing import Dict
 from src.utils.config_loader import ConfigLoader
 from src.config import CONFIG_DIR
 
-class MarketConfig:
+class MarketConfigLoader:
     def __init__(self):
         self.loader = ConfigLoader(CONFIG_DIR / 'dataset.yaml')
 
