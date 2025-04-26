@@ -49,7 +49,7 @@ def main(
         logger.error(f"Error loading raw data: {e}")
     
     df_raw.to_csv(RAW_DATA_DIR / 'dataset.csv')
-    df_raw = pd.read_csv(RAW_DATA_DIR / 'dataset.csv', index_col=0) # Garantir acoplamento
+    df_raw = pd.read_csv(RAW_DATA_DIR / 'dataset.csv', index_col=0) # ensure coupling
 
     logger.success("Raw data successfully loaded...")
 
