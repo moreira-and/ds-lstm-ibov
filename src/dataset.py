@@ -6,12 +6,14 @@ import typer
 
 from src.config import PROCESSED_DATA_DIR, RAW_DATA_DIR, CONFIG_DIR
 from src.utils.dataset_loader import MultiLoader
+from src.utils.clean_handler import ClearPipeline
+from src.utils.model_handler import LstmHandler
 
 import datetime as dt
 
 import pandas as pd
 
-from sklearn.model_selection import train_test_split
+
 
 app = typer.Typer()
 
@@ -49,11 +51,11 @@ def main(
 
     logger.success("Raw data successfully loaded...")  # se estiver usando `loguru`
 
-    df_cleaned = CleanHandler().clear(df_raw)
+    df_cleaned = ClearPipeline(df_raw).fit()
 
-    df_train, df_test = ModelHandler().train_test_split(df_cleaned)
+    df_train, df_test = LstmHandler().train_test_split(df_cleaned)
 
-    logger.info("Packing raw dataset...")
+    # logger.info("Packing raw dataset...")
     # logger.info("Splitting dataset into training and test sets...")
 
     # X,y = slipt...
