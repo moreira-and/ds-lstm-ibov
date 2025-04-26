@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import List
 
 from loguru import logger
 from tqdm import tqdm
@@ -6,8 +7,7 @@ import typer
 
 from src.config import PROCESSED_DATA_DIR, RAW_DATA_DIR, CONFIG_DIR
 from src.utils.dataset_loader import MultiLoader
-from src.utils.clean_handler import ClearPipeline
-from src.utils.model_handler import LstmHandler
+from src.utils.clean_handler import CleanPipeline
 
 import datetime as dt
 
@@ -21,7 +21,8 @@ app = typer.Typer()
 @app.command()
 def main(
     # ----  DEFAULT PATHS --------------------------
-    # target: List[] = ['']
+    asset: str = '^BVSP',
+    asset_focus: str = 'Close'
     # ----------------------------------------------
 ):
     # -----------------------------------------
@@ -48,17 +49,23 @@ def main(
         logger.error(f"Error loading raw data: {e}")
     
     df_raw.to_csv(RAW_DATA_DIR / 'dataset.csv')
+    df_raw = pd.read_csv(RAW_DATA_DIR / 'dataset.csv', index_col=0) # Garantir acoplamento
 
-    logger.success("Raw data successfully loaded...")  # se estiver usando `loguru`
+    logger.success("Raw data successfully loaded...")
 
-    df_cleaned = ClearPipeline(df_raw).fit()
+    # Supondo df como seu DataFrame
+    target_cols = [col for col in df_raw.columns if asset in col]
+    target_col = [col for col in target_cols if asset_focus in col]
+    y = df_raw[target_col]  # This column is kept only for cleaning purposes.
+    X = df_raw.drop(columns=target_col) 
+    X_clean, y_clean = CleanPipeline().clear(X, y)
 
-    df_train, df_test = LstmHandler().train_test_split(df_cleaned)
+    df_clean = pd.concat([X_clean,y_clean],axis=1)
 
-    # logger.info("Packing raw dataset...")
-    # logger.info("Splitting dataset into training and test sets...")
+    df_clean.to_csv(PROCESSED_DATA_DIR / 'dataset.csv')
+    logger.success("Clean data successfully loaded...")
 
-    # X,y = slipt...
+
     # -----------------------------------------
 
 

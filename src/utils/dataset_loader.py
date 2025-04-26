@@ -37,7 +37,6 @@ class MultiLoader(DatasetLoader):
             dataset['Yfinance'] = YfinanceLoader(self.start_date,self.end_date).load()
             dataset['Bcb'] =  BcbLoader(self.start_date,self.end_date).load()
             dataset['PandasReader'] = DataReaderLoader(self.start_date,self.end_date).load()
-
             return dataset
         
         except Exception as e:
@@ -104,8 +103,8 @@ class BcbLoader(DatasetLoader):
         url = f'https://api.bcb.gov.br/dados/serie/bcdata.sgs.{sgs_code}/dados'
         params = {
             'formato': 'json',
-            'dataInicial': pd.to_datetime(self.start_date).strftime('%d/%m/%Y'),
-            'dataFinal': pd.to_datetime(self.end_date).strftime('%d/%m/%Y'),
+            'dataInicial': pd.to_datetime(self.start_date, dayfirst=True, format = '%d/%m/%Y').strftime('%d/%m/%Y'),
+            'dataFinal': pd.to_datetime(self.end_date, dayfirst=True,format = '%d/%m/%Y').strftime('%d/%m/%Y'),
         }
 
         try:
