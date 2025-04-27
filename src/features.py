@@ -5,6 +5,10 @@ from tqdm import tqdm
 import typer
 
 from src.config import PROCESSED_DATA_DIR
+from src.utils.model_handler import ModelHandler
+
+
+import pandas as pd
 
 app = typer.Typer()
 
@@ -13,14 +17,19 @@ app = typer.Typer()
 def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
     input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
-    output_path: Path = PROCESSED_DATA_DIR / "features.csv",
+    train_path: Path = PROCESSED_DATA_DIR / "train.csv",
+    test_path: Path = PROCESSED_DATA_DIR / "test.csv",
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
     logger.info("Generating features from dataset...")
-    for i in tqdm(range(10), total=10):
-        if i == 5:
-            logger.info("Something happened for iteration 5.")
+    
+    dataset = pd.read_csv(input_path, index_col=0)
+
+    handler = ModelHandler(dataset)
+
+    
+
     logger.success("Features generation complete.")
     # -----------------------------------------
 
