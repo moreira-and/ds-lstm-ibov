@@ -5,7 +5,7 @@ from tqdm import tqdm
 import typer
 
 from src.config import PROCESSED_DATA_DIR
-from src.utils.model_handler import ModelHandler
+from src.utils.prepare_strategy import ModelHandler
 
 
 import pandas as pd
