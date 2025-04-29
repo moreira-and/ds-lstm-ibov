@@ -22,12 +22,12 @@ app = typer.Typer()
 def main(
     # ----  DEFAULT PATHS --------------------------
     asset: str = '^BVSP',
-    asset_focus: str = 'Close'
+    asset_focus: str = 'Close',
+    years: int = 10
     # ----------------------------------------------
 ):
     # -----------------------------------------
     logger.info("Starting raw data loading...")
-    years = 10
     end_date = dt.datetime.now().date()
     start_date = (end_date - dt.timedelta(days=years*365))
     
