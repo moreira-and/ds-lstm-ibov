@@ -2,9 +2,9 @@ from typing import Any
 
 import numpy as np
 
-from src.utils.splitter_strategy import SplitterStrategy
-from src.utils.preprocessor_strategy import PreprocessorStrategy
-from src.utils.generator_strategy import GeneratorStrategy
+from splitter_strategy import SplitterStrategy
+from preprocessor_strategy import PreprocessorStrategy
+from generator_strategy import GeneratorStrategy
 
 from abc import ABC, abstractmethod
 
@@ -15,7 +15,7 @@ class PrepareDataTemplate(ABC):
         pass
 
 
-class LstmPrepareTemplate(PrepareDataTemplate):
+class LstmPrepareDataTemplate(PrepareDataTemplate):
     def __init__(self, dataset, splitter: SplitterStrategy, preprocessor: PreprocessorStrategy, generator: GeneratorStrategy):
         self.dataset = dataset
         self.splitter = splitter

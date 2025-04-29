@@ -7,10 +7,10 @@ import typer
 
 from src.config import logger, PROCESSED_DATA_DIR
 
-from src.utils.prepare_strategy import LstmPrepareTemplate
-from src.utils.splitter_strategy import SequentialSplitter
-from src.utils.preprocessor_strategy import DefaultPreprocessor
-from src.utils.generator_strategy import TimeseriesGeneratorStrategy
+from utils.features.prepare_data_template import LstmPrepareDataTemplate
+from utils.features.splitter_strategy import SequentialSplitter
+from utils.features.preprocessor_strategy import DefaultPreprocessor
+from utils.features.generator_strategy import TimeseriesGeneratorStrategy
 
 import numpy as np
 import pandas as pd
@@ -32,16 +32,16 @@ def main(
     logger.info("Generating features from dataset...")
 
     try:
-        prepare_template = LstmPrepareTemplate(
+        prepare_data_template = LstmPrepareDataTemplate(
             dataset = pd.read_csv(input_path, index_col=0).sort_index(),
             splitter=SequentialSplitter(),
             preprocessor=DefaultPreprocessor(),
             generator = TimeseriesGeneratorStrategy()
             )
         
-        prepare_template.prepare_data()
+        prepare_data_template.prepare_data()
 
-        X_train,X_test,y_train, y_test = prepare_template.get_data()
+        X_train,X_test,y_train, y_test = prepare_data_template.get_data()
 
         logger.success(f"Saving train features in {train_dir}...")
         np.save(train_dir / 'X_train.npy',X_train)
@@ -53,8 +53,8 @@ def main(
     
         logger.success("Features generation complete.")
 
-        joblib.dump(prepare_template.preprocessor, train_dir / 'preprocessor.joblib')
-        joblib.dump(prepare_template.generator, train_dir / 'generator.joblib')
+        joblib.dump(prepare_data_template.preprocessor, train_dir / 'preprocessor.joblib')
+        joblib.dump(prepare_data_template.generator, train_dir / 'generator.joblib')
 
     except Exception as e:
         logger.error(f"An error occurred: {e}")
