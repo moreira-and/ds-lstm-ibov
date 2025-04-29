@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
-
+from src.config import logger
 
 class SplitterStrategy(ABC):
     @abstractmethod
-    def split(self,dataset):
+    def split(self,X, y=None):
         pass
 
 
@@ -12,6 +12,7 @@ class SequentialSplitter(SplitterStrategy):
         self.train_size_ratio = train_size_ratio
 
     def split(self, X, y=None):
+        logger.info("Splitting dataset into training and testing sets...")
 
         X_train_size = int(len(X) * self.train_size_ratio)
 
