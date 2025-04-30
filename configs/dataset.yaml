@@ -1,31 +1,28 @@
 yfinance:
-  tickers_code:
-    BOVESPA: "^BVSP"
-    S&P500: "^GSPC"
-    BITCOIN: "BTC-USD"
-    OURO: "GC=F"
-    PETROLEO: "CL=F"
-    ACUCAR: "SB=F"
+  BOVESPA: "^BVSP"
+  S&P500: "^GSPC"
+  BITCOIN: "BTC-USD"
+  OURO: "GC=F"
+  PETROLEO: "CL=F"
+  ACUCAR: "SB=F"
 
 bcb:
-  sgs_code:
-    SELIC: 11
-    CDI: 12
-    SELIC_Anual: 1178
-    SELIC_Meta_Anual: 432
-    IPCA_Mensal: 433
-    IGP_M_Mensal: 189
-    INCC_Mensal: 192
-    Indice_Condicoes_Econ_BR: 27574
-    Indice_Condicoes_Econ_BR_USD: 29042
-    Salario_Minimo: 1619
-    IBC_BR: 24363
-    Populacao_BR: 21774
-    PIB_Trimestral_Real: 4380
-    PIB_Anual_Corrente: 7326
-    Deflator_Implicito_PIB: 1211
+  SELIC: 11
+  CDI: 12
+  SELIC_Anual: 1178
+  SELIC_Meta_Anual: 432
+  IPCA_Mensal: 433
+  IGP_M_Mensal: 189
+  INCC_Mensal: 192
+  Indice_Condicoes_Econ_BR: 27574
+  Indice_Condicoes_Econ_BR_USD: 29042
+  Salario_Minimo: 1619
+  IBC_BR: 24363
+  Populacao_BR: 21774
+  PIB_Trimestral_Real: 4380
+  PIB_Anual_Corrente: 7326
+  Deflator_Implicito_PIB: 1211
 
 DataReader:
-  reader_code:
-    DEXBZUS: BRL_USD
-    CPIAUCSL: CPI_USA
+  DEXBZUS: BRL_USD
+  CPIAUCSL: CPI_USA

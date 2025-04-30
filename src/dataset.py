@@ -1,4 +1,5 @@
 from pathlib import Path
+import time
 from typing import List
 
 from loguru import logger
@@ -6,8 +7,10 @@ from tqdm import tqdm
 import typer
 
 from src.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
-from src.utils.dataset_loader import MultiLoader
-from src.utils.clean_handler import CleanPipeline
+from utils.dataset.dataset_loading_strategy import DatasetMultiLoader, YfinanceLoadingStrategy, BcbLoadingStrategy, DataReaderLoadingStrategy
+
+from utils.dataset.clean_strategy import CleanPipeline, CleanMissingValues, CleanLowVariance, CleanGenericUnivariate
+from sklearn.feature_selection import (f_classif, f_regression)
 
 import datetime as dt
 
@@ -27,14 +30,22 @@ def main(
     # ----------------------------------------------
 ):
     # -----------------------------------------
+    start_time = time.time()
     logger.info("Starting raw data loading...")
+    
     end_date = dt.datetime.now().date()
     start_date = (end_date - dt.timedelta(days=years*365))
     
 
     logger.info(f'Requesting information between {start_date} and {end_date}')
     try:
-        dict_raw = MultiLoader(start_date,end_date).load()
+        loaders = DatasetMultiLoader([
+            YfinanceLoadingStrategy(start_date, end_date),
+            BcbLoadingStrategy(start_date, end_date),
+            DataReaderLoadingStrategy(start_date, end_date)
+        ])
+
+        dict_raw = loaders.load()
 
         df_raw = pd.DataFrame()
 
@@ -57,15 +68,25 @@ def main(
     target_cols = [col for col in df_raw.columns if asset in col]
     target_col = [col for col in target_cols if asset_focus in col]
     y = df_raw[target_col]  # This column is kept only for cleaning purposes.
-    X = df_raw.drop(columns=target_col) 
-    X_clean, y_clean = CleanPipeline().clear(X, y)
+    X = df_raw.drop(columns=target_col)
+
+    clean_pipeline = CleanPipeline([
+            CleanMissingValues(),
+            CleanLowVariance(),
+            CleanGenericUnivariate(f_classif, "percentile", 95),
+            CleanGenericUnivariate(f_regression, "percentile", 95)
+            ])
+
+    X_clean, y_clean = clean_pipeline.clear(X, y)
 
     df_clean = pd.concat([X_clean,y_clean],axis=1)
 
     df_clean.to_csv(PROCESSED_DATA_DIR / 'dataset.csv')
     logger.success("Clean data successfully loaded...")
 
-
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    logger.info(f"Total time taken: {elapsed_time:.2f} seconds")
     # -----------------------------------------
 
 

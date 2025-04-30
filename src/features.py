@@ -10,7 +10,7 @@ from src.config import logger, PROCESSED_DATA_DIR
 from utils.features.prepare_data_template import LstmPrepareDataTemplate
 from utils.features.splitter_strategy import SequentialSplitter
 from utils.features.preprocessor_strategy import DefaultPreprocessor
-from utils.features.generator_strategy import TimeseriesGeneratorStrategy
+from utils.features.generator_strategy import TimeseriesGenerator
 
 import numpy as np
 import pandas as pd
@@ -36,7 +36,7 @@ def main(
             dataset = pd.read_csv(input_path, index_col=0).sort_index(),
             splitter=SequentialSplitter(),
             preprocessor=DefaultPreprocessor(),
-            generator = TimeseriesGeneratorStrategy()
+            generator = TimeseriesGenerator()
             )
         
         prepare_data_template.prepare_data()

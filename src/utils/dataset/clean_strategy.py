@@ -4,7 +4,7 @@ from typing import Any, Optional, Tuple, Union
 import pandas as pd
 import numpy as np
 
-from sklearn.feature_selection import (GenericUnivariateSelect, f_classif, f_regression, VarianceThreshold, SequentialFeatureSelector)
+from sklearn.feature_selection import (GenericUnivariateSelect, VarianceThreshold, SequentialFeatureSelector)
 from sklearn.linear_model import LinearRegression
 
 import logging
@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Abstract base class for data cleaning handlers
-class CleanHandler(ABC):
+class CleanStrategy(ABC):
     @abstractmethod
     def clear(self, 
               X: Union[pd.DataFrame, np.ndarray], 
@@ -27,23 +27,17 @@ class CleanHandler(ABC):
         pass
 
 # Pipeline for cleaning data by applying multiple cleaning steps sequentially
-class CleanPipeline(CleanHandler):
+class CleanPipeline(CleanStrategy):
     '''
     This class allows for applying a series of cleaning steps to the data in sequence.
     '''
-    def __init__(self, steps: list = None):
+    def __init__(self, steps: list):
         """
         Initializes the pipeline with a list of cleaning steps.
 
         :param steps: A list of CleanHandler objects that will be applied sequentially.
         """
-        self.steps = steps or [
-            CleanMissingValues(),
-            CleanLowVariance(),
-            #CleanHighCorrelation(),
-            CleanGenericUnivariate(f_classif, "percentile", 95),
-            CleanGenericUnivariate(f_regression, "percentile", 95)
-            ]
+        self.steps = steps
 
     def clear(self, X, y=None):
         """
@@ -58,7 +52,7 @@ class CleanPipeline(CleanHandler):
         return X, y
 
 # Class to handle missing values in the data by filling forward and backward
-class CleanMissingValues(CleanHandler):
+class CleanMissingValues(CleanStrategy):
     def clear(self, 
               X: Union[pd.DataFrame, np.ndarray], 
               y: Optional[Union[pd.Series, np.ndarray]] = None
@@ -90,7 +84,7 @@ class CleanMissingValues(CleanHandler):
         return X_new, y_new
 
 # Class to remove features with low variance
-class CleanLowVariance(CleanHandler):
+class CleanLowVariance(CleanStrategy):
     def __init__(self, threshold: float = 0.01):
         """
         Initialize the class with a threshold for variance.
@@ -128,7 +122,7 @@ class CleanLowVariance(CleanHandler):
         return X_new, y
 
 # Class to remove features that are highly correlated
-class CleanHighCorrelation(CleanHandler):
+class CleanHighCorrelation(CleanStrategy):
     def __init__(self, correlation_threshold: float = 0.95):
         """
         Initialize the class with a correlation threshold.
@@ -164,13 +158,13 @@ class CleanHighCorrelation(CleanHandler):
         return X_new, y
 
 # Class to select features based on univariate statistical tests (e.g., ANOVA F-test)
-class CleanGenericUnivariate(CleanHandler):
+class CleanGenericUnivariate(CleanStrategy):
     '''
     Score functions (f_classif, f_regression, chi2, etc.)
     mode ("percentile","k_best","fpr","fdr","fwe")
     param (threshold or number of features)
     '''
-    def __init__(self, score_func=None, mode=None, param=None):
+    def __init__(self, score_func, mode=None, param=None):
         """
         Initialize the class with the score function, mode, and parameter for feature selection.
 
@@ -178,7 +172,7 @@ class CleanGenericUnivariate(CleanHandler):
         :param mode: The mode of feature selection (e.g., percentile, k_best, etc.).
         :param param: The parameter for the selected mode (e.g., percentile value or number of features).
         """
-        self._score_func = score_func or f_regression
+        self._score_func = score_func
         self._mode = mode or 'percentile'
         self._param = param or 20
 
@@ -210,7 +204,7 @@ class CleanGenericUnivariate(CleanHandler):
         return X_new, y
 
 # Class to apply sequential feature selection
-class CleanSequential(CleanHandler):
+class CleanSequential(CleanStrategy):
     def __init__(self, model=None, n_features_to_select=None, direction=None):
         """
         Initialize the class with the model and parameters for sequential feature selection.

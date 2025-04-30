@@ -2,7 +2,7 @@ import yaml
 from pathlib import Path
 from typing import Any, Dict
 
-class ConfigLoader:
+class ConfigWrapper:
     def __init__(self, config_path: str):
         self.path = Path(config_path)
         self.config = self._load()
@@ -13,8 +13,8 @@ class ConfigLoader:
         with open(self.path, "r") as f:
             return yaml.safe_load(f)
 
-    def get(self, *keys: str, default: Any = None) -> Any:
+    def get(self, *keys: str) -> Any:
         data = self.config
         for key in keys:
             data = data.get(key, {})
-        return data or default
+        return data
