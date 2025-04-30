@@ -2,9 +2,10 @@ from typing import Any
 
 import numpy as np
 
-from splitter_strategy import SplitterStrategy
-from preprocessor_strategy import PreprocessorStrategy
-from generator_strategy import GeneratorStrategy
+from src.utils.features.splitter_strategy import SplitterStrategy
+
+from src.utils.features.preprocessor_strategy import PreprocessorStrategy
+from src.utils.features.generator_strategy import GeneratorStrategy
 
 from abc import ABC, abstractmethod
 

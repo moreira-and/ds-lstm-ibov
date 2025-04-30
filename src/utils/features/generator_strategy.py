@@ -8,7 +8,7 @@ class GeneratorStrategy(ABC):
     def generate(self, data):
         pass
 
-class TimeseriesGenerator(GeneratorStrategy):
+class DefaultGenerator(GeneratorStrategy):
     def __init__(self, sequence_length=7, batch_size=1):
         self.sequence_length = sequence_length
         self.batch_size = batch_size
