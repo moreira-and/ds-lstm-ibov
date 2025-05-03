@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import joblib
 from loguru import logger
 from tqdm import tqdm
 import typer
@@ -18,30 +19,50 @@ app = typer.Typer()
 @app.command()
 def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    features_path: Path = PROCESSED_DATA_DIR / "features.csv",
-    labels_path: Path = PROCESSED_DATA_DIR / "labels.csv",
-    model_path: Path = MODELS_DIR / "model.pkl",
+    X_path: Path = PROCESSED_DATA_DIR / "X_train.npy",
+    y_path: Path = PROCESSED_DATA_DIR / "y_train.npy"
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
-    logger.info("Training some model...")
+    logger.info("Loading training dataset...")
 
-    X_train = np.load(PROCESSED_DATA_DIR / X_train)
-    y_train = np.load(PROCESSED_DATA_DIR / y_train)
+    X_train = np.load(X_path)
+    y_train = np.load(y_path)
 
-    builder = LstmModelBuilder()
+    input_shape = X_train.shape[1:]
+    output_shape = y_train.shape[1:]
 
+    logger.info("Building model...")
+    builder = LstmModelBuilder(
+            input_shape = input_shape,
+            output_shape = output_shape
+        )
+
+    logger.info("Selecting compile strategy...")
     compiler = ClassificationCompileStrategy()
 
+    logger.info("Selecting training strategy...")
     trainer = BasicTrainStrategy()
 
+    logger.info("Building model training pipeline template...")   
     template = ModelKerasPipeline(
         builder=builder,
         compiler=compiler,
         trainer=trainer
     )
 
-    model = template.run(X_train,y_train)
+    logger.info("Training model...")
+
+    model, history = template.run(X_train,y_train)
+        
+    final_epoch = history.epoch[-1]
+    final_loss = history.history['loss'][-1]
+
+    model_name = f'{model.__class__.__name__}_epoch{final_epoch}_loss{final_loss:.4f}.keras'
+
+    logger.info(f"Saving '{model_name}' in '{MODELS_DIR}'...")
+
+    model.save(MODELS_DIR / model_name)
 
     logger.success("Modeling training complete.")
     # -----------------------------------------

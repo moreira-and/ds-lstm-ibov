@@ -7,6 +7,7 @@ import numpy as np
 
 from abc import ABC
 
+from src.config import logger
 from src.utils.train.model_builder import ModelBuilder
 from src.utils.train.compile_strategy import CompileStrategy
 from src.utils.train.train_strategy import TrainStrategy
@@ -23,7 +24,10 @@ class ModelKerasPipeline(ModelTemplate):
         self.trainer = trainer
 
     def run(self, X_train, y_train):
-        model = self.builder.build_model()
-        self.compiler.compile(model)
-        history = self.trainer.train(model, X_train, y_train)
-        return self.model, history
+        try:
+            model = self.builder.build_model()
+            self.compiler.compile(model)
+            history = self.trainer.train(model, X_train, y_train)
+            return model, history
+        except Exception as e:
+            logger.error(f'Error running {self.__class__.__name__}: {e}')
