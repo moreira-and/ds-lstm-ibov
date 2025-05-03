@@ -6,6 +6,7 @@ from src.utils.features.splitter_strategy import SplitterStrategy
 
 from src.utils.features.preprocessor_strategy import PreprocessorStrategy
 from src.utils.features.generator_strategy import GeneratorStrategy
+from src.utils.features.transformer_builder import PreprocessorAndTimeSeries, TransformerBuilder
 
 from abc import ABC, abstractmethod
 
@@ -13,6 +14,10 @@ from abc import ABC, abstractmethod
 class PrepareDataTemplate(ABC):
     @abstractmethod
     def prepare_data(self):
+        pass
+    
+    @abstractmethod
+    def get_transformer(self) -> TransformerBuilder: 
         pass
 
 
@@ -47,5 +52,13 @@ class LstmPrepareDataTemplate(PrepareDataTemplate):
         self._X_test = np.array([generator[i][0][0] for i in range(n_total - (n_test+1), n_total)])
         self._y_test = np.array([generator[i][1][0] for i in range(n_total - (n_test+1), n_total)])
 
+    def get_transformer(self) -> TransformerBuilder:
+        return PreprocessorAndTimeSeries(
+            preprocessor=self.preprocessor,
+            generator=self.generator
+        )
+
+
     def get_data(self):
-        return self._X_train,self._X_test,self._y_train,self._y_test
+        return self._X_train,self._X_test,self._y_train,self._y_test   
+
