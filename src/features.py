@@ -56,6 +56,8 @@ def main(
         joblib.dump(prepare_data_template.preprocessor, train_dir / 'preprocessor.joblib')
         joblib.dump(prepare_data_template.generator, train_dir / 'generator.joblib')
 
+        # Pending: include postprocessor
+
     except Exception as e:
         logger.error(f"An error occurred: {e}")
         return
