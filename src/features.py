@@ -9,7 +9,7 @@ from src.config import logger, PROCESSED_DATA_DIR
 
 from utils.features.prepare_data_template import LstmPrepareDataTemplate
 from utils.features.splitter_strategy import SequentialSplitter
-from utils.features.preprocessor_strategy import DefaultPreprocessor
+from src.utils.features.preprocessor_strategy import DefaultPreprocessor
 from utils.features.generator_strategy import DefaultGenerator
 
 import numpy as np
@@ -53,8 +53,11 @@ def main(
     
         logger.success("Features generation complete.")
 
-        joblib.dump(prepare_data_template.preprocessor, train_dir / 'preprocessor.joblib')
-        joblib.dump(prepare_data_template.generator, train_dir / 'generator.joblib')
+        preprocessor, generator, postprocessor = prepare_data_template.get_transformers()
+
+        joblib.dump(preprocessor, train_dir / 'preprocessor.joblib')
+        joblib.dump(generator, train_dir / 'generator.joblib')
+        joblib.dump(postprocessor, train_dir / 'postprocessor.joblib')
 
         # Pending: include postprocessor
 

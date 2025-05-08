@@ -18,29 +18,37 @@ class PreprocessorStrategy(ABC):
     def fit_transform(self, X, y=None):
         pass
 
-
 class DefaultPreprocessor(PreprocessorStrategy):
-    def __init__(self):
-        self.pipeline = Pipeline(steps=[
-            ('preprocessor', ColumnTransformer(
-                transformers=[
-                    ('scaler', StandardScaler(), make_column_selector(dtype_include="number")),
-                    ('encoder', OneHotEncoder(), make_column_selector(dtype_include="object"))
-                ],
-                remainder='passthrough'
-            ))
-        ])
+    def __init__(self, 
+                 numeric_transformer=StandardScaler(),
+                 categorical_transformer=OneHotEncoder(sparse_output=False, handle_unknown='ignore')):
+        self._numeric_transformer = numeric_transformer
+        self._categorical_transformer = categorical_transformer
+
+        self.column_transformer = ColumnTransformer(
+            transformers=[
+                ('numeric', self._numeric_transformer, make_column_selector(dtype_include="number")),
+                ('categorical', self._categorical_transformer, make_column_selector(dtype_include="object"))
+            ],
+            remainder='passthrough'
+        )
 
     def fit(self, X, y=None):
-        logger.info("Fitting the transformer on the training dataset...")
-        return self.pipeline.fit(X)
-    
-    def transform(self, X, y=None):
-        logger.info("Transforming the dataset using the transformer...")
-        return self.pipeline.transform(X)
-    
-    def fit_transform(self, X, y=None):
-        logger.info("Fitting the transformer and transforming the dataset using it...")
-        return self.pipeline.fit_transform(X)
+        logger.info(f"[Preprocessing] Fitting on shape {X.shape}")
+        self.column_transformer.fit(X, y)
+        return self
 
-    
+    def transform(self, X, y=None):
+        logger.info(f"[Preprocessing] Transforming data with shape {X.shape}")
+        return self.column_transformer.transform(X)
+
+    def fit_transform(self, X, y=None):
+        logger.info(f"[Preprocessing] Fit-transforming data with shape {X.shape}")
+        return self.column_transformer.fit_transform(X, y)
+
+    def get_params(self, deep=True):
+        return self.column_transformer.get_params(deep)
+
+    def set_params(self, **params):
+        self.column_transformer.set_params(**params)
+        return self

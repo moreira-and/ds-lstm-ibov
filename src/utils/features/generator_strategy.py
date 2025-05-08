@@ -10,14 +10,14 @@ class GeneratorStrategy(ABC):
 
 class DefaultGenerator(GeneratorStrategy):
     def __init__(self, sequence_length=7, batch_size=1):
-        self.sequence_length = sequence_length
-        self.batch_size = batch_size
+        self._sequence_length = sequence_length
+        self._batch_size = batch_size
 
     def generate(self, data):
 
         logger.info("Generating Timeseries from dataset...")
         return TimeseriesGenerator(
             data, data,
-            length=self.sequence_length,
-            batch_size=self.batch_size
+            length=self._sequence_length,
+            batch_size=self._batch_size
         )
