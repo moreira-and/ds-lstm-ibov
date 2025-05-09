@@ -1,23 +1,48 @@
+
 from abc import ABC, abstractmethod
-from typing import Any
-from src.config import logger
 
 
-class PostprocessorStrategy(ABC):
+class PostprocessorStrategy(ABC):  
     @abstractmethod
-    def inverse_transform(self, X: Any, y: Any = None) -> Any:
+    def inverse_transform(self, y_predicted, y_indices):
         pass
 
 
 class DefaultPostprocessor(PostprocessorStrategy):
+
     def __init__(self, preprocessor):
-        if hasattr(preprocessor.column_transformer, 'inverse_transform'):
-            self._preprocessor = preprocessor.column_transformer
-        else:
-            self._preprocessor = None
-            logger.warning("Preprocessor does not implement inverse_transform.")
+        self.preprocessor = preprocessor
+        self.__get_transform_map()
 
+    def __get_transform_map(self):
 
-    def inverse_transform(self, X: Any, y: Any = None) -> Any:
-        logger.info(f"[Postprocessing] Inversing transformation on shape {X.shape}")
-        return self._preprocessor.inverse_transform(X) if self._preprocessor else X
+        self.transform_map = []
+        output_slices = self.preprocessor.output_indices_
+        
+        for name, sl in output_slices.items():
+            if name not in self.preprocessor.named_transformers_:
+                transformer = None
+            else:
+                transformer = self.preprocessor.named_transformers_[name]
+            self.transform_map.append((name, transformer, sl))
+
+    def inverse_transform(self, y_predicted, y_indices):
+        y_rec = y_predicted.copy()
+
+        for name, transformer, sl in self.transform_map:
+            if transformer is None or not hasattr(transformer, "inverse_transform"):
+                continue
+
+            col_range = range(sl.start, sl.stop)
+            # Só tentar inverter se TODA a fatia estiver incluída nos índices
+            if all(i in y_indices for i in col_range):
+                part = y_predicted[:, col_range]
+                inv = transformer.inverse_transform(part)
+                if inv.ndim == 1:
+                    inv = inv.reshape(-1, 1)
+                y_rec[:, col_range] = inv
+            else:
+                # Se parte da fatia está fora de y_indices, pula a inversão (evita erro)
+                continue
+
+        return y_rec

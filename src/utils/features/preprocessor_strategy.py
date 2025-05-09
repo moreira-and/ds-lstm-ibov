@@ -1,5 +1,8 @@
 from abc import ABC, abstractmethod
+
+import numpy as np
 from src.config import logger
+from src.utils.features.postprocessor_strategy import DefaultPostprocessor
 
 from sklearn.compose import ColumnTransformer, make_column_selector
 from sklearn.pipeline import Pipeline
@@ -18,6 +21,10 @@ class PreprocessorStrategy(ABC):
     def fit_transform(self, X, y=None):
         pass
 
+    @abstractmethod
+    def get_postprocessor(self):
+        pass
+
 class DefaultPreprocessor(PreprocessorStrategy):
     def __init__(self, 
                  numeric_transformer=StandardScaler(),
@@ -25,6 +32,7 @@ class DefaultPreprocessor(PreprocessorStrategy):
         self._numeric_transformer = numeric_transformer
         self._categorical_transformer = categorical_transformer
 
+        # Define a ColumnTransformer
         self.column_transformer = ColumnTransformer(
             transformers=[
                 ('numeric', self._numeric_transformer, make_column_selector(dtype_include="number")),
@@ -34,16 +42,13 @@ class DefaultPreprocessor(PreprocessorStrategy):
         )
 
     def fit(self, X, y=None):
-        logger.info(f"[Preprocessing] Fitting on shape {X.shape}")
         self.column_transformer.fit(X, y)
         return self
 
     def transform(self, X, y=None):
-        logger.info(f"[Preprocessing] Transforming data with shape {X.shape}")
         return self.column_transformer.transform(X)
 
     def fit_transform(self, X, y=None):
-        logger.info(f"[Preprocessing] Fit-transforming data with shape {X.shape}")
         return self.column_transformer.fit_transform(X, y)
 
     def get_params(self, deep=True):
@@ -52,3 +57,6 @@ class DefaultPreprocessor(PreprocessorStrategy):
     def set_params(self, **params):
         self.column_transformer.set_params(**params)
         return self
+
+    def get_postprocessor(self):
+        return DefaultPostprocessor(self.column_transformer)

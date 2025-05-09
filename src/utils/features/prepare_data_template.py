@@ -6,7 +6,6 @@ from src.utils.features.splitter_strategy import SplitterStrategy
 
 from src.utils.features.preprocessor_strategy import PreprocessorStrategy
 from src.utils.features.generator_strategy import GeneratorStrategy
-from src.utils.features.postprocessor_strategy import DefaultPostprocessor
 
 from abc import ABC, abstractmethod
 
@@ -53,7 +52,7 @@ class LstmPrepareDataTemplate(PrepareDataTemplate):
         self._y_test = np.array([generator[i][1][0] for i in range(n_total - (n_test+1), n_total)])
 
     def get_transformers(self):
-        return self.preprocessor,self.generator,DefaultPostprocessor(self.preprocessor)
+        return self.preprocessor,self.generator
 
 
     def get_data(self):

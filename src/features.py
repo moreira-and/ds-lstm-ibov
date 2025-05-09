@@ -53,7 +53,9 @@ def main(
     
         logger.success("Features generation complete.")
 
-        preprocessor, generator, postprocessor = prepare_data_template.get_transformers()
+        preprocessor, generator = prepare_data_template.get_transformers()
+
+        postprocessor = preprocessor.get_postprocessor()
 
         joblib.dump(preprocessor, train_dir / 'preprocessor.joblib')
         joblib.dump(generator, train_dir / 'generator.joblib')
