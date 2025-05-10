@@ -1,4 +1,5 @@
 from pathlib import Path
+import time
 
 import joblib
 from loguru import logger
@@ -24,6 +25,7 @@ def main(
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
+    start_time = time.time()
     logger.info("Loading training dataset...")
 
     X_train = np.load(X_path)
@@ -65,6 +67,9 @@ def main(
     model.save(MODELS_DIR / model_name)
 
     logger.success("Modeling training complete.")
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    logger.info(f"Elapsed time: {elapsed_time:.2f} seconds")
     # -----------------------------------------
 
 
