@@ -1,6 +1,7 @@
 
 from abc import ABC, abstractmethod
 
+import time
 from typing import Any, Dict, List, Optional
 import pandas as pd
 
@@ -49,18 +50,20 @@ class YfinanceLoadingStrategy(DatasetLoadingStrategy):
             logger.error(f'Error loading data in {self.__class__.__name__}: {e}')
             return {}
 
-    def _load_from_yfinance(self) -> Dict[str, pd.DataFrame]:
+    def _load_from_yfinance(self,interval="1d") -> Dict[str, pd.DataFrame]:
         yf_data = {}
         for name, ticker in self._config.items():
             logger.info(f'Downloading {name} ({ticker}) from yfinance...')
             try:
-                df = yf.download(ticker, start=self.start_date, end=self.end_date)
+                df = yf.download(ticker, start=self.start_date, end=self.end_date,auto_adjust=False,interval=interval)
                 if not df.empty:
                     yf_data[name] = df
                 else:
                     logger.warning(f'No data returned for {ticker}')
             except Exception as e:
                 logger.error(f'Error loading {ticker}: {e}')
+            time.sleep(2)
+            
         return yf_data
 
 
@@ -79,6 +82,8 @@ class BcbLoadingStrategy(DatasetLoadingStrategy):
             df = self._load_single_ticker(name, ticker)
             if df is not None:
                 bcb_data[name] = df
+
+            time.sleep(2)
 
         return bcb_data
 
@@ -132,6 +137,8 @@ class DataReaderLoadingStrategy(DatasetLoadingStrategy):
             df = self._load_single_ticker(ticker, name)
             if df is not None:
                 dr_data[name] = df
+
+            time.sleep(2)
 
         return dr_data
 
