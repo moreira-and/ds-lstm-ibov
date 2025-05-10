@@ -20,7 +20,7 @@ EXTERNAL_DATA_DIR = DATA_DIR / "external"
 
 MODELS_DIR = PROJ_ROOT / "models"
 
-MLRUNS_DIR = PROJ_ROOT / "mlruns"
+MLFLOW_TRACKING_URI = PROJ_ROOT / "mlflow"
 
 REPORTS_DIR = PROJ_ROOT / "reports"
 
