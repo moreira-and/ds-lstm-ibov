@@ -55,7 +55,7 @@ class YfinanceLoadingStrategy(DatasetLoadingStrategy):
         for name, ticker in self._config.items():
             logger.info(f'Downloading {name} ({ticker}) from yfinance...')
             try:
-                df = yf.download(ticker, start=self.start_date, end=self.end_date,auto_adjust=False,interval=interval)
+                df = yf.download(ticker, start=self.start_date, end=self.end_date,auto_adjust=True,interval=interval)
                 if not df.empty:
                     yf_data[name] = df
                 else:

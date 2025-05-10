@@ -38,6 +38,7 @@ def main(
     
 
     logger.info(f'Requesting information between {start_date} and {end_date}')
+    
     try:
         loaders = DatasetMultiLoader([
             YfinanceLoadingStrategy(start_date, end_date),
@@ -60,6 +61,7 @@ def main(
         logger.error(f"Error loading raw data: {e}")
     
     df_raw.to_csv(RAW_DATA_DIR / 'dataset.csv')
+    
     df_raw = pd.read_csv(RAW_DATA_DIR / 'dataset.csv', index_col=0) # ensure coupling
 
     logger.success("Raw data successfully loaded...")
@@ -67,7 +69,7 @@ def main(
     # Supondo df como seu DataFrame
     target_cols = [col for col in df_raw.columns if asset in col]
     target_col = [col for col in target_cols if asset_focus in col]
-    y = df_raw[target_col]  # This column is kept only for cleaning purposes.
+    y = df_raw[target_col[1]]  # This column is kept only for cleaning purposes.
     X = df_raw.drop(columns=target_col)
 
     clean_pipeline = CleanPipeline([
