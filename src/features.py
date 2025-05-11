@@ -1,8 +1,7 @@
 import time
 from pathlib import Path
 
-import joblib
-from tqdm import tqdm
+import cloudpickle
 import typer
 
 from src.config import logger, PROCESSED_DATA_DIR
@@ -58,10 +57,11 @@ def main(
 
         postprocessor = prepare_data_template.get_postprocessor()
 
-        joblib.dump(preprocessor, train_dir / 'preprocessor.joblib')
-        joblib.dump(postprocessor, train_dir / 'postprocessor.joblib')
+        with open(train_dir / "preprocessor.pkl", "wb") as f:
+            cloudpickle.dump(preprocessor, f)
 
-        # Pending: include postprocessor
+        with open(train_dir / "postprocessor.pkl", "wb") as f:
+            cloudpickle.dump(postprocessor, f)
 
     except Exception as e:
         logger.error(f"An error occurred: {e}")

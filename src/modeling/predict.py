@@ -1,12 +1,13 @@
 from pathlib import Path
 import pandas as pd
 
-import joblib
+import cloudpickle
 import keras
 from loguru import logger
 from tqdm import tqdm
 import typer
 
+from src import config, utils
 from src.config import MODELS_DIR, PROCESSED_DATA_DIR
 
 app = typer.Typer()
@@ -16,19 +17,22 @@ app = typer.Typer()
 def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
     input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
-    preprocessor_path: Path = PROCESSED_DATA_DIR / "preprocessor.joblib",
+    preprocessor_path: Path = PROCESSED_DATA_DIR / "preprocessor.pkl",
     model_path: Path = MODELS_DIR / "Sequential_epoch13_loss0.0875.keras",    
-    postprocessor_path: Path = PROCESSED_DATA_DIR / "postprocessor.joblib",
+    postprocessor_path: Path = PROCESSED_DATA_DIR / "postprocessor.pkl",
     output_path: Path = PROCESSED_DATA_DIR / "y_predicted.csv",
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
     logger.info("Performing inference for model...")
 
-     # Carrega artefatos
-    preprocessor = joblib.load(preprocessor_path)
     model = keras.models.load_model(model_path)
-    postprocessor = joblib.load(postprocessor_path)
+    
+    with open(preprocessor_path, "rb") as f:
+        preprocessor = cloudpickle.load(f)
+
+    with open(postprocessor_path, "rb") as f:
+        postprocessor = cloudpickle.load(f)
 
     # Carrega dados de entrada
     df = pd.read_csv(input_path, index_col=0)

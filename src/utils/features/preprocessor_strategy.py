@@ -12,5 +12,5 @@ class DefaultLstmPreprocessor(PreprocessorStrategy):
         self._generator = generator
 
     def transform(self, X, y=None):
-        self._transformer.fit(X, y)
-        return self._generator.transform(X)
+        X_transformed = self._transformer.transform(X, y)
+        return self._generator.transform(X_transformed)

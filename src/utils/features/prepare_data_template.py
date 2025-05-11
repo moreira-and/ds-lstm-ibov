@@ -3,7 +3,6 @@ from typing import Any
 import numpy as np
 
 from src.utils.features.splitter_strategy import SplitterStrategy
-
 from src.utils.features.transform_strategy import TransformStrategy
 from src.utils.features.generator_strategy import GeneratorStrategy
 from src.utils.features.preprocessor_strategy import DefaultLstmPreprocessor
