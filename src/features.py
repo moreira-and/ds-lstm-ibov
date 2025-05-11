@@ -7,10 +7,10 @@ import typer
 
 from src.config import logger, PROCESSED_DATA_DIR
 
-from utils.features.prepare_data_template import LstmPrepareDataTemplate
+from utils.features.prepare_data_template import DefaultLstmPrepareDataTemplate
 from utils.features.splitter_strategy import SequentialSplitter
-from src.utils.features.preprocessor_strategy import DefaultPreprocessor
-from utils.features.generator_strategy import DefaultGenerator
+from src.utils.features.transform_strategy import DefaultLstmTransformStrategy
+from utils.features.generator_strategy import DefaultLstmGenerator
 
 import numpy as np
 import pandas as pd
@@ -32,11 +32,11 @@ def main(
     logger.info("Generating features from dataset...")
 
     try:
-        prepare_data_template = LstmPrepareDataTemplate(
+        prepare_data_template = DefaultLstmPrepareDataTemplate(
             dataset = pd.read_csv(input_path, index_col=0).sort_index(),
             splitter=SequentialSplitter(),
-            preprocessor=DefaultPreprocessor(),
-            generator = DefaultGenerator()
+            transformer=DefaultLstmTransformStrategy(),
+            generator = DefaultLstmGenerator()
             )
         
         prepare_data_template.prepare_data()
@@ -53,12 +53,12 @@ def main(
     
         logger.success("Features generation complete.")
 
-        preprocessor, generator = prepare_data_template.get_transformers()
+        logger.info("Saving transformers...")
+        preprocessor = prepare_data_template.get_preprocessor()
 
-        postprocessor = preprocessor.get_postprocessor()
+        postprocessor = prepare_data_template.get_postprocessor()
 
         joblib.dump(preprocessor, train_dir / 'preprocessor.joblib')
-        joblib.dump(generator, train_dir / 'generator.joblib')
         joblib.dump(postprocessor, train_dir / 'postprocessor.joblib')
 
         # Pending: include postprocessor

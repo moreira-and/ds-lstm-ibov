@@ -17,7 +17,7 @@ def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
     input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
     preprocessor_path: Path = PROCESSED_DATA_DIR / "preprocessor.joblib",
-    model_path: Path = MODELS_DIR / "Sequential_epoch1_loss0.1272.keras",    
+    model_path: Path = MODELS_DIR / "Sequential_epoch13_loss0.0875.keras",    
     postprocessor_path: Path = PROCESSED_DATA_DIR / "postprocessor.joblib",
     output_path: Path = PROCESSED_DATA_DIR / "y_predicted.csv",
     # -----------------------------------------

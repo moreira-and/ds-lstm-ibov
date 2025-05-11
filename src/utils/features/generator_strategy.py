@@ -8,7 +8,7 @@ class GeneratorStrategy(ABC):
     def generate(self, data):
         pass
 
-class DefaultGenerator(GeneratorStrategy):
+class DefaultLstmGenerator(GeneratorStrategy):
     def __init__(self, sequence_length=7, batch_size=1):
         self._sequence_length = sequence_length
         self._batch_size = batch_size
