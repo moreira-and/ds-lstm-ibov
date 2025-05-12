@@ -13,4 +13,4 @@ class DefaultLstmPreprocessor(PreprocessorStrategy):
 
     def transform(self, X, y=None):
         X_transformed = self._transformer.transform(X, y)
-        return self._generator.transform(X_transformed)
+        return self._generator.generate(X_transformed)
