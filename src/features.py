@@ -6,10 +6,10 @@ import typer
 
 from src.config import logger, PROCESSED_DATA_DIR
 
-from utils.features.prepare_data_template import DefaultLstmPrepareDataTemplate
-from utils.features.splitter_strategy import SequentialSplitter
+from src.utils.features.prepare_data_template import DefaultLstmPrepareDataTemplate
+from src.utils.features.splitter_strategy import SequentialSplitter
 from src.utils.features.transform_strategy import DefaultLstmTransformStrategy
-from utils.features.generator_strategy import DefaultLstmGenerator
+from src.utils.features.generator_strategy import DefaultLstmGenerator
 
 import numpy as np
 import pandas as pd
