@@ -81,7 +81,7 @@ def main(
 
     X_clean, y_clean = clean_pipeline.clear(X, y)
 
-    df_clean = pd.concat([X_clean,y_clean],axis=1)
+    df_clean = pd.concat([y_clean,X_clean],axis=1)
 
     df_clean.to_csv(PROCESSED_DATA_DIR / 'dataset.csv')
     logger.success("Clean data successfully loaded...")

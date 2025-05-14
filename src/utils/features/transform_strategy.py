@@ -19,6 +19,10 @@ class TransformStrategy(ABC):
         pass
 
     @abstractmethod
+    def get_feature_names(self):
+        pass
+
+    @abstractmethod
     def get_postprocessor(self) -> PostprocessorStrategy:
         pass
 
@@ -54,6 +58,9 @@ class DefaultLstmTransformStrategy(TransformStrategy):
     
     def get_postprocessor(self)->PostprocessorStrategy:
         return DefaultLstmPostprocessor(self.column_transformer)
+    
+    def get_feature_names(self, input_features = None):
+        return self.column_transformer.get_feature_names_out(input_features=input_features)
 
     def get_params(self, deep=True):
         return self.column_transformer.get_params(deep)

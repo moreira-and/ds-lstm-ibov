@@ -25,8 +25,9 @@ class PrepareDataTemplate(ABC):
 
 
 class DefaultLstmPrepareDataTemplate(PrepareDataTemplate):
-    def __init__(self, dataset, splitter: SplitterStrategy, transformer: TransformStrategy, generator: GeneratorStrategy):
+    def __init__(self, dataset,targets, splitter: SplitterStrategy, transformer: TransformStrategy, generator: GeneratorStrategy):
         self.dataset = dataset
+        self.targets = targets
         self.splitter = splitter
         self.transformer = transformer
         self.generator = generator
@@ -42,9 +43,17 @@ class DefaultLstmPrepareDataTemplate(PrepareDataTemplate):
         train_X = self.transformer.fit_transform(X = train_data) # train fit
         test_X = self.transformer.transform(X = test_data) # test transform with train fit (real)
 
+        feature_names = self.transformer.get_feature_names() # get feature names
+
+        matching_features = [
+            (i, feature)
+            for i, feature in enumerate(feature_names)
+            if any(t in feature for t in self.targets)
+        ]
+
         X_all = np.concatenate([train_X, test_X]) # concat to generate
 
-        generator = self.generator.generate(X_all)
+        generator = self.generator.generate(X_all,X_all[:,[i for i, _ in matching_features]])
 
         n_total = len(generator)
         n_test = len(test_data)

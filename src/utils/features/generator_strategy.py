@@ -13,11 +13,11 @@ class DefaultLstmGenerator(GeneratorStrategy):
         self._sequence_length = sequence_length
         self._batch_size = batch_size
 
-    def generate(self, data):
+    def generate(self, data,targets):
 
         logger.info("Generating Timeseries from dataset...")
         return TimeseriesGenerator(
-            data, data,
+            data, targets,
             length=self._sequence_length,
             batch_size=self._batch_size
         )
