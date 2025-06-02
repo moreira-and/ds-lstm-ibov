@@ -8,11 +8,11 @@ class TrainStrategy(ABC):
         pass
 
 class BasicTrainStrategy(TrainStrategy):
-    def __init__(self, epochs= None, batch_size= None, validation_split= None, callbacks = None):
-        self.epochs = epochs or 100
-        self.batch_size = batch_size or 16
-        self.validation_split = validation_split or 0.3
-        self.callbacks = callbacks or DefaultCallbacksStrategy.get()
+    def __init__(self, epochs= 100, batch_size= 16, validation_split= 0.3, callbacks = DefaultCallbacksStrategy.get()):
+        self.epochs = epochs
+        self.batch_size = batch_size
+        self.validation_split = validation_split
+        self.callbacks = callbacks
 
     def train(self, model, X_train, y_train):
         try:

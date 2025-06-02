@@ -9,10 +9,10 @@ class CompileStrategy(ABC):
         pass
 
 class ClassificationCompileStrategy(CompileStrategy):
-    def __init__(self, optimizer = None, loss = None, metrics = None):
-        self.optimizer = optimizer or 'adam'
-        self.loss = loss or 'mse'
-        self.metrics = metrics or ['accuracy']
+    def __init__(self, optimizer = 'adam', loss = 'mse', metrics = ['accuracy']):
+        self.optimizer = optimizer
+        self.loss = loss
+        self.metrics = metrics
 
     def compile(self, model):
         try:
