@@ -7,8 +7,8 @@ class PostprocessorStrategy(ABC):
 
 class DefaultLstmPostprocessor(PostprocessorStrategy):
 
-    def __init__(self, transformer):
-        self.__transformer = transformer
+    def __init__(self, transformer,y_train):
+        self.__transformer = transformer.fit(y_train)
 
     def inverse_transform(self, y_predicted):
-        return self.__transformer.inverse_transformer(self.__transformer, y_predicted)
+        return self.__transformer.inverse_transform(y_predicted)

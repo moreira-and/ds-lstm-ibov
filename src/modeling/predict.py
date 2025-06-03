@@ -18,7 +18,7 @@ def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
     input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
     preprocessor_path: Path = PROCESSED_DATA_DIR / "preprocessor.pkl",
-    model_path: Path = MODELS_DIR / "Sequential_epoch21_loss0.1437.keras",    
+    model_path: Path = MODELS_DIR / "Sequential_epoch20_loss0.1473.keras",    
     postprocessor_path: Path = PROCESSED_DATA_DIR / "postprocessor.pkl",
     output_path: Path = PROCESSED_DATA_DIR / "y_predicted.csv",
     # -----------------------------------------
@@ -26,25 +26,25 @@ def main(
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
     logger.info("Performing inference for model...")
 
-    model = keras.models.load_model(model_path)
+    # Carrega dados de entrada
+    df = pd.read_csv(input_path, index_col=0).tail(8)
+    logger.info(f"Input data shape: {df.shape}")
     
     with open(preprocessor_path, "rb") as f:
         preprocessor = cloudpickle.load(f)
+    # Aplica pipeline de predição
+    X_processed = preprocessor.transform(df)
+
+    model = keras.models.load_model(model_path)
+    predictions = model.predict(X_processed)
 
     with open(postprocessor_path, "rb") as f:
         postprocessor = cloudpickle.load(f)
 
-    # Carrega dados de entrada
-    df = pd.read_csv(input_path, index_col=0)
-    logger.info(f"Input data shape: {df.shape}")
-
-    # Aplica pipeline de predição
-    X_processed = preprocessor.transform(df)
-    predictions = model.predict(X_processed)
     final_output = postprocessor.inverse_transform(predictions)
 
     # Salva resultados
-    pd.DataFrame(final_output, columns=["prediction"]).to_csv(output_path, index=False)
+    pd.DataFrame(final_output).to_csv(output_path, index=False)
 
 
     # Log com MLflow

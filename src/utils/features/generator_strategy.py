@@ -5,7 +5,7 @@ from tensorflow.keras.preprocessing.sequence import TimeseriesGenerator
 
 class GeneratorStrategy(ABC):
     @abstractmethod
-    def generate(self, data):
+    def generate(self, data,targets=None):
         pass
 
 class DefaultLstmGenerator(GeneratorStrategy):

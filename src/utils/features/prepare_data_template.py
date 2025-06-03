@@ -55,7 +55,7 @@ class DefaultLstmPrepareDataTemplate(PrepareDataTemplate):
 
         X_all = np.concatenate([train_X, test_X]) # concat to generate
 
-        generator = self.generator.generate(X_all,X_all[:,y_index])
+        generator = self.generator.generate(data=X_all,targets = X_all[:,y_index])
 
         n_total = len(generator)
         n_test = len(test_data)
@@ -73,9 +73,12 @@ class DefaultLstmPrepareDataTemplate(PrepareDataTemplate):
         return DefaultLstmPreprocessor(self.transformer, self.generator)
     
     def get_postprocessor(self):
+
+        X,_ = self.splitter.split(X = self.dataset)
+
         filtered_columns = [
-            feature for feature in self.dataset.columns
+            feature for feature in X
             if any(t in feature for t in self.targets)
         ]
 
-        return self.transformer.get_postprocessor(self.dataset.loc[:, filtered_columns])
+        return self.transformer.get_postprocessor(X.loc[:, filtered_columns])

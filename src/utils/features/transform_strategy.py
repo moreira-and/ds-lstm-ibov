@@ -23,15 +23,15 @@ class TransformStrategy(ABC):
         pass
 
     @abstractmethod
-    def get_postprocessor(self,y) -> PostprocessorStrategy:
+    def get_postprocessor(self,y_train) -> PostprocessorStrategy:
         pass
 
 
 class DefaultLstmTransformStrategy(TransformStrategy):
     def __init__(
-    self, 
-    numeric_transformer=StandardScaler(),
-    categorical_transformer=OneHotEncoder(sparse_output=False, handle_unknown='ignore')):
+        self, 
+        numeric_transformer=StandardScaler(),
+        categorical_transformer=OneHotEncoder(sparse_output=False, handle_unknown='ignore')):
             
         self._numeric_transformer = numeric_transformer
         self._categorical_transformer = categorical_transformer
@@ -56,8 +56,8 @@ class DefaultLstmTransformStrategy(TransformStrategy):
     def fit_transform(self, X, y=None):
         return self.column_transformer.fit_transform(X, y)
     
-    def get_postprocessor(self, y) -> PostprocessorStrategy:
-        return DefaultLstmPostprocessor(self.fit(y))
+    def get_postprocessor(self, y_train) -> PostprocessorStrategy:
+        return DefaultLstmPostprocessor(self._numeric_transformer,y_train=y_train)
     
     def get_feature_names(self, input_features = None):
         return self.column_transformer.get_feature_names_out(input_features=input_features)

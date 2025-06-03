@@ -54,13 +54,12 @@ def main(
         logger.success("Features generation complete.")
 
         logger.info("Saving transformers...")
+        
         preprocessor = prepare_data_template.get_preprocessor()
-
-        postprocessor = prepare_data_template.get_postprocessor()
-
         with open(train_dir / "preprocessor.pkl", "wb") as f:
             cloudpickle.dump(preprocessor, f)
 
+        postprocessor = prepare_data_template.get_postprocessor()
         with open(train_dir / "postprocessor.pkl", "wb") as f:
             cloudpickle.dump(postprocessor, f)
 
