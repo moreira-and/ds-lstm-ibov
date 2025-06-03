@@ -23,7 +23,7 @@ class TransformStrategy(ABC):
         pass
 
     @abstractmethod
-    def get_postprocessor(self) -> PostprocessorStrategy:
+    def get_postprocessor(self,y) -> PostprocessorStrategy:
         pass
 
 
@@ -56,28 +56,9 @@ class DefaultLstmTransformStrategy(TransformStrategy):
     def fit_transform(self, X, y=None):
         return self.column_transformer.fit_transform(X, y)
     
-    def get_postprocessor(self,selected_features = None)->PostprocessorStrategy:
-
-        filtered_transformers = []
-
-        for name, transformer, columns in self.column_transformer.transformers:
-            # Se o ColumnTransformer for baseado em nomes de colunas:
-            if isinstance(columns, list):
-                # Mantém apenas colunas desejadas
-                filtered_cols = [col for col in columns if col in selected_features]
-
-                if filtered_cols:
-                    filtered_transformers.append((name, transformer, filtered_cols))
-
-        return DefaultLstmPostprocessor(ColumnTransformer(transformers=filtered_transformers))
+    def get_postprocessor(self, y) -> PostprocessorStrategy:
+        return DefaultLstmPostprocessor(self.fit(y))
     
     def get_feature_names(self, input_features = None):
         return self.column_transformer.get_feature_names_out(input_features=input_features)
-
-    def get_params(self, deep=True):
-        return self.column_transformer.get_params(deep)
-
-    def set_params(self, **params):
-        self.column_transformer.set_params(**params)
-        return self
     

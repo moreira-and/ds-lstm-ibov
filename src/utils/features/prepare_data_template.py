@@ -45,15 +45,17 @@ class DefaultLstmPrepareDataTemplate(PrepareDataTemplate):
 
         feature_names = self.transformer.get_feature_names() # get feature names
 
-        matching_features = [
+        y_features = [
             (i, feature)
             for i, feature in enumerate(feature_names)
             if any(t in feature for t in self.targets)
         ]
 
+        y_index = [i for i, _ in y_features]
+
         X_all = np.concatenate([train_X, test_X]) # concat to generate
 
-        generator = self.generator.generate(X_all,X_all[:,[i for i, _ in matching_features]])
+        generator = self.generator.generate(X_all,X_all[:,y_index])
 
         n_total = len(generator)
         n_test = len(test_data)
@@ -71,4 +73,9 @@ class DefaultLstmPrepareDataTemplate(PrepareDataTemplate):
         return DefaultLstmPreprocessor(self.transformer, self.generator)
     
     def get_postprocessor(self):
-        return self.transformer.get_postprocessor()
+        filtered_columns = [
+            feature for feature in self.dataset.columns
+            if any(t in feature for t in self.targets)
+        ]
+
+        return self.transformer.get_postprocessor(self.dataset.loc[:, filtered_columns])
