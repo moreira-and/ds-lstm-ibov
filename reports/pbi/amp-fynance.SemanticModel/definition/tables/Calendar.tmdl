@@ -1,0 +1,23 @@
+table Calendar
+	lineageTag: 01cec652-3664-42dc-a5d5-a0061c233a80
+
+	column Date
+		formatString: General Date
+		lineageTag: 5fadaae0-dd80-421b-8dc0-72b116f533ac
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		variation Variation
+			isDefault
+			relationship: c6e93cb7-5f1f-43ff-8a1c-048adf214a41
+			defaultHierarchy: LocalDateTable_1979701f-3ade-42d9-92c8-c04f89563c4f.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendar = calculated
+		mode: import
+		source = CALENDARAUTO()
+
+	annotation PBI_Id = 82b40443440246c2bfafdb55a574c8ae
+

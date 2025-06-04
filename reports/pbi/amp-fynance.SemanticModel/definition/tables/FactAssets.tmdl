@@ -1,0 +1,105 @@
+table FactAssets
+	lineageTag: 9f6dd781-b372-4d62-9005-05fdc4c6d7ed
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 333a9cae-7609-4a8a-b7c9-9ce03fcff73f
+		summarizeBy: none
+		sourceColumn: Date
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column type
+		dataType: string
+		lineageTag: 2ac70e53-9bb4-4c48-bb2c-f6af70ab5e9a
+		summarizeBy: none
+		sourceColumn: type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Asset
+		dataType: string
+		lineageTag: e54cc30e-2e53-457f-8bf5-b7eb96e8abad
+		summarizeBy: none
+		sourceColumn: Asset
+
+		annotation SummarizationSetBy = Automatic
+
+	column Close
+		dataType: double
+		lineageTag: 0f8f6c8f-95a2-465b-b46a-9abae8283d9a
+		summarizeBy: sum
+		sourceColumn: Close
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column High
+		dataType: double
+		lineageTag: 0f01b446-759e-4ca2-b989-396b1b814dbb
+		summarizeBy: sum
+		sourceColumn: High
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Low
+		dataType: double
+		lineageTag: edc0a340-8272-4333-a030-aaee59b0fab4
+		summarizeBy: sum
+		sourceColumn: Low
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Open
+		dataType: double
+		lineageTag: b62906e4-fc81-442f-87fe-6337787c4d5b
+		summarizeBy: sum
+		sourceColumn: Open
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Volume
+		dataType: double
+		lineageTag: 82313ee4-146e-4a11-93ce-3af7f457eb24
+		summarizeBy: sum
+		sourceColumn: Volume
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition FactAssets = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\Repositories\ds-lstm-ibov\data\processed\dataset_report.csv"),[Delimiter=",", Columns=41, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"Cabeçalhos Promovidos",{{"", "Date"}}),
+				    #"Valor Substituído" = Table.ReplaceValue(#"Colunas Renomeadas",".",",",Replacer.ReplaceText,{"('Close', '^BVSP')", "('High', '^BVSP')", "('Low', '^BVSP')", "('Open', '^BVSP')", "('Volume', '^BVSP')", "('Close', '^GSPC')", "('High', '^GSPC')", "('Low', '^GSPC')", "('Open', '^GSPC')", "('Volume', '^GSPC')", "('Close', 'BTC-USD')", "('High', 'BTC-USD')", "('Low', 'BTC-USD')", "('Open', 'BTC-USD')", "('Close', 'GC=F')", "('High', 'GC=F')", "('Low', 'GC=F')", "('Open', 'GC=F')", "('Close', 'CL=F')", "('High', 'CL=F')", "('Low', 'CL=F')", "('Open', 'CL=F')", "('Close', 'SB=F')", "('High', 'SB=F')", "('Low', 'SB=F')", "('Open', 'SB=F')", "SELIC_Anual", "SELIC_Meta_Anual", "IGP_M_Mensal", "INCC_Mensal", "Indice_Condicoes_Econ_BR", "Indice_Condicoes_Econ_BR_USD", "Salario_Minimo", "IBC_BR", "Populacao_BR", "PIB_Trimestral_Real", "PIB_Anual_Corrente", "Deflator_Implicito_PIB", "CPIAUCSL"}),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Valor Substituído",{{"Date", type date}, {"('Close', '^BVSP')", type number}, {"('High', '^BVSP')", type number}, {"('Low', '^BVSP')", type number}, {"('Open', '^BVSP')", type number}, {"('Volume', '^BVSP')", type number}, {"('Close', '^GSPC')", type number}, {"('High', '^GSPC')", type number}, {"('Low', '^GSPC')", type number}, {"('Open', '^GSPC')", type number}, {"('Volume', '^GSPC')", type number}, {"('Close', 'BTC-USD')", type number}, {"('High', 'BTC-USD')", type number}, {"('Low', 'BTC-USD')", type number}, {"('Open', 'BTC-USD')", type number}, {"('Close', 'GC=F')", type number}, {"('High', 'GC=F')", type number}, {"('Low', 'GC=F')", type number}, {"('Open', 'GC=F')", type number}, {"('Close', 'CL=F')", type number}, {"('High', 'CL=F')", type number}, {"('Low', 'CL=F')", type number}, {"('Open', 'CL=F')", type number}, {"('Close', 'SB=F')", type number}, {"('High', 'SB=F')", type number}, {"('Low', 'SB=F')", type number}, {"('Open', 'SB=F')", type number}, {"SELIC_Anual", type number}, {"SELIC_Meta_Anual", type number}, {"IGP_M_Mensal", type number}, {"INCC_Mensal", type number}, {"Indice_Condicoes_Econ_BR", type number}, {"Indice_Condicoes_Econ_BR_USD", type number}, {"Salario_Minimo", type number}, {"IBC_BR", type number}, {"Populacao_BR", type number}, {"PIB_Trimestral_Real", type number}, {"PIB_Anual_Corrente", type number}, {"Deflator_Implicito_PIB", type number}, {"CPIAUCSL", type number}, {"type", type text}}),
+				    #"Colunas Não Dinâmicas" = Table.UnpivotOtherColumns(#"Tipo Alterado", {"Date", "type"}, "Atributo", "Valor"),
+				    #"Linhas Filtradas" = Table.SelectRows(#"Colunas Não Dinâmicas", each ([Atributo] <> "CPIAUCSL" and [Atributo] <> "Deflator_Implicito_PIB" and [Atributo] <> "IBC_BR" and [Atributo] <> "IGP_M_Mensal" and [Atributo] <> "INCC_Mensal" and [Atributo] <> "Indice_Condicoes_Econ_BR" and [Atributo] <> "Indice_Condicoes_Econ_BR_USD" and [Atributo] <> "PIB_Anual_Corrente" and [Atributo] <> "PIB_Trimestral_Real" and [Atributo] <> "Populacao_BR" and [Atributo] <> "Salario_Minimo" and [Atributo] <> "SELIC_Anual" and [Atributo] <> "SELIC_Meta_Anual")),
+				    #"Dividir Coluna por Delimitador" = Table.SplitColumn(#"Linhas Filtradas", "Atributo", Splitter.SplitTextByDelimiter(",", QuoteStyle.Csv), {"Atributo.1", "Atributo.2"}),
+				    #"Tipo Alterado1" = Table.TransformColumnTypes(#"Dividir Coluna por Delimitador",{{"Atributo.1", type text}, {"Atributo.2", type text}}),
+				    #"Texto Extraído Após o Delimitador" = Table.TransformColumns(#"Tipo Alterado1", {{"Atributo.1", each Text.AfterDelimiter(_, "("), type text}}),
+				    #"Texto Extraído Antes do Delimitador" = Table.TransformColumns(#"Texto Extraído Após o Delimitador", {{"Atributo.2", each Text.BeforeDelimiter(_, ")"), type text}}),
+				    #"Valor Substituído1" = Table.ReplaceValue(#"Texto Extraído Antes do Delimitador","'","",Replacer.ReplaceText,{"Atributo.1", "Atributo.2"}),
+				    #"Coluna em pivô" = Table.Pivot(#"Valor Substituído1", List.Distinct(#"Valor Substituído1"[Atributo.1]), "Atributo.1", "Valor"),
+				    #"Colunas Renomeadas1" = Table.RenameColumns(#"Coluna em pivô",{{"Atributo.2", "Asset"}})
+				in
+				    #"Colunas Renomeadas1"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

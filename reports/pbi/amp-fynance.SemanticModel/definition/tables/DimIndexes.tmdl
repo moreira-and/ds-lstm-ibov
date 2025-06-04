@@ -1,0 +1,32 @@
+table DimIndexes
+	lineageTag: e6020b78-f55d-4757-88aa-9985e6fd9e81
+
+	column Index
+		dataType: string
+		lineageTag: 7287693c-9353-4b55-9315-ca59f3b17275
+		summarizeBy: none
+		sourceColumn: Index
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DimIndexes = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\Repositories\ds-lstm-ibov\data\processed\dataset_report.csv"),[Delimiter=",", Columns=41, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"Cabeçalhos Promovidos",{{"", "Date"}}),
+				    #"Valor Substituído" = Table.ReplaceValue(#"Colunas Renomeadas",".",",",Replacer.ReplaceText,{"('Close', '^BVSP')", "('High', '^BVSP')", "('Low', '^BVSP')", "('Open', '^BVSP')", "('Volume', '^BVSP')", "('Close', '^GSPC')", "('High', '^GSPC')", "('Low', '^GSPC')", "('Open', '^GSPC')", "('Volume', '^GSPC')", "('Close', 'BTC-USD')", "('High', 'BTC-USD')", "('Low', 'BTC-USD')", "('Open', 'BTC-USD')", "('Close', 'GC=F')", "('High', 'GC=F')", "('Low', 'GC=F')", "('Open', 'GC=F')", "('Close', 'CL=F')", "('High', 'CL=F')", "('Low', 'CL=F')", "('Open', 'CL=F')", "('Close', 'SB=F')", "('High', 'SB=F')", "('Low', 'SB=F')", "('Open', 'SB=F')", "SELIC_Anual", "SELIC_Meta_Anual", "IGP_M_Mensal", "INCC_Mensal", "Indice_Condicoes_Econ_BR", "Indice_Condicoes_Econ_BR_USD", "Salario_Minimo", "IBC_BR", "Populacao_BR", "PIB_Trimestral_Real", "PIB_Anual_Corrente", "Deflator_Implicito_PIB", "CPIAUCSL"}),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Valor Substituído",{{"Date", type date}, {"('Close', '^BVSP')", type number}, {"('High', '^BVSP')", type number}, {"('Low', '^BVSP')", type number}, {"('Open', '^BVSP')", type number}, {"('Volume', '^BVSP')", type number}, {"('Close', '^GSPC')", type number}, {"('High', '^GSPC')", type number}, {"('Low', '^GSPC')", type number}, {"('Open', '^GSPC')", type number}, {"('Volume', '^GSPC')", type number}, {"('Close', 'BTC-USD')", type number}, {"('High', 'BTC-USD')", type number}, {"('Low', 'BTC-USD')", type number}, {"('Open', 'BTC-USD')", type number}, {"('Close', 'GC=F')", type number}, {"('High', 'GC=F')", type number}, {"('Low', 'GC=F')", type number}, {"('Open', 'GC=F')", type number}, {"('Close', 'CL=F')", type number}, {"('High', 'CL=F')", type number}, {"('Low', 'CL=F')", type number}, {"('Open', 'CL=F')", type number}, {"('Close', 'SB=F')", type number}, {"('High', 'SB=F')", type number}, {"('Low', 'SB=F')", type number}, {"('Open', 'SB=F')", type number}, {"SELIC_Anual", type number}, {"SELIC_Meta_Anual", type number}, {"IGP_M_Mensal", type number}, {"INCC_Mensal", type number}, {"Indice_Condicoes_Econ_BR", type number}, {"Indice_Condicoes_Econ_BR_USD", type number}, {"Salario_Minimo", type number}, {"IBC_BR", type number}, {"Populacao_BR", type number}, {"PIB_Trimestral_Real", type number}, {"PIB_Anual_Corrente", type number}, {"Deflator_Implicito_PIB", type number}, {"CPIAUCSL", type number}, {"type", type text}}),
+				    #"Colunas Não Dinâmicas" = Table.UnpivotOtherColumns(#"Tipo Alterado", {"Date", "type"}, "Atributo", "Valor"),
+				    #"Linhas Filtradas" = Table.SelectRows(#"Colunas Não Dinâmicas", each ([Atributo] = "CPIAUCSL" or [Atributo] = "Deflator_Implicito_PIB" or [Atributo] = "IBC_BR" or [Atributo] = "IGP_M_Mensal" or [Atributo] = "INCC_Mensal" or [Atributo] = "Indice_Condicoes_Econ_BR" or [Atributo] = "Indice_Condicoes_Econ_BR_USD" or [Atributo] = "PIB_Anual_Corrente" or [Atributo] = "PIB_Trimestral_Real" or [Atributo] = "Populacao_BR" or [Atributo] = "Salario_Minimo" or [Atributo] = "SELIC_Anual" or [Atributo] = "SELIC_Meta_Anual")),
+				    #"Colunas Renomeadas1" = Table.RenameColumns(#"Linhas Filtradas",{{"Atributo", "Index"}, {"Valor", "Value"}}),
+				    #"Duplicatas Removidas" = Table.Distinct(#"Colunas Renomeadas1", {"Index"}),
+				    #"Outras Colunas Removidas" = Table.SelectColumns(#"Duplicatas Removidas",{"Index"})
+				in
+				    #"Outras Colunas Removidas"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

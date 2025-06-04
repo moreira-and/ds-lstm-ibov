@@ -7,9 +7,114 @@
         "x": 0,
         "y": 0
       },
-      "nodes": [],
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 111.90556317036584
+          },
+          "nodeIndex": "dataset_report",
+          "nodeLineageTag": "440b5185-99dd-4e62-ad80-073209e85e8b",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 2,
+          "expandedHeight": 300
+        },
+        {
+          "location": {
+            "x": 231.29342534411313,
+            "y": 682.91904334111291
+          },
+          "nodeIndex": "DimAssets",
+          "nodeLineageTag": "eec48190-04a4-4d86-bfe1-4e1038c25503",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1195.8988136306921,
+            "y": 705.04045942084258
+          },
+          "nodeIndex": "DimIndexes",
+          "nodeLineageTag": "e6020b78-f55d-4757-88aa-9985e6fd9e81",
+          "size": {
+            "height": 104,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 566.69307557653872,
+            "y": 387.12478139526604
+          },
+          "nodeIndex": "FactAssets",
+          "nodeLineageTag": "9f6dd781-b372-4d62-9005-05fdc4c6d7ed",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 910.31871248213963,
+            "y": 392.52275842422387
+          },
+          "nodeIndex": "FactIndexes",
+          "nodeLineageTag": "634334af-8c0f-4537-b179-594fb03c095e",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 751.47218414817087,
+            "y": 92.786675804438971
+          },
+          "nodeIndex": "Calendar",
+          "nodeLineageTag": "01cec652-3664-42dc-a5d5-a0061c233a80",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "_MedidasAssets",
+          "size": {
+            "height": 72,
+            "width": 234
+          },
+          "zIndex": 0,
+          "expandedHeight": 200
+        },
+        {
+          "location": {
+            "x": 1479.8988136306921,
+            "y": 304.52022971042129
+          },
+          "nodeIndex": "_MedidasIndexes",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
       "name": "Todas as tabelas",
-      "zoomValue": 100,
+      "zoomValue": 63.287087723234038,
       "pinKeyFieldsToTop": false,
       "showExtraHeaderInfo": false,
       "hideKeyFieldsWhenCollapsed": false,

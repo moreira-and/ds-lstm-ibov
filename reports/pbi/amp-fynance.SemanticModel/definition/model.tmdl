@@ -1,9 +1,30 @@
 model Model
 	culture: pt-BR
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: pt-BR
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
 
 annotation PBI_ProTooling = ["DevMode"]
 
 annotation PBIDesktopVersion = 2.143.1204.0 (25.05)+23c84aace645781dd62b8a26eb0418c7e6a84b72
+
+annotation PBI_QueryOrder = ["dataset_report","FactAssets","DimAssets","FactIndexes","DimIndexes"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+ref table dataset_report
+ref table DateTableTemplate_5b7a043c-7f3f-4f30-bc77-5acadcdbb383
+ref table LocalDateTable_62c30d5c-706c-4970-955f-9d32c8620507
+ref table _MedidasAssets
+ref table FactAssets
+ref table DimAssets
+ref table FactIndexes
+ref table DimIndexes
+ref table Calendar
+ref table LocalDateTable_1979701f-3ade-42d9-92c8-c04f89563c4f
+ref table _MedidasIndexes
 
 ref cultureInfo pt-BR
 

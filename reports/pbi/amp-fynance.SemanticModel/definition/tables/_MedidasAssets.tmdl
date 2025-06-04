@@ -1,0 +1,55 @@
+table _MedidasAssets
+	lineageTag: 172d5e1c-595b-4244-b29b-6e9c93e12eb9
+
+	measure _LastCloseAsset = ```
+			
+			CALCULATE(
+			    LASTNONBLANK(FactAssets[Close], TRUE()),
+			    FILTER(
+			        ALL('Calendar'),
+			        'Calendar'[Date] = MAX('Calendar'[Date])
+			    )
+			)
+			
+			```
+		lineageTag: 4cd10df6-adb3-47fe-8a45-8da9cfad5fcf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _FirstCloseAsset = ```
+			
+			CALCULATE(
+			    FIRSTNONBLANK(FactAssets[Close], TRUE()),
+			    FILTER(
+			        ALL('Calendar'),
+			        'Calendar'[Date] = MIN('Calendar'[Date])
+			    )
+			)
+			
+			```
+		lineageTag: 0107b40a-1c4f-41ab-8454-f5ce0a8ae68b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '%Δ Asset' = DIVIDE(_MedidasAssets[_LastCloseAsset]-_MedidasAssets[_FirstCloseAsset],[_LastCloseAsset],0)
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: fb4c82d3-53e5-4b52-b736-0cb5fdb6d39b
+
+	column Column
+		isHidden
+		formatString: 0
+		lineageTag: b0fcb09e-b72b-4807-a342-d8df9562d561
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _MedidasAssets = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = 581c6d7756dc4816b28226c6aa70686c
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+

@@ -1,0 +1,428 @@
+table dataset_report
+	lineageTag: 440b5185-99dd-4e62-ad80-073209e85e8b
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 4e483a3d-3443-447c-9256-dad8f43c367d
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: e9df697c-6037-45d0-ad45-bd98b6a04696
+			defaultHierarchy: LocalDateTable_62c30d5c-706c-4970-955f-9d32c8620507.'Hierarquia de datas'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column '(''Close'', ''^BVSP'')'
+		dataType: double
+		formatString: 0
+		lineageTag: 045d069c-9264-456a-9f71-b6ac6a919674
+		summarizeBy: sum
+		sourceColumn: ('Close', '^BVSP')
+
+		annotation SummarizationSetBy = Automatic
+
+	column '(''High'', ''^BVSP'')'
+		dataType: double
+		formatString: 0
+		lineageTag: 33642d02-de7b-4eb8-a70b-a818cf9f7cfe
+		summarizeBy: sum
+		sourceColumn: ('High', '^BVSP')
+
+		annotation SummarizationSetBy = Automatic
+
+	column '(''Low'', ''^BVSP'')'
+		dataType: double
+		formatString: 0
+		lineageTag: 7f162a6d-c1f4-4efb-934c-732758aa70f0
+		summarizeBy: sum
+		sourceColumn: ('Low', '^BVSP')
+
+		annotation SummarizationSetBy = Automatic
+
+	column '(''Open'', ''^BVSP'')'
+		dataType: double
+		formatString: 0
+		lineageTag: 2deff87b-7d7b-4172-96fe-2e418483a549
+		summarizeBy: sum
+		sourceColumn: ('Open', '^BVSP')
+
+		annotation SummarizationSetBy = Automatic
+
+	column '(''Volume'', ''^BVSP'')'
+		dataType: double
+		formatString: 0
+		lineageTag: ce0b0912-eaaf-496a-8cc7-90d2ac47309c
+		summarizeBy: sum
+		sourceColumn: ('Volume', '^BVSP')
+
+		annotation SummarizationSetBy = Automatic
+
+	column '(''Close'', ''^GSPC'')'
+		dataType: double
+		lineageTag: 8db1ec72-5ecf-45b8-b29a-d121c3908ca4
+		summarizeBy: sum
+		sourceColumn: ('Close', '^GSPC')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''High'', ''^GSPC'')'
+		dataType: double
+		lineageTag: 004495be-e0a2-49a1-b260-86b0b592efe5
+		summarizeBy: sum
+		sourceColumn: ('High', '^GSPC')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Low'', ''^GSPC'')'
+		dataType: double
+		lineageTag: 0279d29b-8fcb-4e79-9dd9-297075a79e22
+		summarizeBy: sum
+		sourceColumn: ('Low', '^GSPC')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Open'', ''^GSPC'')'
+		dataType: double
+		lineageTag: cafce775-5b38-4dab-b731-8fbd69b05db7
+		summarizeBy: sum
+		sourceColumn: ('Open', '^GSPC')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Volume'', ''^GSPC'')'
+		dataType: double
+		lineageTag: 2b3d9850-d51d-4026-b494-091beb807eac
+		summarizeBy: sum
+		sourceColumn: ('Volume', '^GSPC')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Close'', ''BTC-USD'')'
+		dataType: double
+		lineageTag: fc50ee1d-ea32-4a93-94b8-6630a403b7a1
+		summarizeBy: sum
+		sourceColumn: ('Close', 'BTC-USD')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''High'', ''BTC-USD'')'
+		dataType: double
+		lineageTag: 47a8d8ef-9bed-467b-9672-6d79a1288b9e
+		summarizeBy: sum
+		sourceColumn: ('High', 'BTC-USD')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Low'', ''BTC-USD'')'
+		dataType: double
+		lineageTag: a3b60974-cbe9-48ec-9201-491466e31e3d
+		summarizeBy: sum
+		sourceColumn: ('Low', 'BTC-USD')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Open'', ''BTC-USD'')'
+		dataType: double
+		lineageTag: 03aae2fc-e891-489f-ba63-59aa9981f477
+		summarizeBy: sum
+		sourceColumn: ('Open', 'BTC-USD')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Close'', ''GC=F'')'
+		dataType: double
+		lineageTag: f0ccfede-deb9-4fdc-93c7-7d130d25f13b
+		summarizeBy: sum
+		sourceColumn: ('Close', 'GC=F')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''High'', ''GC=F'')'
+		dataType: double
+		lineageTag: 11671287-8b3d-47c8-8a35-7a55344f86de
+		summarizeBy: sum
+		sourceColumn: ('High', 'GC=F')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Low'', ''GC=F'')'
+		dataType: double
+		lineageTag: 1691cd98-99e6-4c35-b6ce-1a3e31de3c93
+		summarizeBy: sum
+		sourceColumn: ('Low', 'GC=F')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Open'', ''GC=F'')'
+		dataType: double
+		lineageTag: cca59f8c-5124-44c1-86d6-bd1014398a5b
+		summarizeBy: sum
+		sourceColumn: ('Open', 'GC=F')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Close'', ''CL=F'')'
+		dataType: double
+		lineageTag: b2b723d6-96f3-4b20-8ec5-5d873331d5b2
+		summarizeBy: sum
+		sourceColumn: ('Close', 'CL=F')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''High'', ''CL=F'')'
+		dataType: double
+		lineageTag: e95cf88a-c05e-4fd4-b5d9-79fb9426510d
+		summarizeBy: sum
+		sourceColumn: ('High', 'CL=F')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Low'', ''CL=F'')'
+		dataType: double
+		lineageTag: b732dc1f-fa51-4b7e-9904-ce0b14e74762
+		summarizeBy: sum
+		sourceColumn: ('Low', 'CL=F')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Open'', ''CL=F'')'
+		dataType: double
+		lineageTag: 33cbc80b-e603-4452-ab7d-b6afe1fe8c1f
+		summarizeBy: sum
+		sourceColumn: ('Open', 'CL=F')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Close'', ''SB=F'')'
+		dataType: double
+		lineageTag: df4bf987-e8cb-44e2-95a9-9b613366eee4
+		summarizeBy: sum
+		sourceColumn: ('Close', 'SB=F')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''High'', ''SB=F'')'
+		dataType: double
+		lineageTag: 2e91a46b-1a05-4f59-908c-24bd2a084097
+		summarizeBy: sum
+		sourceColumn: ('High', 'SB=F')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Low'', ''SB=F'')'
+		dataType: double
+		lineageTag: 93c6cf95-7139-451a-adfa-ef019773805a
+		summarizeBy: sum
+		sourceColumn: ('Low', 'SB=F')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column '(''Open'', ''SB=F'')'
+		dataType: double
+		lineageTag: 05a345d3-a53d-4080-be0b-e5281758b7fd
+		summarizeBy: sum
+		sourceColumn: ('Open', 'SB=F')
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SELIC_Anual
+		dataType: double
+		lineageTag: 60e07e01-5048-4e75-98bc-36391a5e7737
+		summarizeBy: sum
+		sourceColumn: SELIC_Anual
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column SELIC_Meta_Anual
+		dataType: double
+		lineageTag: 0918c84f-7ab2-4643-8569-2c64ed144473
+		summarizeBy: sum
+		sourceColumn: SELIC_Meta_Anual
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column IGP_M_Mensal
+		dataType: double
+		lineageTag: 31369c3c-9a5e-401d-ab33-ba52220c7c3c
+		summarizeBy: sum
+		sourceColumn: IGP_M_Mensal
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column INCC_Mensal
+		dataType: double
+		lineageTag: 7217aa81-514d-47fe-bdf4-a44177769993
+		summarizeBy: sum
+		sourceColumn: INCC_Mensal
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Indice_Condicoes_Econ_BR
+		dataType: double
+		lineageTag: f918d415-7d73-45af-9d3a-42689d754626
+		summarizeBy: sum
+		sourceColumn: Indice_Condicoes_Econ_BR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Indice_Condicoes_Econ_BR_USD
+		dataType: double
+		lineageTag: af00a338-685b-440d-a47f-f6ed2d9c7372
+		summarizeBy: sum
+		sourceColumn: Indice_Condicoes_Econ_BR_USD
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Salario_Minimo
+		dataType: double
+		lineageTag: f24179b4-6fbc-4fd9-a336-cef772fd8d04
+		summarizeBy: sum
+		sourceColumn: Salario_Minimo
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column IBC_BR
+		dataType: double
+		lineageTag: 8fb4edbf-51dd-4017-bc2c-1436eec3cbd7
+		summarizeBy: sum
+		sourceColumn: IBC_BR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Populacao_BR
+		dataType: double
+		lineageTag: f4ae545e-95a2-4186-b534-596fe052571d
+		summarizeBy: sum
+		sourceColumn: Populacao_BR
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PIB_Trimestral_Real
+		dataType: double
+		lineageTag: 058dfe8e-abbf-42bd-aec9-1873b38a2e7d
+		summarizeBy: sum
+		sourceColumn: PIB_Trimestral_Real
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column PIB_Anual_Corrente
+		dataType: double
+		lineageTag: e755e28b-fb7a-404a-a4d5-c3a940011e2d
+		summarizeBy: sum
+		sourceColumn: PIB_Anual_Corrente
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Deflator_Implicito_PIB
+		dataType: double
+		lineageTag: 990b586d-5fae-448a-93dd-8d4fdf55540d
+		summarizeBy: sum
+		sourceColumn: Deflator_Implicito_PIB
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CPIAUCSL
+		dataType: double
+		lineageTag: 71151e26-c9c4-401e-b7ed-1e24b18c21e5
+		summarizeBy: sum
+		sourceColumn: CPIAUCSL
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column type
+		dataType: string
+		lineageTag: 2e14ea47-429d-4c24-aca2-c7e8638e68a1
+		summarizeBy: none
+		sourceColumn: type
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dataset_report = m
+		mode: import
+		source =
+				let
+				    Fonte = Csv.Document(File.Contents("C:\Repositories\ds-lstm-ibov\data\processed\dataset_report.csv"),[Delimiter=",", Columns=41, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Cabeçalhos Promovidos" = Table.PromoteHeaders(Fonte, [PromoteAllScalars=true]),
+				    #"Colunas Renomeadas" = Table.RenameColumns(#"Cabeçalhos Promovidos",{{"", "Date"}}),
+				    #"Valor Substituído" = Table.ReplaceValue(#"Colunas Renomeadas",".",",",Replacer.ReplaceText,{"('Close', '^BVSP')", "('High', '^BVSP')", "('Low', '^BVSP')", "('Open', '^BVSP')", "('Volume', '^BVSP')", "('Close', '^GSPC')", "('High', '^GSPC')", "('Low', '^GSPC')", "('Open', '^GSPC')", "('Volume', '^GSPC')", "('Close', 'BTC-USD')", "('High', 'BTC-USD')", "('Low', 'BTC-USD')", "('Open', 'BTC-USD')", "('Close', 'GC=F')", "('High', 'GC=F')", "('Low', 'GC=F')", "('Open', 'GC=F')", "('Close', 'CL=F')", "('High', 'CL=F')", "('Low', 'CL=F')", "('Open', 'CL=F')", "('Close', 'SB=F')", "('High', 'SB=F')", "('Low', 'SB=F')", "('Open', 'SB=F')", "SELIC_Anual", "SELIC_Meta_Anual", "IGP_M_Mensal", "INCC_Mensal", "Indice_Condicoes_Econ_BR", "Indice_Condicoes_Econ_BR_USD", "Salario_Minimo", "IBC_BR", "Populacao_BR", "PIB_Trimestral_Real", "PIB_Anual_Corrente", "Deflator_Implicito_PIB", "CPIAUCSL"}),
+				    #"Tipo Alterado" = Table.TransformColumnTypes(#"Valor Substituído",{{"Date", type date}, {"('Close', '^BVSP')", type number}, {"('High', '^BVSP')", type number}, {"('Low', '^BVSP')", type number}, {"('Open', '^BVSP')", type number}, {"('Volume', '^BVSP')", type number}, {"('Close', '^GSPC')", type number}, {"('High', '^GSPC')", type number}, {"('Low', '^GSPC')", type number}, {"('Open', '^GSPC')", type number}, {"('Volume', '^GSPC')", type number}, {"('Close', 'BTC-USD')", type number}, {"('High', 'BTC-USD')", type number}, {"('Low', 'BTC-USD')", type number}, {"('Open', 'BTC-USD')", type number}, {"('Close', 'GC=F')", type number}, {"('High', 'GC=F')", type number}, {"('Low', 'GC=F')", type number}, {"('Open', 'GC=F')", type number}, {"('Close', 'CL=F')", type number}, {"('High', 'CL=F')", type number}, {"('Low', 'CL=F')", type number}, {"('Open', 'CL=F')", type number}, {"('Close', 'SB=F')", type number}, {"('High', 'SB=F')", type number}, {"('Low', 'SB=F')", type number}, {"('Open', 'SB=F')", type number}, {"SELIC_Anual", type number}, {"SELIC_Meta_Anual", type number}, {"IGP_M_Mensal", type number}, {"INCC_Mensal", type number}, {"Indice_Condicoes_Econ_BR", type number}, {"Indice_Condicoes_Econ_BR_USD", type number}, {"Salario_Minimo", type number}, {"IBC_BR", type number}, {"Populacao_BR", type number}, {"PIB_Trimestral_Real", type number}, {"PIB_Anual_Corrente", type number}, {"Deflator_Implicito_PIB", type number}, {"CPIAUCSL", type number}, {"type", type text}})
+				in
+				    #"Tipo Alterado"
+
+	annotation PBI_NavigationStepName = Navegação
+
+	annotation PBI_ResultType = Table
+

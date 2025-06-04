@@ -1,0 +1,56 @@
+table _MedidasIndexes
+	lineageTag: 987a0dd0-1f2d-45aa-a27a-1fd2140adbd2
+
+	measure _FirstValueIndex =
+			
+			
+			CALCULATE(
+			    FIRSTNONBLANK(FactIndexes[Value], TRUE()),
+			    FILTER(
+			        ALL('Calendar'),
+			        'Calendar'[Date] = MIN('Calendar'[Date])
+			    )
+			)
+		lineageTag: c827bc20-2b86-403d-b2ad-9c1e6590808a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure _LastValueIndex =
+			
+			
+			CALCULATE(
+			    LASTNONBLANK(FactIndexes[Value], TRUE()),
+			    FILTER(
+			        ALL('Calendar'),
+			        'Calendar'[Date] = MAX('Calendar'[Date])
+			    )
+			)
+		lineageTag: 1006192a-f848-4be6-bf04-5363e71e3ae2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure '%Δ Index' = ```
+			DIVIDE([_LastValueIndex]-[_FirstValueIndex],[_LastValueIndex],0)
+			
+			```
+		lineageTag: f714dccc-052c-492b-9c1f-185f918646d9
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Column
+		formatString: 0
+		lineageTag: e865467a-bfa8-480e-9419-b12dae9a4499
+		summarizeBy: sum
+		isNameInferred
+		sourceColumn: [Column]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _MedidasIndexes = calculated
+		mode: import
+		source = Row("Column", BLANK())
+
+	annotation PBI_Id = bbc7df784e8a4886b64997732a3ba773
+
+	annotation 436ba87b-9c83-4389-a31b-ebd06a36be98 = {"Expression":""}
+
