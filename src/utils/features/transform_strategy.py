@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from sklearn.compose import ColumnTransformer, make_column_selector
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.preprocessing import OneHotEncoder, RobustScaler
 
 from src.utils.features.postprocessor_strategy import (PostprocessorStrategy,DefaultLstmPostprocessor)
 
@@ -30,7 +30,7 @@ class TransformStrategy(ABC):
 class DefaultLstmTransformStrategy(TransformStrategy):
     def __init__(
         self, 
-        numeric_transformer=StandardScaler(),
+        numeric_transformer=RobustScaler(),
         categorical_transformer=OneHotEncoder(sparse_output=False, handle_unknown='ignore')):
             
         self._numeric_transformer = numeric_transformer
