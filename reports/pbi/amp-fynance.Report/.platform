@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "amp-fynance"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "503aec43-b039-4222-aa01-1da6bdf3d0f3"
+  }
+}
