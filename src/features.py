@@ -34,9 +34,9 @@ def main(
         prepare_data_template = DefaultLstmPrepareDataTemplate(
             dataset = pd.read_csv(input_path, index_col=0).sort_index(),
             targets= ["^BVSP"], #["('High', '^BVSP')","('Low', '^BVSP')","('Open', '^BVSP')","('Volume', '^BVSP')","('Close', '^BVSP')"],
-            splitter=SequentialSplitter(),
+            splitter=SequentialSplitter(train_size_ratio=0.99),
             transformer=DefaultLstmTransformStrategy(),
-            generator = DefaultLstmGenerator()
+            generator = DefaultLstmGenerator(batch_size=1)
             )
         
         prepare_data_template.prepare_data()

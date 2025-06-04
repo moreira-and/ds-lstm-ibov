@@ -21,9 +21,9 @@ class LstmModelBuilder(ModelBuilder):
         try:
             return Sequential([
                 Input(shape=self.input_shape),
-                Bidirectional(LSTM(70, return_sequences=True, recurrent_dropout=0.2, kernel_regularizer=l2(0.001))),
+                Bidirectional(LSTM(70, return_sequences=True, recurrent_dropout=0.3, kernel_regularizer=l2(0.001))),
                 Dropout(0.3),
-                LSTM(50, return_sequences=True, recurrent_dropout=0.2, kernel_regularizer=l2(0.001)),
+                LSTM(50, return_sequences=True, recurrent_dropout=0.3, kernel_regularizer=l2(0.001)),
                 Dropout(0.3),
                 LSTM(30, return_sequences=False, recurrent_dropout=0.2, kernel_regularizer=l2(0.001)),
                 Dense(self.output_shape[0])

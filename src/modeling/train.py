@@ -44,7 +44,7 @@ def main(
     compiler = ClassificationCompileStrategy()
 
     logger.info("Selecting training strategy...")
-    trainer = BasicTrainStrategy()
+    trainer = BasicTrainStrategy(batch_size=1, epochs=100, validation_split=0.1)
 
     logger.info("Building model training pipeline template...")   
     template = ModelKerasPipeline(

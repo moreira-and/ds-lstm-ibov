@@ -18,22 +18,22 @@ def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
     input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
     preprocessor_path: Path = PROCESSED_DATA_DIR / "preprocessor.pkl",
-    model_path: Path = MODELS_DIR / "Sequential_epoch20_loss0.1473.keras",    
+    model_path: Path = MODELS_DIR / "Sequential_epoch59_loss0.1171.keras",    
     postprocessor_path: Path = PROCESSED_DATA_DIR / "postprocessor.pkl",
-    output_path: Path = PROCESSED_DATA_DIR / "y_predicted.csv",
+    output_path: Path = PROCESSED_DATA_DIR / "dataset_report.csv",
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
     logger.info("Performing inference for model...")
 
     # Carrega dados de entrada
-    df = pd.read_csv(input_path, index_col=0).tail(8)
-    logger.info(f"Input data shape: {df.shape}")
+    df = pd.read_csv(input_path, index_col=0,parse_dates=True)
+    logger.info(f"Input data shape: {df.tail(8).shape}")
     
     with open(preprocessor_path, "rb") as f:
         preprocessor = cloudpickle.load(f)
     # Aplica pipeline de predição
-    X_processed = preprocessor.transform(df)
+    X_processed = preprocessor.transform(df.tail(8))
 
     model = keras.models.load_model(model_path)
     predictions = model.predict(X_processed)
@@ -41,10 +41,20 @@ def main(
     with open(postprocessor_path, "rb") as f:
         postprocessor = cloudpickle.load(f)
 
-    final_output = postprocessor.inverse_transform(predictions)
+    df_predicted = postprocessor.inverse_transform(predictions)
+    df_predicted['type'] = 'Predicted'
+
+    last_index = df.index[-1]
+    new_index = last_index + pd.Timedelta(days=1)
+    df_predicted.index = [new_index]
+
+    
+    df['type'] = 'True'
+    df_report = pd.concat([df, df_predicted])
+    df_report = df_report.ffill()
 
     # Salva resultados
-    pd.DataFrame(final_output).to_csv(output_path, index=False)
+    df_report.to_csv(output_path, index=True)
 
 
     # Log com MLflow
