@@ -6,8 +6,8 @@ table _MedidasAssets
 			CALCULATE(
 			    LASTNONBLANK(FactAssets[Close], TRUE()),
 			    FILTER(
-			        ALL('Calendar'),
-			        'Calendar'[Date] = MAX('Calendar'[Date])
+			        ALL('DimCalendar'),
+			        'DimCalendar'[Date] = MAX('DimCalendar'[Date])
 			    )
 			)
 			
@@ -16,13 +16,13 @@ table _MedidasAssets
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure _FirstCloseAsset = ```
+	measure _FirstOpenAsset = ```
 			
 			CALCULATE(
-			    FIRSTNONBLANK(FactAssets[Close], TRUE()),
+			    FIRSTNONBLANK(FactAssets[Open], TRUE()),
 			    FILTER(
-			        ALL('Calendar'),
-			        'Calendar'[Date] = MIN('Calendar'[Date])
+			        ALL('DimCalendar'),
+			        'DimCalendar'[Date] = MIN('DimCalendar'[Date])
 			    )
 			)
 			
@@ -31,7 +31,7 @@ table _MedidasAssets
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure '%Δ Asset' = DIVIDE(_MedidasAssets[_LastCloseAsset]-_MedidasAssets[_FirstCloseAsset],[_LastCloseAsset],0)
+	measure '%Δ Asset' = DIVIDE([_LastCloseAsset]-[_FirstOpenAsset],[_FirstOpenAsset],0)
 		formatString: 0.0%;-0.0%;0.0%
 		lineageTag: fb4c82d3-53e5-4b52-b736-0cb5fdb6d39b
 

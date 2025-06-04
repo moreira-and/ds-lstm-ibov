@@ -19,13 +19,13 @@
             "height": 104,
             "width": 234
           },
-          "zIndex": 2,
+          "zIndex": 7,
           "expandedHeight": 300
         },
         {
           "location": {
-            "x": 231.29342534411313,
-            "y": 682.91904334111291
+            "x": 403.5244505362927,
+            "y": 735.06238124333242
           },
           "nodeIndex": "DimAssets",
           "nodeLineageTag": "eec48190-04a4-4d86-bfe1-4e1038c25503",
@@ -33,12 +33,12 @@
             "height": 104,
             "width": 234
           },
-          "zIndex": 0
+          "zIndex": 1
         },
         {
           "location": {
-            "x": 1195.8988136306921,
-            "y": 705.04045942084258
+            "x": 1050.5295079638984,
+            "y": 755.60369617451
           },
           "nodeIndex": "DimIndexes",
           "nodeLineageTag": "e6020b78-f55d-4757-88aa-9985e6fd9e81",
@@ -46,7 +46,7 @@
             "height": 104,
             "width": 234
           },
-          "zIndex": 0
+          "zIndex": 2
         },
         {
           "location": {
@@ -59,7 +59,7 @@
             "height": 272,
             "width": 234
           },
-          "zIndex": 0
+          "zIndex": 3
         },
         {
           "location": {
@@ -72,20 +72,7 @@
             "height": 176,
             "width": 234
           },
-          "zIndex": 0
-        },
-        {
-          "location": {
-            "x": 751.47218414817087,
-            "y": 92.786675804438971
-          },
-          "nodeIndex": "Calendar",
-          "nodeLineageTag": "01cec652-3664-42dc-a5d5-a0061c233a80",
-          "size": {
-            "height": 200,
-            "width": 234
-          },
-          "zIndex": 0
+          "zIndex": 4
         },
         {
           "location": {
@@ -97,15 +84,28 @@
             "height": 72,
             "width": 234
           },
-          "zIndex": 0,
+          "zIndex": 5,
           "expandedHeight": 200
         },
         {
           "location": {
-            "x": 1479.8988136306921,
-            "y": 304.52022971042129
+            "x": 0,
+            "y": 231.83557687702441
           },
           "nodeIndex": "_MedidasIndexes",
+          "nodeLineageTag": "987a0dd0-1f2d-45aa-a27a-1fd2140adbd2",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 751.47218414817087,
+            "y": 50.123944793532104
+          },
+          "nodeIndex": "DimCalendar",
           "size": {
             "height": 200,
             "width": 234

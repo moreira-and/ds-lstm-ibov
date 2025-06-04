@@ -13,14 +13,14 @@ relationship AutoDetected_b274a98a-0cb5-41dc-a1d5-5835d2ca69ca
 
 relationship c6e93cb7-5f1f-43ff-8a1c-048adf214a41
 	joinOnDateBehavior: datePartOnly
-	fromColumn: Calendar.Date
+	fromColumn: DimCalendar.Date
 	toColumn: LocalDateTable_1979701f-3ade-42d9-92c8-c04f89563c4f.Date
 
 relationship c40e6715-0061-b439-2ba4-f8eda5ea9b99
 	fromColumn: FactAssets.Date
-	toColumn: Calendar.Date
+	toColumn: DimCalendar.Date
 
 relationship 5abc08ea-9936-9d09-716d-de15b144fc40
 	fromColumn: FactIndexes.Date
-	toColumn: Calendar.Date
+	toColumn: DimCalendar.Date
 

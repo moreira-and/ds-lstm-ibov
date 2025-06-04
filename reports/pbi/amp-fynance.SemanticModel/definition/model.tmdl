@@ -22,7 +22,7 @@ ref table FactAssets
 ref table DimAssets
 ref table FactIndexes
 ref table DimIndexes
-ref table Calendar
+ref table DimCalendar
 ref table LocalDateTable_1979701f-3ade-42d9-92c8-c04f89563c4f
 ref table _MedidasIndexes
 

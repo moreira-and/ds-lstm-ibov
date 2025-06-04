@@ -1,4 +1,4 @@
-table Calendar
+table DimCalendar
 	lineageTag: 01cec652-3664-42dc-a5d5-a0061c233a80
 
 	column Date
@@ -15,7 +15,7 @@ table Calendar
 
 		annotation SummarizationSetBy = Automatic
 
-	partition Calendar = calculated
+	partition DimCalendar = calculated
 		mode: import
 		source = CALENDARAUTO()
 

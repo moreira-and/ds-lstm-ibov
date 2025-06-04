@@ -7,8 +7,8 @@ table _MedidasIndexes
 			CALCULATE(
 			    FIRSTNONBLANK(FactIndexes[Value], TRUE()),
 			    FILTER(
-			        ALL('Calendar'),
-			        'Calendar'[Date] = MIN('Calendar'[Date])
+			        ALL('DimCalendar'),
+			        'DimCalendar'[Date] = MIN('DimCalendar'[Date])
 			    )
 			)
 		lineageTag: c827bc20-2b86-403d-b2ad-9c1e6590808a
@@ -21,8 +21,8 @@ table _MedidasIndexes
 			CALCULATE(
 			    LASTNONBLANK(FactIndexes[Value], TRUE()),
 			    FILTER(
-			        ALL('Calendar'),
-			        'Calendar'[Date] = MAX('Calendar'[Date])
+			        ALL('DimCalendar'),
+			        'DimCalendar'[Date] = MAX('DimCalendar'[Date])
 			    )
 			)
 		lineageTag: 1006192a-f848-4be6-bf04-5363e71e3ae2
@@ -30,12 +30,13 @@ table _MedidasIndexes
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure '%Δ Index' = ```
-			DIVIDE([_LastValueIndex]-[_FirstValueIndex],[_LastValueIndex],0)
+			
+			
+			DIVIDE([_LastValueIndex]-[_FirstValueIndex],[_FirstValueIndex],0)
 			
 			```
+		formatString: 0.0%;-0.0%;0.0%
 		lineageTag: f714dccc-052c-492b-9c1f-185f918646d9
-
-		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	column Column
 		formatString: 0

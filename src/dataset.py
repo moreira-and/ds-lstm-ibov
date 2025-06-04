@@ -73,9 +73,9 @@ def main(
 
     clean_pipeline = CleanPipeline([
             CleanMissingValues(),
-            CleanLowVariance(),
-            CleanGenericUnivariate(f_classif, "percentile", 95),
-            CleanGenericUnivariate(f_regression, "percentile", 95)
+            CleanLowVariance()#,
+            #CleanGenericUnivariate(f_classif, "percentile", 95),
+            #CleanGenericUnivariate(f_regression, "percentile", 95)
             ])
 
     X_clean, y_clean = clean_pipeline.clear(X, y)
