@@ -41,7 +41,15 @@ class DefaultLstmPrepareDataTemplate(PrepareDataTemplate):
         train_data, test_data = self.splitter.split(X = self.dataset)
 
         train_X = self.transformer.fit_transform(X = train_data) # train fit
-        test_X = self.transformer.transform(X = test_data) # test transform with train fit (real)
+        
+         # initialize empty array for test data
+
+        if len(test_data) == 0:
+            test_X = None
+            X_all = train_X # concat to generate
+        else:
+            test_X = self.transformer.transform(X = test_data)
+            X_all = np.concatenate([train_X, test_X]) # concat to generate
 
         feature_names = self.transformer.get_feature_names() # get feature names
 
@@ -51,9 +59,7 @@ class DefaultLstmPrepareDataTemplate(PrepareDataTemplate):
             if any(t in feature for t in self.targets)
         ]
 
-        y_index = [i for i, _ in y_features]
-
-        X_all = np.concatenate([train_X, test_X]) # concat to generate
+        y_index = [i for i, _ in y_features]       
 
         generator = self.generator.generate(data=X_all,targets = X_all[:,y_index])
 
