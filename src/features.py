@@ -33,7 +33,7 @@ def main(
     try:
         prepare_data_template = DefaultLstmPrepareDataTemplate(
             dataset = pd.read_csv(input_path, index_col=0).sort_index(),
-            targets = None,#["^BVSP"],
+            targets = ["^BVSP"], #None,
             splitter =SequentialSplitter(train_size_ratio=1),
             transformer = BlankTransformStrategy(), #DefaultLstmTransformStrategy(),
             generator = DefaultLstmGenerator(batch_size=1)

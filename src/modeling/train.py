@@ -11,7 +11,7 @@ import numpy as np
 from src.config import MODELS_DIR, PROCESSED_DATA_DIR
 from src.utils.train.model_template import ModelKerasPipeline
 from src.utils.train.model_builder import LstmModelBuilder
-from src.utils.train.compile_strategy import ClassificationCompileStrategy
+from src.utils.train.compile_strategy import RegressionCompileStrategy
 from src.utils.train.train_strategy import BasicTrainStrategy
 
 app = typer.Typer()
@@ -41,10 +41,10 @@ def main(
         )
 
     logger.info("Selecting compile strategy...")
-    compiler = ClassificationCompileStrategy()
+    compiler = RegressionCompileStrategy()
 
     logger.info("Selecting training strategy...")
-    trainer = BasicTrainStrategy(batch_size=1, epochs=100, validation_split=0.1)
+    trainer = BasicTrainStrategy(batch_size=3, epochs=1000, validation_split=0.15)
 
     logger.info("Building model training pipeline template...")   
     template = ModelKerasPipeline(
