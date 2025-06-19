@@ -4,6 +4,7 @@ from loguru import logger
 import typer
 
 from src.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
+from src.utils.dataset.dataset_save_strategy import update_df
 
 from src.utils.dataset.dataset_loading_strategy import DatasetMultiLoader, YfinanceLoadingStrategy, BcbLoadingStrategy, DataReaderLoadingStrategy
 from src.utils.dataset.clean_strategy import CleanPipeline, CleanMissingValues, CleanLowVariance, CleanGenericUnivariate
@@ -79,7 +80,11 @@ def main(
 
     df_clean = pd.concat([y_clean,X_clean],axis=1)
 
-    df_clean.to_csv(PROCESSED_DATA_DIR / 'dataset.csv')
+    df_old_dataset = pd.read_csv(RAW_DATA_DIR / 'dataset.csv', index_col=0)
+
+    df_new_dataset = update_df(df_old_dataset, df_clean)
+
+    df_new_dataset.to_csv(PROCESSED_DATA_DIR / 'dataset.csv')
     logger.success("Clean data successfully loaded...")
 
     end_time = time.time()

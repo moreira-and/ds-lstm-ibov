@@ -8,7 +8,7 @@ model Model
 
 annotation PBI_ProTooling = ["DevMode"]
 
-annotation PBIDesktopVersion = 2.143.1204.0 (25.05)+23c84aace645781dd62b8a26eb0418c7e6a84b72
+annotation PBIDesktopVersion = 2.144.679.0 (25.06)+ef40146207b86a826d1c72a7727a743ee37450e9
 
 annotation PBI_QueryOrder = ["dataset_report","FactAssets","DimAssets","FactIndexes","DimIndexes"]
 

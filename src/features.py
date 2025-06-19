@@ -8,7 +8,7 @@ from src.config import logger, PROCESSED_DATA_DIR
 
 from src.utils.features.prepare_data_template import DefaultLstmPrepareDataTemplate
 from src.utils.features.splitter_strategy import SequentialSplitter
-from src.utils.features.transform_strategy import DefaultLstmTransformStrategy
+from src.utils.features.transform_strategy import (DefaultLstmTransformStrategy,BlankTransformStrategy)
 from src.utils.features.generator_strategy import DefaultLstmGenerator
 
 import numpy as np
@@ -33,9 +33,9 @@ def main(
     try:
         prepare_data_template = DefaultLstmPrepareDataTemplate(
             dataset = pd.read_csv(input_path, index_col=0).sort_index(),
-            targets= ["^BVSP"], #["('High', '^BVSP')","('Low', '^BVSP')","('Open', '^BVSP')","('Volume', '^BVSP')","('Close', '^BVSP')"],
-            splitter=SequentialSplitter(train_size_ratio=1),
-            transformer=DefaultLstmTransformStrategy(),
+            targets = None,#["^BVSP"],
+            splitter =SequentialSplitter(train_size_ratio=1),
+            transformer = BlankTransformStrategy(), #DefaultLstmTransformStrategy(),
             generator = DefaultLstmGenerator(batch_size=1)
             )
         

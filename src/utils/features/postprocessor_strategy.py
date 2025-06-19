@@ -24,3 +24,12 @@ class DefaultLstmPostprocessor(PostprocessorStrategy):
             column_names = [f'feature_{i}' for i in range(y_inversed.shape[1])]
 
         return pd.DataFrame(y_inversed, columns=column_names)
+
+
+class BlankPostprocessor(PostprocessorStrategy):  
+    
+    def __init__(self,column_names=None):
+        self.column_names = column_names
+
+    def inverse_transform(self, y_predicted):
+        return pd.DataFrame(y_predicted,columns=self.column_names) if self.column_names else pd.DataFrame(y_predicted)
