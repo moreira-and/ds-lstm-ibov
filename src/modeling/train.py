@@ -10,9 +10,9 @@ import numpy as np
 
 from src.config import MODELS_DIR, PROCESSED_DATA_DIR
 from src.utils.train.model_template import ModelKerasPipeline
-from src.utils.train.model_builder import LstmModelBuilder
+from src.utils.train.model_builder import RegressionRobustModelBuilder
 from src.utils.train.compile_strategy import RegressionCompileStrategy
-from src.utils.train.train_strategy import BasicTrainStrategy
+from src.utils.train.train_strategy import RegressionTrainStrategy
 
 app = typer.Typer()
 
@@ -35,7 +35,7 @@ def main(
     output_shape = y_train.shape[1:]
 
     logger.info("Building model...")
-    builder = LstmModelBuilder(
+    builder = RegressionRobustModelBuilder(
             input_shape = input_shape,
             output_shape = output_shape
         )
@@ -44,7 +44,7 @@ def main(
     compiler = RegressionCompileStrategy()
 
     logger.info("Selecting training strategy...")
-    trainer = BasicTrainStrategy(batch_size=3, epochs=1000, validation_split=0.15)
+    trainer = RegressionTrainStrategy(batch_size=3, epochs=1000, validation_split=0.15)
 
     logger.info("Building model training pipeline template...")   
     template = ModelKerasPipeline(

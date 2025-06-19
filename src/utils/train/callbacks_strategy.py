@@ -11,7 +11,7 @@ class CallbacksStrategy(ABC):
         pass
 
 
-class DefaultCallbacksStrategy(CallbacksStrategy):
+class RegressionCallbacksStrategy(CallbacksStrategy):
     @staticmethod
     def get():
         early_stop = callbacks.EarlyStopping(monitor='val_mae', patience=20, restore_best_weights=True,mode='min', verbose=0)
