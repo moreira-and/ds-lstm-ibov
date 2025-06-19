@@ -32,4 +32,5 @@ class BlankPostprocessor(PostprocessorStrategy):
         self.column_names = column_names
 
     def inverse_transform(self, y_predicted):
-        return pd.DataFrame(y_predicted,columns=self.column_names) if self.column_names else pd.DataFrame(y_predicted)
+        return pd.DataFrame(y_predicted, columns=self.column_names.values) \
+            if len(self.column_names.values) > 0 else pd.DataFrame(y_predicted)
