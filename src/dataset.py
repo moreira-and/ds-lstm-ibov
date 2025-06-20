@@ -4,7 +4,7 @@ from loguru import logger
 import typer
 
 from src.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
-from src.utils.dataset.dataset_save_strategy import update_df
+from src.utils.dataset.dataset_save_strategy import update_df, enrich_with_business_calendar
 
 from src.utils.dataset.dataset_loading_strategy import DatasetMultiLoader, YfinanceLoadingStrategy, BcbLoadingStrategy, DataReaderLoadingStrategy
 from src.utils.dataset.clean_strategy import CleanPipeline, CleanMissingValues, CleanLowVariance, CleanGenericUnivariate
@@ -24,7 +24,7 @@ def main(
     # ----  DEFAULT PATHS --------------------------
     asset: str = '^BVSP',
     asset_focus: str = 'Close',
-    years: int = 1
+    years: int = 5
     # ----------------------------------------------
 ):
     # -----------------------------------------
@@ -80,13 +80,15 @@ def main(
 
     df_clean = pd.concat([y_clean,X_clean],axis=1)
 
-    df_old_dataset = pd.read_csv(RAW_DATA_DIR / 'dataset.csv', index_col=0)
+    df_old_dataset = pd.read_csv(PROCESSED_DATA_DIR / 'dataset.csv', index_col=0)
 
     df_updated = update_df(df_old_dataset, df_clean)
-    
-    print(df_updated.tail())
 
-    df_updated.to_csv(PROCESSED_DATA_DIR / 'dataset.csv')
+    df_dataset = enrich_with_business_calendar(df_updated)
+    
+    print(df_dataset.tail(7))
+
+    df_dataset.to_csv(PROCESSED_DATA_DIR / 'dataset.csv')
     logger.success("Clean data successfully loaded...")
 
     end_time = time.time()
