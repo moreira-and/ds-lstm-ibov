@@ -33,7 +33,7 @@ class RegressionRobustModelBuilder(ModelBuilder):
                 # 3. Camada LayerNormalization para estabilizar treino
                 LayerNormalization(),
 
-                Dropout(0.2),
+                Dropout(0.3),
 
                 # 4. Camada GRU para complementar LSTM
                 GRU(32, return_sequences=False, kernel_regularizer=l2(1e-4)),

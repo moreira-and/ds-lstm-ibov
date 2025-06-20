@@ -9,6 +9,7 @@ import typer
 
 from src import config, utils
 from src.config import MODELS_DIR, PROCESSED_DATA_DIR
+from src.utils.train.metric_strategy import smape, rmse, r2_score
 
 app = typer.Typer()
 
@@ -18,7 +19,7 @@ def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
     input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
     preprocessor_path: Path = PROCESSED_DATA_DIR / "preprocessor.pkl",
-    model_path: Path = MODELS_DIR / "Sequential_epoch91_loss19218269183896715264.0000.keras",    
+    model_path: Path = MODELS_DIR / "Sequential_epoch68_loss0.0408.keras",    
     postprocessor_path: Path = PROCESSED_DATA_DIR / "postprocessor.pkl",
     output_path: Path = PROCESSED_DATA_DIR / "dataset_report.csv",
     # -----------------------------------------
@@ -35,7 +36,14 @@ def main(
     # Aplica pipeline de predição
     X_processed = preprocessor.transform(df.tail(8))
 
-    model = keras.models.load_model(model_path)
+    model = keras.models.load_model(
+        model_path, 
+        custom_objects={
+            "smape": smape,
+            "rmse": rmse,
+            "r2_score": r2_score
+        }
+)
     predictions = model.predict(X_processed)
 
     with open(postprocessor_path, "rb") as f:

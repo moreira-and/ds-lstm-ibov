@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from tensorflow.keras.metrics import Precision, Recall, AUC
 import tensorflow.keras.backend as K
-
+from tensorflow.keras.utils import register_keras_serializable
 
 class MetricStrategy(ABC):
     @abstractmethod
@@ -18,16 +18,19 @@ class ClassificationMetricStrategy(MetricStrategy):
     
 # Custom metrics for regression
 # SMAPE
+@register_keras_serializable()
 def smape(y_true, y_pred):
     numerator = K.abs(y_true - y_pred)
     denominator = (K.abs(y_true) + K.abs(y_pred)) / 2.0
     return 100.0 * K.mean(numerator / (denominator + K.epsilon()))
 
 # RMSE
+@register_keras_serializable()
 def rmse(y_true, y_pred):
     return K.sqrt(K.mean(K.square(y_pred - y_true)))
 
 # R² Score
+@register_keras_serializable()
 def r2_score(y_true, y_pred):
     ss_res = K.sum(K.square(y_true - y_pred))
     ss_tot = K.sum(K.square(y_true - K.mean(y_true)))
