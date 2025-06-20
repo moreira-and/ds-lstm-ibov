@@ -24,7 +24,7 @@ def main(
     # ----  DEFAULT PATHS --------------------------
     asset: str = '^BVSP',
     asset_focus: str = 'Close',
-    years: int = 10
+    years: int = 1
     # ----------------------------------------------
 ):
     # -----------------------------------------
@@ -82,9 +82,11 @@ def main(
 
     df_old_dataset = pd.read_csv(RAW_DATA_DIR / 'dataset.csv', index_col=0)
 
-    df_new_dataset = update_df(df_old_dataset, df_clean)
+    df_updated = update_df(df_old_dataset, df_clean)
+    
+    print(df_updated.tail())
 
-    df_new_dataset.to_csv(PROCESSED_DATA_DIR / 'dataset.csv')
+    df_updated.to_csv(PROCESSED_DATA_DIR / 'dataset.csv')
     logger.success("Clean data successfully loaded...")
 
     end_time = time.time()

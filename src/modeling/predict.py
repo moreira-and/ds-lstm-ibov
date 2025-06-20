@@ -19,7 +19,7 @@ def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
     input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
     preprocessor_path: Path = PROCESSED_DATA_DIR / "preprocessor.pkl",
-    model_path: Path = MODELS_DIR / "Sequential_epoch116_loss0.0119.keras",    
+    model_path: Path = MODELS_DIR / "Sequential_epoch145_loss0.0070.keras",    
     postprocessor_path: Path = PROCESSED_DATA_DIR / "postprocessor.pkl",
     output_path: Path = PROCESSED_DATA_DIR / "dataset_report.csv",
     # -----------------------------------------
@@ -55,12 +55,12 @@ def main(
     last_index = df.index[-1]
     new_index = last_index + pd.Timedelta(days=1)
     df_predicted.index = [new_index]
-
-    print(df_predicted)
     
     df['type'] = 'True'
     df_report = pd.concat([df, df_predicted])
     df_report = df_report.ffill()
+    
+    print(df_report[df_predicted.columns].tail(2))
 
     # Salva resultados
     df_report.to_csv(output_path, index=True)
