@@ -40,7 +40,7 @@ class DefaultLstmPrepareDataTemplate(PrepareDataTemplate):
     def prepare_data(self):
         train_data, test_data = self.splitter.split(X = self.dataset)
 
-        train_X,train_y = self.transformer.fit_transform(X = train_data) # train fit
+        train_X = self.transformer.fit_transform(X = train_data) # train fit
         
          # initialize empty array for test data
 

@@ -52,7 +52,7 @@ class DefaultLstmTransformStrategy(TransformStrategy):
         return self
 
     def transform(self, X, y=None):
-        return self.column_transformer.transform(X)
+        return self.column_transformer.transform(X,y), y
 
     def fit_transform(self, X, y=None):
         return self.column_transformer.fit_transform(X, y)

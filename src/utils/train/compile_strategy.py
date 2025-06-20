@@ -1,8 +1,11 @@
 from src.config import logger
+from src.utils.train.metric_strategy import ClassificationMetricStrategy, RegressionMetricStrategy
 
 from abc import ABC, abstractmethod
 from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.metrics import Precision, Recall, AUC
+from tensorflow.keras.losses import Huber
+
+
 
 class CompileStrategy(ABC):
     @abstractmethod
@@ -10,7 +13,7 @@ class CompileStrategy(ABC):
         pass
 
 class ClassificationCompileStrategy(CompileStrategy):
-    def __init__(self, optimizer = Adam(learning_rate=0.01), loss = 'binary_crossentropy', metrics = ['accuracy', Precision(), Recall(), AUC()]):
+    def __init__(self, optimizer = Adam(learning_rate=0.01), loss = 'binary_crossentropy', metrics = ClassificationMetricStrategy().get_metrics()):
         self.optimizer = optimizer
         self.loss = loss
         self.metrics = metrics
@@ -26,7 +29,7 @@ class ClassificationCompileStrategy(CompileStrategy):
             logger.error(f'Error compilling {self.__class__.__name__}: {e}')
 
 class RegressionCompileStrategy(CompileStrategy):
-    def __init__(self, optimizer = Adam(learning_rate=0.01), loss = 'mse', metrics = ['mae','mape']):
+    def __init__(self, optimizer = Adam(learning_rate=0.01), loss = Huber(delta=1.0), metrics = RegressionMetricStrategy().get_metrics()):
         self.optimizer = optimizer
         self.loss = loss
         self.metrics = metrics

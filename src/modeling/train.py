@@ -44,7 +44,7 @@ def main(
     compiler = RegressionCompileStrategy()
 
     logger.info("Selecting training strategy...")
-    trainer = RegressionTrainStrategy(batch_size=3, epochs=1000, validation_split=0.15)
+    trainer = RegressionTrainStrategy(batch_size=1, epochs=1000, validation_split=0.1)
 
     logger.info("Building model training pipeline template...")   
     template = ModelKerasPipeline(

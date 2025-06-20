@@ -35,7 +35,7 @@ def main(
             dataset = pd.read_csv(input_path, index_col=0).sort_index(),
             targets = ["^BVSP"], #None,
             splitter =SequentialSplitter(train_size_ratio=1),
-            transformer = BlankTransformStrategy(), #DefaultLstmTransformStrategy(),
+            transformer = DefaultLstmTransformStrategy(), #BlankTransformStrategy(),
             generator = DefaultLstmGenerator(batch_size=1)
             )
         
