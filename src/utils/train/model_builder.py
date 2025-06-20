@@ -1,8 +1,8 @@
 from src.config import logger
 from abc import ABC, abstractmethod
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Input, Conv1D, LSTM, GRU, Dropout, Dense, LayerNormalization, Bidirectional
-from tensorflow.keras.regularizers import l2
+from tensorflow.keras.layers import Input, Conv1D, LSTM, GRU, Dropout, Dense, LayerNormalization,BatchNormalization, Bidirectional
+from tensorflow.keras.regularizers import l1, l2
 
 class ModelBuilder(ABC):
 
@@ -20,32 +20,19 @@ class RegressionRobustModelBuilder(ModelBuilder):
 
         try:
             return Sequential([
-
-
                 Input(shape=self.input_shape),
 
-                # 1. Camada Conv1D para captar padrões locais temporais
-                Conv1D(filters=128, kernel_size=3, activation='relu', padding='causal'),
-
-                # 2. Camada Bidirectional LSTM para dependências temporais passadas e futuras
-                Bidirectional(LSTM(64, return_sequences=True, kernel_regularizer=l2(1e-4))),
-
-                # 3. Camada LayerNormalization para estabilizar treino
+                LSTM(64, return_sequences=True, kernel_regularizer=l2(1e-4)),
                 LayerNormalization(),
-
                 Dropout(0.3),
 
-                # 4. Camada GRU para complementar LSTM
                 GRU(32, return_sequences=False, kernel_regularizer=l2(1e-4)),
-
                 Dropout(0.2),
 
-                # 5. Camada Dense intermediária
-                Dense(64, activation='relu', kernel_regularizer=l2(1e-4)),
+                Dense(32, activation='relu', kernel_regularizer=l2(1e-5)),
+                Dropout(0.2),
+                BatchNormalization(),
 
-                Dropout(0.1),
-
-                # 6. Saída linear para regressão
                 Dense(self.output_shape[0], activation='linear')
             ])
         except Exception as e:
