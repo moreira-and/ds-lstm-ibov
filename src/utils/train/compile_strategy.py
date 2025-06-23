@@ -29,7 +29,7 @@ class ClassificationCompileStrategy(CompileStrategy):
             logger.error(f'Error compilling {self.__class__.__name__}: {e}')
 
 class RegressionCompileStrategy(CompileStrategy):
-    def __init__(self, optimizer = Adam(learning_rate=0.01), loss = Huber(delta=1.0), metrics = RegressionMetricStrategy().get_metrics()):
+    def __init__(self, optimizer = Adam(learning_rate=0.001), loss = Huber(delta=1.0), metrics = RegressionMetricStrategy().get_metrics()):
         self.optimizer = optimizer
         self.loss = loss
         self.metrics = metrics

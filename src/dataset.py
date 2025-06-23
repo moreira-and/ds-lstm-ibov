@@ -4,7 +4,7 @@ from loguru import logger
 import typer
 
 from src.config import PROCESSED_DATA_DIR, RAW_DATA_DIR
-from src.utils.dataset.dataset_save_strategy import update_df, enrich_with_business_calendar
+from src.utils.dataset.calendar_strategy import update_df, enrich_calendar
 
 from src.utils.dataset.dataset_loading_strategy import DatasetMultiLoader, YfinanceLoadingStrategy, BcbLoadingStrategy, DataReaderLoadingStrategy
 from src.utils.dataset.clean_strategy import CleanPipeline, CleanMissingValues, CleanLowVariance, CleanGenericUnivariate
@@ -84,7 +84,7 @@ def main(
 
     df_updated = update_df(df_old_dataset, df_clean)
 
-    df_dataset = enrich_with_business_calendar(df_updated)
+    df_dataset = enrich_calendar(df_updated)
     
     print(df_dataset.tail(7))
 

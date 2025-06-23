@@ -1,7 +1,7 @@
 from src.config import logger
 from abc import ABC, abstractmethod
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Input,Bidirectional, LSTM, GRU, Dropout, Dense, LayerNormalization
+from tensorflow.keras.layers import Input, Conv1D, Bidirectional, LSTM, GRU, Dropout, Dense, LayerNormalization
 from tensorflow.keras.regularizers import l2
 
 class ModelBuilder(ABC):
@@ -22,13 +22,16 @@ class RegressionRobustModelBuilder(ModelBuilder):
             return Sequential([
                 Input(shape=self.input_shape),
 
-                Bidirectional(LSTM(128, return_sequences=True, kernel_regularizer=l2(1e-4),recurrent_dropout=0.2)),
+                Conv1D(64, kernel_size=3, activation='relu', padding='same', kernel_regularizer=l2(1e-4)),
                 LayerNormalization(),
-
-                GRU(64, return_sequences=False, kernel_regularizer=l2(1e-4),recurrent_dropout=0.2),
-
-                Dense(32, activation='relu', kernel_regularizer=l2(1e-5)),
                 Dropout(0.1),
+                
+                Bidirectional(LSTM(32, return_sequences=True, kernel_regularizer=l2(1e-4),recurrent_dropout=0.2)),
+                
+                GRU(32, return_sequences=False, kernel_regularizer=l2(1e-4),recurrent_dropout=0.2),
+
+                Dense(32, activation='relu', kernel_regularizer=l2(1e-4)),
+                Dropout(0.3),
                 
                 Dense(self.output_shape[0], activation='linear')
             ])

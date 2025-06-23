@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1750642030212
+current_stage: None
+description: null
+last_updated_timestamp: 1750642030212
+name: RegressionRobustModelBuilder
+run_id: 67dafac73a0d41ba9bbfa0a1c8a2d453
+run_link: null
+source: file:///C:/Repositories/ds-lstm-ibov/mlruns/372487245857191218/67dafac73a0d41ba9bbfa0a1c8a2d453/artifacts/keras_model
+status: READY
+status_message: null
+storage_location: file:///C:/Repositories/ds-lstm-ibov/mlruns/372487245857191218/67dafac73a0d41ba9bbfa0a1c8a2d453/artifacts/keras_model
+user_id: null
+version: 1

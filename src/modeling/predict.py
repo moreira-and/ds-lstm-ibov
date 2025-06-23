@@ -29,12 +29,12 @@ def main(
 
     # Carrega dados de entrada
     df = pd.read_csv(input_path, index_col=0,parse_dates=True)
-    logger.info(f"Input data shape: {df.tail(21).shape}")
+    logger.info(f"Input data shape: {df.tail(101).shape}")
     
     with open(preprocessor_path, "rb") as f:
         preprocessor = cloudpickle.load(f)
     # Aplica pipeline de predição
-    X_processed = preprocessor.transform(df.tail(21))
+    X_processed = preprocessor.transform(df.tail(101))
 
     model = keras.models.load_model(
         model_path, 

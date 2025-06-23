@@ -8,7 +8,7 @@ class TrainStrategy(ABC):
         pass
 
 class RegressionTrainStrategy(TrainStrategy):
-    def __init__(self, epochs= 100, batch_size= 16, validation_len = 5, callbacks = RegressionCallbacksStrategy.get()):
+    def __init__(self, epochs= 200, batch_size= 16, validation_len = 20, callbacks = RegressionCallbacksStrategy.get()):
         self.epochs = epochs
         self.batch_size = batch_size
         self.validation_len = validation_len

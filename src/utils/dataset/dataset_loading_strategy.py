@@ -57,7 +57,7 @@ class YfinanceLoadingStrategy(DatasetLoadingStrategy):
             try:
                 df = yf.download(ticker, start=self.start_date, end=self.end_date,auto_adjust=True,interval=interval)
                 if not df.empty:
-                    yf_data[name] = df
+                    yf_data[name] = df.ffill().bfill().diff()
                 else:
                     logger.warning(f'No data returned for {ticker}')
             except Exception as e:
