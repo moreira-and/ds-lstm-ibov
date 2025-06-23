@@ -52,7 +52,7 @@ class RegressionSimpleModelBuilder(ModelBuilder):
                 Input(shape=self.input_shape),
                 
                 LSTM(32, return_sequences=False, kernel_regularizer=l2(1e-5),recurrent_dropout=0.3),
-                #LayerNormalization(),
+                LayerNormalization(),
 
                 Dense(16, activation='relu', kernel_regularizer=l2(1e-5)),
                 Dropout(0.2),

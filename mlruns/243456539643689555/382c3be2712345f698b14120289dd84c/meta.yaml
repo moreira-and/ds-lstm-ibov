@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Repositories/ds-lstm-ibov/mlruns/243456539643689555/382c3be2712345f698b14120289dd84c/artifacts
+end_time: 1750697834481
+entry_point_name: ''
+experiment_id: '243456539643689555'
+lifecycle_stage: active
+run_id: 382c3be2712345f698b14120289dd84c
+run_name: RegressionSimpleModelBuilder
+run_uuid: 382c3be2712345f698b14120289dd84c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1750697808376
+status: 3
+tags: []
+user_id: SAMSUNG

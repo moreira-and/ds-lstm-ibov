@@ -84,3 +84,73 @@ class BlankTransformStrategy(TransformStrategy):
 
     def get_postprocessor(self, y_train) -> PostprocessorStrategy:
         return BlankPostprocessor(column_names=self.get_feature_names())
+    
+
+'''
+import numpy as np
+
+def rolling_inverse_transform(X_norm, min_vals, max_vals):
+    """
+    Reverte a normalização feita com rolling_normalize_with_params.
+
+    Parâmetros:
+    -----------
+    X_norm : np.ndarray
+        Dados normalizados (n_amostras, janela, n_features)
+    min_vals : np.ndarray
+        Mínimos salvos na normalização (n_amostras, n_features)
+    max_vals : np.ndarray
+        Máximos salvos na normalização (n_amostras, n_features)
+
+    Retorna:
+    --------
+    X_original : np.ndarray
+        Dados na escala original
+    """
+    X_orig = np.empty_like(X_norm)
+    denom = max_vals - min_vals
+    denom[denom == 0] = 1
+
+    for i in range(X_norm.shape[0]):
+        X_orig[i] = X_norm[i] * denom[i] + min_vals[i]
+
+    return X_orig
+
+def rolling_normalize_with_params(X):
+    """
+    Normaliza cada janela individualmente (MinMax por janela) e armazena min/max.
+
+    Parâmetros:
+    -----------
+    X : np.ndarray
+        Array de shape (n_amostras, janela, n_features)
+
+    Retorna:
+    --------
+    X_norm : np.ndarray
+        Dados normalizados
+    min_vals : np.ndarray
+        Mínimos por janela e por feature — shape (n_amostras, n_features)
+    max_vals : np.ndarray
+        Máximos por janela e por feature — shape (n_amostras, n_features)
+    """
+    X_norm = np.empty_like(X)
+    min_vals = X.min(axis=1)  # shape (n, features)
+    max_vals = X.max(axis=1)
+
+    denom = max_vals - min_vals
+    denom[denom == 0] = 1  # evita divisão por zero
+
+    for i in range(X.shape[0]):
+        X_norm[i] = (X[i] - min_vals[i]) / denom[i]
+
+    return X_norm, min_vals, max_vals
+
+
+# X: shape (n_amostras, janela, n_features)
+X_norm, X_min, X_max = rolling_normalize_with_params(X)
+
+# Após treino e predict:
+X_inv = rolling_inverse_transform(X_norm, X_min, X_max)
+
+'''
