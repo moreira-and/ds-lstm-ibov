@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1750690784269
+current_stage: None
+description: null
+last_updated_timestamp: 1750690784269
+name: RegressionSimpleModelBuilder
+run_id: 6805a69166ce41158bd4b4b3274873e8
+run_link: null
+source: file:///C:/Repositories/ds-lstm-ibov/mlruns/243456539643689555/6805a69166ce41158bd4b4b3274873e8/artifacts/keras_model
+status: READY
+status_message: null
+storage_location: file:///C:/Repositories/ds-lstm-ibov/mlruns/243456539643689555/6805a69166ce41158bd4b4b3274873e8/artifacts/keras_model
+user_id: null
+version: 1

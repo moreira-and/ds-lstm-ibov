@@ -18,6 +18,7 @@ app = typer.Typer()
 def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
     input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
+    length: int = 20,
     preprocessor_path: Path = PROCESSED_DATA_DIR / "preprocessor.pkl",
     model_path: Path = MODELS_DIR / "Sequential_epoch111_loss0.1866.keras",    
     postprocessor_path: Path = PROCESSED_DATA_DIR / "postprocessor.pkl",
@@ -29,12 +30,12 @@ def main(
 
     # Carrega dados de entrada
     df = pd.read_csv(input_path, index_col=0,parse_dates=True)
-    logger.info(f"Input data shape: {df.tail(101).shape}")
+    logger.info(f"Input data shape: {df.tail(length+1).shape}")
     
     with open(preprocessor_path, "rb") as f:
         preprocessor = cloudpickle.load(f)
     # Aplica pipeline de predição
-    X_processed = preprocessor.transform(df.tail(101))
+    X_processed = preprocessor.transform(df.tail(length+1))
 
     model = keras.models.load_model(
         model_path, 
@@ -60,7 +61,7 @@ def main(
     df_report = pd.concat([df, df_predicted])
     df_report = df_report.ffill()
     
-    print(df_report[df_predicted.columns].tail(2))
+    print(df_report[df_predicted.columns].tail(3))
 
     # Salva resultados
     df_report.to_csv(output_path, index=True)
