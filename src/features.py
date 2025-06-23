@@ -24,6 +24,7 @@ def main(
     input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
     train_dir: Path = PROCESSED_DATA_DIR,
     test_dir: Path = PROCESSED_DATA_DIR,
+    sequence_length: int = 20
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
@@ -36,7 +37,7 @@ def main(
             targets = ["^BVSP"], #None,
             splitter =SequentialSplitter(train_size_ratio=1),
             transformer = DefaultLstmTransformStrategy(), #BlankTransformStrategy(),
-            generator = DefaultLstmGenerator(batch_size=1)
+            generator = DefaultLstmGenerator(batch_size=1,sequence_length=sequence_length)
             )
         
         prepare_data_template.prepare_data()

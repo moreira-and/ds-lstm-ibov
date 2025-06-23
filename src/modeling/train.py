@@ -10,7 +10,7 @@ import numpy as np
 
 from src.config import MODELS_DIR, PROCESSED_DATA_DIR, logger
 from src.utils.train.model_template import ModelKerasPipeline
-from src.utils.train.model_builder import RegressionRobustModelBuilder
+from src.utils.train.model_builder import RegressionRobustModelBuilder,RegressionSimpleModelBuilder
 from src.utils.train.compile_strategy import RegressionCompileStrategy
 from src.utils.train.train_strategy import RegressionTrainStrategy
 from src.utils.train.logger_strategy import MLflowLogger
@@ -23,7 +23,8 @@ def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
     X_path: Path = PROCESSED_DATA_DIR / "X_train.npy",
     y_path: Path = PROCESSED_DATA_DIR / "y_train.npy",
-    batch_size: int = 32
+    batch_size: int = 32,
+    validation_split: float = 0.2,
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
@@ -33,11 +34,13 @@ def main(
     X_train = np.load(X_path)
     y_train = np.load(y_path)
 
+    validation_len = X_train.shape[0] - int(X_train.shape[0] * (1 - validation_split))
+
     input_shape = X_train.shape[1:]
     output_shape = y_train.shape[1:]
 
     logger.info("Building model...")
-    builder = RegressionRobustModelBuilder(
+    builder = RegressionSimpleModelBuilder(
             input_shape = input_shape,
             output_shape = output_shape
         )
@@ -46,7 +49,7 @@ def main(
     compiler = RegressionCompileStrategy()
 
     logger.info("Selecting training strategy...")
-    trainer = RegressionTrainStrategy(batch_size=batch_size, epochs=200, validation_len=20)
+    trainer = RegressionTrainStrategy(batch_size=batch_size, epochs=200, validation_len=validation_len)
 
     logger.info("Building model training pipeline template...")   
     template = ModelKerasPipeline(
@@ -80,7 +83,7 @@ def main(
         model_version="v1.0.0",
     )
 
-    ml_logger.log_run(run_name="meu_experimento")
+    ml_logger.log_run(run_name=builder.__class__.__name__)
 
     logger.success("Modeling training complete.")
     end_time = time.time()

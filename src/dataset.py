@@ -71,16 +71,18 @@ def main(
 
     clean_pipeline = CleanPipeline([
             CleanMissingValues(),
-            CleanLowVariance()#,
-            #CleanGenericUnivariate(f_classif, "percentile", 95),
-            #CleanGenericUnivariate(f_regression, "percentile", 95)
+            CleanLowVariance(),
+            CleanGenericUnivariate(f_classif, "percentile", 99),
+            CleanGenericUnivariate(f_regression, "percentile", 99)
             ])
 
     X_clean, y_clean = clean_pipeline.clear(X, y)
 
     df_clean = pd.concat([y_clean,X_clean],axis=1)
 
-    df_old_dataset = pd.read_csv(PROCESSED_DATA_DIR / 'dataset.csv', index_col=0)
+    dataset_path = PROCESSED_DATA_DIR / 'dataset.csv'
+
+    df_old_dataset = pd.read_csv(dataset_path, index_col=0) if dataset_path.exists() else df_clean.copy()
 
     df_updated = update_df(df_old_dataset, df_clean)
 

@@ -39,9 +39,9 @@ def enrich_calendar(df_input):
     br_holidays = holidays.Brazil(years=anos)
     df['is_holiday'] = df.index.to_series().apply(lambda x: int(x in br_holidays))
 
-    df['is_general_election_year'] = df['year'].map(lambda y: get_election_flags(y)[0])
-    df['is_municipal_election_year'] = df['year'].map(lambda y: get_election_flags(y)[1])
-    df[['near_first_turn', 'near_second_turn']] = df.index.to_series().apply(lambda d: pd.Series(check_near_election(d)))
+    #df['is_general_election_year'] = df.index.to_series().map(lambda y: get_election_flags(y)[0])
+    #df['is_municipal_election_year'] = df['year'].map(lambda y: get_election_flags(y)[1])
+    #df[['near_first_turn', 'near_second_turn']] = df.index.to_series().apply(lambda d: pd.Series(check_near_election(d)))
 
     return df
 
