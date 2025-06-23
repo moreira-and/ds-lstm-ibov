@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Repositories/ds-lstm-ibov/mlruns/372487245857191218/7999968024d6457aba9429072f5be484/artifacts
+end_time: 1750642903648
+entry_point_name: ''
+experiment_id: '372487245857191218'
+lifecycle_stage: active
+run_id: 7999968024d6457aba9429072f5be484
+run_name: meu_experimento
+run_uuid: 7999968024d6457aba9429072f5be484
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1750642890044
+status: 3
+tags: []
+user_id: SAMSUNG

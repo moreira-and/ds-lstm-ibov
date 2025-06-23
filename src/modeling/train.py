@@ -59,14 +59,14 @@ def main(
 
     model, history = template.run(X_train,y_train)
         
-    #final_epoch = history.epoch[-1]
-    #final_loss = history.history['loss'][-1]
+    final_epoch = history.epoch[-1]
+    final_loss = history.history['loss'][-1]
 
-    #model_name = f'{model.__class__.__name__}_epoch{final_epoch}_loss{final_loss:.4f}.keras'
+    model_name = f'{model.__class__.__name__}_epoch{final_epoch}_loss{final_loss:.4f}.keras'
 
-    #logger.info(f"Saving '{model_name}' in '{MODELS_DIR}'...")
+    logger.info(f"Saving '{model_name}' in '{MODELS_DIR}'...")
 
-    #model.save(MODELS_DIR / model_name)
+    model.save(MODELS_DIR / model_name)
 
     ml_logger = MLflowLogger(
         model=model,
