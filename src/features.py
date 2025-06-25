@@ -3,6 +3,7 @@ from pathlib import Path
 
 import cloudpickle
 import typer
+from typing import List
 
 from src.config import logger, PROCESSED_DATA_DIR
 
@@ -24,6 +25,7 @@ def main(
     input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
     train_dir: Path = PROCESSED_DATA_DIR,
     test_dir: Path = PROCESSED_DATA_DIR,
+    targets: List[str] = ["^BVSP"],
     sequence_length: int = 20
     # -----------------------------------------
 ):
@@ -34,11 +36,11 @@ def main(
     try:
         prepare_data_template = DefaultLstmPrepareDataTemplate(
             dataset = pd.read_csv(input_path, index_col=0).sort_index(),
-            targets = ["^BVSP"], #None,
+            targets = targets,
             splitter =SequentialSplitter(train_size_ratio=1),
             transformer = DefaultLstmTransformStrategy(), #BlankTransformStrategy(),
             generator = DefaultLstmGenerator(batch_size=1,sequence_length=sequence_length)
-            )
+        )
         
         prepare_data_template.prepare_data()
 

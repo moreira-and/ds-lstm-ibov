@@ -7,6 +7,9 @@ def update_df(old_df, new_df):
     old_df = old_df.copy()
     new_df = new_df.copy()
 
+    old_df.index = pd.to_datetime(old_df.index)
+    new_df.index = pd.to_datetime(new_df.index)
+
     # Substitui dados em índices já existentes (com merge por índice)
     old_df.update(new_df)
 
@@ -43,7 +46,10 @@ def enrich_calendar(df_input):
     #df['is_municipal_election_year'] = df['year'].map(lambda y: get_election_flags(y)[1])
     #df[['near_first_turn', 'near_second_turn']] = df.index.to_series().apply(lambda d: pd.Series(check_near_election(d)))
 
-    return df
+    return df.loc[
+        (df['is_weekend'].astype(bool) == False) &
+        (df['is_holiday'].astype(bool) == False)
+    ]
 
 # Semana do mês (como número de 1 a 5)
 def week_of_month(x):

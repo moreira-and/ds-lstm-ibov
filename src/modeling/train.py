@@ -40,7 +40,7 @@ def main(
     output_shape = y_train.shape[1:]
 
     logger.info("Building model...")
-    builder = RegressionSimpleModelBuilder(
+    builder = RegressionRobustModelBuilder(
             input_shape = input_shape,
             output_shape = output_shape
         )

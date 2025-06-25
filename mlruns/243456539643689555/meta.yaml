@@ -1,6 +1,0 @@
-artifact_location: file:///C:/Repositories/ds-lstm-ibov/mlruns/243456539643689555
-creation_time: 1750690768379
-experiment_id: '243456539643689555'
-last_update_time: 1750690768379
-lifecycle_stage: active
-name: lstm-ibov-experiment
