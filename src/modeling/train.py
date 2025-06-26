@@ -105,25 +105,28 @@ def main(
 
     model.save(MODELS_DIR / model_name)
 
-    ml_logger = MLflowLogger(
-        model=model,
-        history=history,
-        model_strategy=model.__class__.__name__,
-        compile_strategy=compiler.__class__.__name__,
-        train_strategy=trainer.__class__.__name__,
-        batch_size=batch_size,
-        input_shape=input_shape,
-        output_shape=output_shape,
-        experiment_name=experiment_name,
-        model_version="v1.0.0",
-    )
-
-    ml_logger.log_run(run_name=model.__class__.__name__)
-
     logger.success("Modeling training complete.")
     end_time = time.time()
     elapsed_time = end_time - start_time
     logger.info(f"Elapsed time: {elapsed_time:.2f} seconds")
+
+    logger.info("Logging experiment into mlflow.")
+
+    ml_logger = MLflowLogger(
+        model=model,
+        history=history,
+        validation_len=validation_len,
+        batch_size=batch_size,
+        X_train=X_train,
+        y_train=y_train,
+        elapsed_time=elapsed_time
+    )
+
+    ml_logger.log_run(run_name=model.__class__.__name__,
+                      experiment_name=experiment_name)
+
+    logger.success("Experiment logged successfully.")
+
     # -----------------------------------------
 
 
