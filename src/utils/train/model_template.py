@@ -18,16 +18,15 @@ class ModelTemplate(ABC):
 
 
 class ModelKerasPipeline(ModelTemplate):
-    def __init__(self, builder: ModelBuilder, compiler: CompileStrategy, trainer: TrainStrategy):
-        self.builder = builder
+    def __init__(self, model: ModelBuilder, compiler: CompileStrategy, trainer: TrainStrategy):
+        self.model = model
         self.compiler = compiler
         self.trainer = trainer
 
     def run(self, X_train, y_train):
         try:
-            model = self.builder.build_model()
-            self.compiler.compile(model)
-            history = self.trainer.train(model, X_train, y_train)
-            return model, history
+            self.compiler.compile(self.model)
+            history = self.trainer.train(self.model, X_train, y_train)
+            return self.model, history
         except Exception as e:
             logger.error(f'Error running {self.__class__.__name__}: {e}')

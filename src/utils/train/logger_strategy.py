@@ -14,22 +14,26 @@ class MLflowLogger:
         self,
         model,
         history,
-        builder_strategy,
+        model_strategy,
         compile_strategy,
         train_strategy,
         batch_size,
         input_shape,
         output_shape,
+        run_name="training_run",
+        experiment_name="default_experiment",
         model_version="v1.0.0"
     ):
         self.model = model
         self.history = history
-        self.builder_strategy = builder_strategy
+        self.model_strategy = model_strategy
         self.compile_strategy = compile_strategy
         self.train_strategy = train_strategy
         self.batch_size = batch_size
         self.input_shape = input_shape
         self.output_shape = output_shape
+        self.run_name = run_name
+        self.experiment_name = experiment_name
         self.model_version = model_version
 
     def plot_history(self):
@@ -43,11 +47,11 @@ class MLflowLogger:
         plt.grid(True)
         return plt
 
-    def log_run(self, run_name="training_run"):
+    def log_run(self, run_name=self.run_name):
         start_time = time.time()
 
         # Defina o nome do experimento aqui
-        mlflow.set_experiment("lstm-ibov-experiment")
+        mlflow.set_experiment(self.experiment_name)
         with mlflow.start_run(run_name=run_name):
 
             # Log modelo Keras
