@@ -7,10 +7,10 @@ from typing import List
 
 from src.config import logger, PROCESSED_DATA_DIR
 
-from src.utils.features.prepare_data_template import DefaultLstmPrepareDataTemplate
+from src.utils.features.prepare_data_template import DefaultRnnPrepareDataTemplate
 from src.utils.features.splitter_strategy import SequentialSplitter
-from src.utils.features.transform_strategy import (DefaultLstmTransformStrategy,BlankTransformStrategy)
-from src.utils.features.generator_strategy import DefaultLstmGenerator
+from src.utils.features.transform_strategy import DefaultRnnTransformStrategy
+from src.utils.features.generator_strategy import DefaultRnnGenerator
 
 import numpy as np
 import pandas as pd
@@ -22,10 +22,12 @@ app = typer.Typer()
 @app.command()
 def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
+    dataset_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
     train_dir: Path = PROCESSED_DATA_DIR,
     test_dir: Path = PROCESSED_DATA_DIR,
     targets: List[str] = ["^BVSP"],
+    train_size_ratio: float = 1,
+    batch_size: int = 1,
     sequence_length: int = 20
     # -----------------------------------------
 ):
@@ -34,12 +36,12 @@ def main(
     logger.info("Generating features from dataset...")
 
     try:
-        prepare_data_template = DefaultLstmPrepareDataTemplate(
-            dataset = pd.read_csv(input_path, index_col=0).sort_index(),
+        prepare_data_template = DefaultRnnPrepareDataTemplate(
+            dataset = pd.read_csv(dataset_path, index_col=0).sort_index(),
             targets = targets,
-            splitter =SequentialSplitter(train_size_ratio=1),
-            transformer = DefaultLstmTransformStrategy(), #BlankTransformStrategy(),
-            generator = DefaultLstmGenerator(batch_size=1,sequence_length=sequence_length)
+            splitter =SequentialSplitter(train_size_ratio=train_size_ratio),
+            transformer = DefaultRnnTransformStrategy(), #BlankTransformStrategy(),
+            generator = DefaultRnnGenerator(batch_size=batch_size,sequence_length=sequence_length)
         )
         
         prepare_data_template.prepare_data()

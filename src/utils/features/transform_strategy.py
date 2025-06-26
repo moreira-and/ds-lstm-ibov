@@ -5,7 +5,7 @@ import numpy as np
 from sklearn.compose import ColumnTransformer, make_column_selector
 from sklearn.preprocessing import OneHotEncoder, RobustScaler
 
-from src.utils.features.postprocessor_strategy import (BlankPostprocessor, PostprocessorStrategy,DefaultLstmPostprocessor)
+from src.utils.features.postprocessor_strategy import (BlankPostprocessor, PostprocessorStrategy,DefaultRnnPostprocessor)
 
 class TransformStrategy(ABC):
     @abstractmethod
@@ -28,7 +28,7 @@ class TransformStrategy(ABC):
     def get_postprocessor(self,y_train) -> PostprocessorStrategy:
         pass
 
-class DefaultLstmTransformStrategy(TransformStrategy):
+class DefaultRnnTransformStrategy(TransformStrategy):
     def __init__(
         self, 
         numeric_transformer=RobustScaler(),
@@ -58,7 +58,7 @@ class DefaultLstmTransformStrategy(TransformStrategy):
         return self.column_transformer.fit_transform(X, y)
     
     def get_postprocessor(self, y_train) -> PostprocessorStrategy:
-        return DefaultLstmPostprocessor(self._numeric_transformer,y_train=y_train)
+        return DefaultRnnPostprocessor(self._numeric_transformer,y_train=y_train)
     
     def get_feature_names(self, input_features = None):
         return self.column_transformer.get_feature_names_out(input_features=input_features)

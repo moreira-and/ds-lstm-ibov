@@ -5,7 +5,7 @@ import numpy as np
 from src.utils.features.splitter_strategy import SplitterStrategy
 from src.utils.features.transform_strategy import TransformStrategy
 from src.utils.features.generator_strategy import GeneratorStrategy
-from src.utils.features.preprocessor_strategy import DefaultLstmPreprocessor
+from src.utils.features.preprocessor_strategy import DefaultRnnPreprocessor
 
 from abc import ABC, abstractmethod
 
@@ -24,7 +24,7 @@ class PrepareDataTemplate(ABC):
         pass
 
 
-class DefaultLstmPrepareDataTemplate(PrepareDataTemplate):
+class DefaultRnnPrepareDataTemplate(PrepareDataTemplate):
     def __init__(self, dataset,targets, splitter: SplitterStrategy, transformer: TransformStrategy, generator: GeneratorStrategy):
         self.dataset = dataset
         self.targets = targets
@@ -78,7 +78,7 @@ class DefaultLstmPrepareDataTemplate(PrepareDataTemplate):
         return self._X_train,self._X_test,self._y_train,self._y_test   
 
     def get_preprocessor(self):
-        return DefaultLstmPreprocessor(self.transformer, self.generator)
+        return DefaultRnnPreprocessor(self.transformer, self.generator)
     
     def get_postprocessor(self):
 

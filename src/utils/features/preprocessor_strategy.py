@@ -5,7 +5,7 @@ class PreprocessorStrategy(ABC):
     def transform(self, X, y=None):
         pass
 
-class DefaultLstmPreprocessor(PreprocessorStrategy):
+class DefaultRnnPreprocessor(PreprocessorStrategy):
 
     def __init__(self, transformer, generator):
         self._transformer = transformer
