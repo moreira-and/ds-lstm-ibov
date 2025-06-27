@@ -15,9 +15,15 @@ class ModelBuilder(ABC):
     
 class RegressionRobustModelBuilder(ModelBuilder):
 
-    def __init__(self, input_shape, output_shape):
+    def __init__(self, input_shape, output_shape,l2_rate = 1e-4,dropout_rate=0.3, conv1D_units = 128, lstm_units = 32, dense_units = 32, gru_units = 32 ):
         self.input_shape = input_shape
         self.output_shape = output_shape
+        self.l2_rate = l2_rate
+        self.dropout_rate = dropout_rate
+        self.conv1D_units = conv1D_units
+        self.lstm_units = lstm_units
+        self.dense_units = dense_units
+        self.gru_units = gru_units
 
     def build_model(self):
 
@@ -25,21 +31,19 @@ class RegressionRobustModelBuilder(ModelBuilder):
             return Sequential([
                 Input(shape=self.input_shape),
 
-                Conv1D(128, kernel_size=3, activation='relu', padding='causal', kernel_regularizer=l2(1e-4)),
+                Conv1D(self.conv1D_units, kernel_size=3, activation='relu', padding='causal', kernel_regularizer=l2(self.l2_rate)),
                 LayerNormalization(),
-                Dropout(0.3),
+                Dropout(self.dropout_rate),
 
-                LSTM(32, return_sequences=True, kernel_regularizer=l2(1e-4),recurrent_dropout=0.3),
-                Dropout(0.2),
+                LSTM(self.lstm_units, return_sequences=True, kernel_regularizer=l2(self.l2_rate),recurrent_dropout=self.dropout_rate),
 
-                TimeDistributed(Dense(32, activation='relu', kernel_regularizer=l2(1e-4))),
-                Dropout(0.3),
+                TimeDistributed(Dense(self.dense_units, activation='relu', kernel_regularizer=l2(self.l2_rate))),
+                Dropout(self.dropout_rate),
 
-                GRU(32, return_sequences=False, kernel_regularizer=l2(1e-4),recurrent_dropout=0.3),
-                Dropout(0.2),
+                GRU(self.gru_units, return_sequences=False, kernel_regularizer=l2(self.l2_rate),recurrent_dropout=self.dropout_rate),
 
-                Dense(16, activation='relu', kernel_regularizer=l2(1e-4)),
-                Dropout(0.1),
+                Dense(int(self.dense_units/2), activation='relu', kernel_regularizer=l2(self.l2_rate)),
+                Dropout(self.dropout_rate),
 
                 Dense(self.output_shape[0], activation='linear')
             ])
@@ -123,3 +127,4 @@ class RegressionMultiLayersModelBuilder(ModelBuilder):
         output = Dense(self.output_shape[0], activation='linear')(dense)
 
         return Model(inputs=inputs_list, outputs=output)
+    
