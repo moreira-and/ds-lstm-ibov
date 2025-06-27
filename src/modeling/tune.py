@@ -21,6 +21,8 @@ from src.utils.tune.tune_template import TunerKerasPipeline
 from src.utils.tune.tuner_builder import RegressionRobustModelTuner
 from src.utils.tune.search_strategy import RegressionTuneStrategy
 
+import tensorflow as tf
+
 app = typer.Typer()
 
 
@@ -30,14 +32,17 @@ def main(
     X_path: Path = PROCESSED_DATA_DIR / "X_train.npy",
     y_path: Path = PROCESSED_DATA_DIR / "y_train.npy",
     # -----------------------------------------
-    batch_size: int = 128,
-    epochs: int = 300,
-    validation_len: int = 45,
+    epochs: int = 3.650, # decade
+    batch_size: int = 182, # Semester
+    validation_len: int = 90, # Trimester
     # -----------------------------------------
     experiment_name: str = "default_experiment",
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
+    if not tf.executing_eagerly():
+        tf.config.run_functions_eagerly(True)
+
     start_time = time.time()
     logger.info("Loading training dataset...")
 
@@ -78,7 +83,7 @@ def main(
 
     best_model, best_hps = template.run(X_train,y_train)
 
-    model_name = f'best_model_tuned.keras'
+    model_name = 'best_model_tuned.keras'
 
     logger.info(f"Saving '{model_name}' in '{MODELS_DIR}'...")
 

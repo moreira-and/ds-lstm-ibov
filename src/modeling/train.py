@@ -35,9 +35,9 @@ def main(
     loss: str = None,
     metrics: str = None,
     # -----------------------------------------
-    batch_size: int = 128,
-    epochs: int = 30,
-    validation_len: int = 45,
+    epochs: int = 3.650, # decade
+    batch_size: int = 182, # Semester
+    validation_len: int = 90, # Trimester
     # -----------------------------------------
     experiment_name: str = "default_experiment",
     # -----------------------------------------
