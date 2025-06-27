@@ -10,15 +10,14 @@ import numpy as np
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import Huber
 
+
 from src.config import MODELS_DIR, PROCESSED_DATA_DIR, logger
 
-from src.utils.train.metric_strategy import RegressionMetricStrategy
 from src.utils.train.callbacks_strategy import RegressionCallbacksStrategy
 
-from src.utils.train.model_template import ModelKerasPipeline
-from src.utils.train.model_builder import RegressionRobustModelBuilder
-from src.utils.train.compile_strategy import RegressionCompileStrategy
-from src.utils.train.train_strategy import RegressionTrainStrategy
+from src.utils.tune.tune_template import TunerKerasPipeline
+from src.utils.tune.tuner_builder import RegressionRobustModelTuner
+from src.utils.tune.search_strategy import RegressionTuneStrategy
 
 from src.utils.log.logger_strategy import MLflowLogger
 
@@ -36,7 +35,7 @@ def main(
     metrics: str = None,
     # -----------------------------------------
     batch_size: int = 128,
-    epochs: int = 30,
+    epochs: int = 300,
     validation_len: int = 45,
     # -----------------------------------------
     experiment_name: str = "default_experiment",
@@ -53,20 +52,13 @@ def main(
     output_shape = y_train.shape[1:]
     
     logger.info("Selecting builder strategy...")
-    model_builder = RegressionRobustModelBuilder(
-        input_shape=input_shape,
-        output_shape=output_shape
-    )
-    
-    logger.info("Selecting compile strategy...")
-    compiler = RegressionCompileStrategy(
-        optimizer = Adam(learning_rate=0.001) if optimizer is None else optimizer, 
-        loss = Huber(delta=1.0) if loss is None else loss, 
-        metrics = RegressionMetricStrategy().get_metrics()  if metrics is None else metrics
+    tuner_builder = RegressionRobustModelTuner(
+        input_shape=input_shape
+        ,output_shape=output_shape
     )
 
-    logger.info("Selecting training strategy...")
-    trainer = RegressionTrainStrategy(
+    logger.info("Selecting Tuning strategy...")
+    searcher = RegressionTuneStrategy(
         batch_size=batch_size
         ,epochs=epochs
         ,validation_len=validation_len
@@ -74,34 +66,31 @@ def main(
     )
 
     logger.info("Building model training pipeline template...")   
-    template = ModelKerasPipeline(
-        model_builder=model_builder,
-        compiler=compiler,
-        trainer=trainer
+    template = TunerKerasPipeline(
+        tuner_builder = tuner_builder
+        ,searcher = searcher
     )
 
-    logger.info("Training model...")
+    logger.info("Tuning model...")
 
-    model, history = template.run(X_train,y_train)
-        
-    final_epoch = history.epoch[-1]
-    final_loss = history.history['loss'][-1]
+    best_model, best_hps = template.run(X_train,y_train)
 
-    model_name = f'{model.__class__.__name__}_epoch{final_epoch}_loss{final_loss:.4f}.keras'
+    model_name = f'best_model_tuned.keras'
 
     logger.info(f"Saving '{model_name}' in '{MODELS_DIR}'...")
 
-    model.save(MODELS_DIR / model_name)
+    best_model.save(MODELS_DIR / model_name)
 
     logger.success("Modeling training complete.")
     end_time = time.time()
     elapsed_time = end_time - start_time
     logger.info(f"Elapsed time: {elapsed_time:.2f} seconds")
 
+    '''
     logger.info("Logging experiment into mlflow.")
 
     ml_logger = MLflowLogger(
-        model=model,
+        model=best_model,
         history=history,
         validation_len=validation_len,
         batch_size=batch_size,
@@ -110,10 +99,11 @@ def main(
         elapsed_time=elapsed_time
     )
 
-    ml_logger.log_run(run_name=model.__class__.__name__,
+    ml_logger.log_run(run_name=best_model.__class__.__name__,
                       experiment_name=experiment_name)
 
     logger.success("Experiment logged successfully.")
+    '''
 
     # -----------------------------------------
 

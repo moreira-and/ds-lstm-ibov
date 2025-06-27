@@ -19,9 +19,11 @@ class TunerBuilder(ABC):
 
 class RegressionRobustModelTuner(TunerBuilder):
 
-    def __init__(self, input_shape, output_shape):
+    def __init__(self, input_shape, output_shape,max_trials=10,project_name = "default"):
         self.input_shape = input_shape
         self.output_shape = output_shape
+        self.max_trials = max_trials
+        self.project_name = project_name
 
     def _build_model(self,hp: HyperParameters):
 
@@ -54,8 +56,8 @@ class RegressionRobustModelTuner(TunerBuilder):
         return kt.BayesianOptimization(
             self._build_model,
             objective="val_loss",
-            max_trials=10,
+            max_trials=self.max_trials ,
             executions_per_trial=1,
             directory=MODELS_DIR,
-            project_name="lstm_optimization"
+            project_name=self.project_name
         )

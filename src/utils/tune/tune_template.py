@@ -16,20 +16,20 @@ class TunerKerasPipeline(TuneTemplate):
         self.searcher = searcher
         self.tuner = None
 
-    def run(self, X_train, y_train, X_val=None, y_val=None):
+    def run(self, X_train, y_train):
         try:
             # Cria o tuner
             self.tuner = self.tuner_builder.build_tuner()
 
             # Executa a busca com a estratégia passada
-            self.searcher.search(self.tuner, X_train, y_train, X_val, y_val)
+            self.searcher.search(self.tuner, X_train, y_train)
 
             # Recupera os melhores hiperparâmetros
             best_hps = self.tuner.get_best_hyperparameters(num_trials=1)[0]
 
             # Constrói o melhor modelo
             best_model = self.tuner.hypermodel.build(best_hps)
-
+            
             return best_model, best_hps
 
         except Exception as e:
