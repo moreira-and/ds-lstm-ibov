@@ -7,6 +7,8 @@ import typer
 
 import numpy as np
 
+import tensorflow as tf
+tf.compat.v1.enable_eager_execution()
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import Huber
 
@@ -21,8 +23,6 @@ from src.utils.tune.tune_template import TunerKerasPipeline
 from src.utils.tune.tuner_builder import RegressionRobustModelTuner
 from src.utils.tune.search_strategy import RegressionTuneStrategy
 
-import tensorflow as tf
-
 app = typer.Typer()
 
 
@@ -32,9 +32,9 @@ def main(
     X_path: Path = PROCESSED_DATA_DIR / "X_train.npy",
     y_path: Path = PROCESSED_DATA_DIR / "y_train.npy",
     # -----------------------------------------
-    epochs: int = 365, # Year
-    batch_size: int = 121, # Trimester
-    validation_len: int = 30, # Month
+    epochs: int = int(365*2), # Year
+    batch_size: int = int(365/4), # Trimester
+    validation_len: int = int(365/12), # Month
     # -----------------------------------------
     experiment_name: str = "default_experiment",
     # -----------------------------------------
@@ -100,6 +100,7 @@ def main(
     logger.success("Modeling training complete.")
     end_time = time.time()
     elapsed_time = end_time - start_time
+
     logger.info(f"Elapsed time: {elapsed_time:.2f} seconds")
 
     '''
