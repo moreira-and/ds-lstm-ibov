@@ -32,9 +32,9 @@ def main(
     X_path: Path = PROCESSED_DATA_DIR / "X_train.npy",
     y_path: Path = PROCESSED_DATA_DIR / "y_train.npy",
     # -----------------------------------------
-    epochs: int = 3.650, # decade
-    batch_size: int = 182, # Semester
-    validation_len: int = 90, # Trimester
+    epochs: int = 365, # Year
+    batch_size: int = 121, # Trimester
+    validation_len: int = 30, # Month
     # -----------------------------------------
     experiment_name: str = "default_experiment",
     # -----------------------------------------
@@ -56,7 +56,7 @@ def main(
     tuner_builder = RegressionRobustModelTuner(
         input_shape=input_shape
         ,output_shape=output_shape
-        ,max_trials = 10
+        ,max_trials = 14
         ,project_name = "default"
         ,compile_strategy = RegressionCompileStrategy(
                 optimizer = Adam(learning_rate=0.001)
@@ -83,7 +83,15 @@ def main(
 
     best_model, best_hps = template.run(X_train,y_train)
 
+    print("\nMelhores Hiperparâmetros Encontrados:")
+    print("-" * 40)
+    for param in best_hps.values.keys():
+        print(f"{param:<20}: {best_hps.get(param)}")
+    print("-" * 40)
+
     model_name = 'best_model_tuned.keras'
+
+    
 
     logger.info(f"Saving '{model_name}' in '{MODELS_DIR}'...")
 
