@@ -1,10 +1,9 @@
 from abc import ABC, abstractmethod
+from src.config import MODELS_DIR, logger
 
-from keras import layers, models
-from keras_tuner import HyperParameters
 import keras_tuner as kt
+from keras_tuner import HyperParameters
 
-from src.config import MODELS_DIR
 from src.utils.train.model_builder import RegressionRobustModelBuilder
 from src.utils.train.compile_strategy import RegressionCompileStrategy
 

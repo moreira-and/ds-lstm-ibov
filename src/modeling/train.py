@@ -2,22 +2,21 @@ from pathlib import Path
 import time
 
 import joblib
-#from loguru import logger
 from tqdm import tqdm
 import typer
 
 import numpy as np
 
-from tensorflow.keras.models import load_model
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import Huber
 
 
-from src.utils.train.metric_strategy import ClassificationMetricStrategy, RegressionMetricStrategy,smape, rmse, r2_score
-
 from src.config import MODELS_DIR, PROCESSED_DATA_DIR, logger
+from src.utils.train.metric_strategy import RegressionMetricStrategy
+from src.utils.train.callbacks_strategy import RegressionCallbacksStrategy
+
 from src.utils.train.model_template import ModelKerasPipeline
-from src.utils.train.model_builder import RegressionRobustModelBuilder,RegressionSimpleModelBuilder
+from src.utils.train.model_builder import RegressionRobustModelBuilder
 from src.utils.train.compile_strategy import RegressionCompileStrategy
 from src.utils.train.train_strategy import RegressionTrainStrategy
 from src.utils.train.logger_strategy import MLflowLogger
@@ -37,8 +36,8 @@ def main(
     metrics: str = None,
     # -----------------------------------------
     batch_size: int = 128,
-    epochs: int = 300,
-    validation_len: int = 30,
+    epochs: int = 30,
+    validation_len: int = 45,
     # -----------------------------------------
     experiment_name: str = "default_experiment",
     # -----------------------------------------
@@ -52,24 +51,13 @@ def main(
 
     input_shape = X_train.shape[1:]
     output_shape = y_train.shape[1:]
-
-    if model_path is None:
-        logger.info("No model path provided. Building a new model from scratch...")
-        model = RegressionRobustModelBuilder(
-            input_shape=input_shape,
-            output_shape=output_shape
-        ).build_model()
-    else:
-        logger.info(f"Loading model from {model_path}...")
-        model = load_model(
-            model_path,
-            custom_objects={
-                "smape": smape,
-                "rmse": rmse,
-                "r2_score": r2_score
-            }
-        )
-
+    
+    logger.info("Selecting builder strategy...")
+    model_builder = RegressionRobustModelBuilder(
+        input_shape=input_shape,
+        output_shape=output_shape
+    )
+    
     logger.info("Selecting compile strategy...")
     compiler = RegressionCompileStrategy(
         optimizer = Adam(learning_rate=0.001) if optimizer is None else optimizer, 
@@ -79,15 +67,15 @@ def main(
 
     logger.info("Selecting training strategy...")
     trainer = RegressionTrainStrategy(
-        batch_size=batch_size,
-        epochs=epochs,
-        validation_len=validation_len,
-        callbacks=None
+        batch_size=batch_size
+        ,epochs=epochs
+        ,validation_len=validation_len
+        ,callbacks=RegressionCallbacksStrategy.get()
     )
 
     logger.info("Building model training pipeline template...")   
     template = ModelKerasPipeline(
-        model=model,
+        model_builder=model_builder,
         compiler=compiler,
         trainer=trainer
     )
