@@ -32,9 +32,9 @@ def main(
     X_path: Path = PROCESSED_DATA_DIR / "X_train.npy",
     y_path: Path = PROCESSED_DATA_DIR / "y_train.npy",
     # -----------------------------------------
-    epochs: int = int(365*2), # Year
-    batch_size: int = int(365/4), # Trimester
-    validation_len: int = int(365/12), # Month
+    epochs: int = 2**8,
+    batch_size: int = 2**6,
+    validation_len: int = 2**5,
     # -----------------------------------------
     experiment_name: str = "default_experiment",
     # -----------------------------------------
