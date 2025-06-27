@@ -2,7 +2,9 @@ from abc import ABC, abstractmethod
 
 from src.config import logger
 
-from src.utils.train.callbacks_strategy import RegressionCallbacksStrategy
+from keras import callbacks
+
+from src.utils.train.callbacks_strategy import CallbacksStrategy, RegressionCallbacksStrategy
 
 class SearchStrategy(ABC):
     @abstractmethod
@@ -10,7 +12,7 @@ class SearchStrategy(ABC):
         pass
 
 class RegressionTuneStrategy(SearchStrategy):
-    def __init__(self, epochs= 200, batch_size= 16, validation_len = 20, callbacks = RegressionCallbacksStrategy.get()):
+    def __init__(self, epochs : int = 200, batch_size : int = 16, validation_len : int = 20, callbacks : callbacks = RegressionCallbacksStrategy.get()):
         self.epochs = epochs
         self.batch_size = batch_size
         self.validation_len = validation_len

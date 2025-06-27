@@ -5,7 +5,7 @@ import keras_tuner as kt
 from keras_tuner import HyperParameters
 
 from src.utils.train.model_builder import RegressionRobustModelBuilder
-from src.utils.train.compile_strategy import RegressionCompileStrategy
+from src.utils.train.compile_strategy import CompileStrategy,RegressionCompileStrategy
 
 
 class TunerBuilder(ABC):
@@ -19,11 +19,12 @@ class TunerBuilder(ABC):
 
 class RegressionRobustModelTuner(TunerBuilder):
 
-    def __init__(self, input_shape, output_shape,max_trials=10,project_name = "default"):
+    def __init__(self, input_shape, output_shape,max_trials : int =10,project_name : str = "default", compile_strategy : CompileStrategy = RegressionCompileStrategy()):
         self.input_shape = input_shape
         self.output_shape = output_shape
         self.max_trials = max_trials
         self.project_name = project_name
+        self.compile_strategy = compile_strategy
 
     def _build_model(self,hp: HyperParameters):
 
@@ -46,9 +47,7 @@ class RegressionRobustModelTuner(TunerBuilder):
         )
 
         model =  builder.build_model()
-
-        compile_strategy = RegressionCompileStrategy()
-        compile_strategy.compile(model)
+        self.compile_strategy.compile(model)
 
         return model
 

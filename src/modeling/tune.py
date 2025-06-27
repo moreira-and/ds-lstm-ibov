@@ -13,13 +13,13 @@ from tensorflow.keras.losses import Huber
 
 from src.config import MODELS_DIR, PROCESSED_DATA_DIR, logger
 
+from src.utils.train.compile_strategy import RegressionCompileStrategy
 from src.utils.train.callbacks_strategy import RegressionCallbacksStrategy
+from src.utils.train.metric_strategy import RegressionMetricStrategy
 
 from src.utils.tune.tune_template import TunerKerasPipeline
 from src.utils.tune.tuner_builder import RegressionRobustModelTuner
 from src.utils.tune.search_strategy import RegressionTuneStrategy
-
-from src.utils.log.logger_strategy import MLflowLogger
 
 app = typer.Typer()
 
@@ -29,10 +29,6 @@ def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
     X_path: Path = PROCESSED_DATA_DIR / "X_train.npy",
     y_path: Path = PROCESSED_DATA_DIR / "y_train.npy",
-    # -----------------------------------------
-    optimizer: str = None,
-    loss: str = None,
-    metrics: str = None,
     # -----------------------------------------
     batch_size: int = 128,
     epochs: int = 300,
@@ -55,6 +51,13 @@ def main(
     tuner_builder = RegressionRobustModelTuner(
         input_shape=input_shape
         ,output_shape=output_shape
+        ,max_trials = 10
+        ,project_name = "default"
+        ,compile_strategy = RegressionCompileStrategy(
+                optimizer = Adam(learning_rate=0.001)
+                ,loss = Huber(delta=1.0)
+                ,metrics = RegressionMetricStrategy().get_metrics()
+            )
     )
 
     logger.info("Selecting Tuning strategy...")
