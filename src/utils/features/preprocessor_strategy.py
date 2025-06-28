@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class PreprocessorStrategy(ABC):
     @abstractmethod
     def transform(self, X, y=None):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 class DefaultRnnPreprocessor(PreprocessorStrategy):
 

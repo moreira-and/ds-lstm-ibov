@@ -16,8 +16,14 @@ from src.config import logger
 
 mlflow.set_tracking_uri(config.MLFLOW_TRACKING_URI)
 
+from abc import ABC, abstractmethod
 
-class MLflowLogger:
+class LogStrategy(ABC):
+    @abstractmethod
+    def run(self):
+        raise NotImplementedError("Implement in subclass")
+
+class MLflowLogger(LogStrategy):
     def __init__(
         self,
         model,
@@ -68,7 +74,7 @@ class MLflowLogger:
         except Exception as e:
             logger.warning(f"Could not log environment info: {e}")
 
-    def log_run(
+    def run(
         self,
         run_name="training_run",
         experiment_name="default_experiment",

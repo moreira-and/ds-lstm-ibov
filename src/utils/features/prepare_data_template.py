@@ -13,15 +13,15 @@ from abc import ABC, abstractmethod
 class PrepareDataTemplate(ABC):
     @abstractmethod
     def prepare_data(self):
-        pass
+        raise NotImplementedError("Implement in subclass")
     
     @abstractmethod
     def get_preprocessor(self): 
-        pass
+        raise NotImplementedError("Implement in subclass")
 
     @abstractmethod
     def get_postprocessor(self): 
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 
 class DefaultRnnPrepareDataTemplate(PrepareDataTemplate):

@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 class PredictTemplate(ABC):
     @abstractmethod
     def predict(self, X):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 class DefaultPredictTemplate(PredictTemplate):
     def __init__(self, model, preprocessor = None , postprocessor = None):

@@ -12,7 +12,7 @@ class MetricStrategy(ABC):
 class RegressionMetricStrategy(MetricStrategy):
     def get_metrics(self):
         return ['mae', 'mse',smape,rmse,r2_score]
-        #return ['mae', 'mse', smape, rmse, R2Score()]
+        #return ['mae', 'mse']
 
 class ClassificationMetricStrategy(MetricStrategy):
     def get_metrics(self):

@@ -10,7 +10,7 @@ from tensorflow.keras.losses import Huber
 class CompileStrategy(ABC):
     @abstractmethod
     def compile(self, model):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 class ClassificationCompileStrategy(CompileStrategy):
     def __init__(self, optimizer = Adam(learning_rate=0.01), loss = 'binary_crossentropy', metrics = ClassificationMetricStrategy().get_metrics()):

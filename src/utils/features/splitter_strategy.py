@@ -4,7 +4,7 @@ from src.config import logger
 class SplitterStrategy(ABC):
     @abstractmethod
     def split(self,X, y=None):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 
 class SequentialSplitter(SplitterStrategy):

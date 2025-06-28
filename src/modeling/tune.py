@@ -8,7 +8,7 @@ import typer
 import numpy as np
 
 import tensorflow as tf
-#tf.config.run_functions_eagerly(True)
+tf.config.run_functions_eagerly(True)
 
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import Huber
@@ -41,8 +41,8 @@ def main(
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
-    #if not tf.executing_eagerly():
-    #    tf.config.run_functions_eagerly(True)
+    if not tf.executing_eagerly():
+        tf.config.run_functions_eagerly(True)
 
     start_time = time.time()
     logger.info("Loading training dataset...")

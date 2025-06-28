@@ -10,23 +10,23 @@ from src.utils.features.postprocessor_strategy import (BlankPostprocessor, Postp
 class TransformStrategy(ABC):
     @abstractmethod
     def fit(self, X, y=None):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
     @abstractmethod
     def transform(self, X, y=None):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
     @abstractmethod
     def fit_transform(self, X, y=None):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
     @abstractmethod
     def get_feature_names(self):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
     @abstractmethod
     def get_postprocessor(self,y_train) -> PostprocessorStrategy:
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 class DefaultRnnTransformStrategy(TransformStrategy):
     def __init__(

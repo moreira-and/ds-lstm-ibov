@@ -11,7 +11,7 @@ import tensorflow.keras.backend as K
 class ModelBuilder(ABC):
     @abstractmethod
     def build_model(self):
-        return
+        raise NotImplementedError("Implement in subclass")
     
 class RegressionRobustModelBuilder(ModelBuilder):
 

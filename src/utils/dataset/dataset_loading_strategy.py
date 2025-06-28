@@ -16,7 +16,7 @@ import requests
 class DatasetLoadingStrategy(ABC):
     @abstractmethod
     def load(self) -> Any:
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 
 class DatasetMultiLoader(DatasetLoadingStrategy):

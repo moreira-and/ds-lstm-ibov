@@ -8,7 +8,7 @@ class CallbacksStrategy(ABC):
     @staticmethod
     @abstractmethod
     def get() -> List:
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 
 class RegressionCallbacksStrategy(CallbacksStrategy):

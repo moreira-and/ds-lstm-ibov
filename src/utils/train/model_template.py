@@ -9,7 +9,7 @@ from src.utils.train.train_strategy import TrainStrategy
 class ModelTemplate(ABC):
     @abstractmethod
     def run(self, X_train, y_train):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 
 class ModelKerasPipeline(ModelTemplate):

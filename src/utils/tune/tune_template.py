@@ -8,7 +8,7 @@ from src.utils.tune.tuner_builder import TunerBuilder
 class TuneTemplate(ABC):
     @abstractmethod
     def run(self, X_train, y_train):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 class TunerKerasPipeline(TuneTemplate):
     def __init__(self, tuner_builder: TunerBuilder, searcher: SearchStrategy):

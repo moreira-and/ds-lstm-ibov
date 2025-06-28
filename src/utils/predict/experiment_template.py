@@ -19,12 +19,12 @@ class ExperimentTemplate(ABC):
 
     @abstractmethod
     def run(self):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
     @abstractmethod
     def build_pyfunc_model(self) -> PyFuncModelTemplate:
         """Build and return a Python model."""
-        pass
+        raise NotImplementedError("Implement in subclass")
 
     def set_tags(self, tags: dict):
         """Set tags for the experiment."""

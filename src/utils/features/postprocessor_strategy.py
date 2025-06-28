@@ -4,7 +4,7 @@ import pandas as pd
 class PostprocessorStrategy(ABC):  
     @abstractmethod
     def inverse_transform(self, y_predicted):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 class DefaultRnnPostprocessor(PostprocessorStrategy):
 

@@ -6,7 +6,7 @@ from tensorflow.keras.preprocessing.sequence import TimeseriesGenerator
 class GeneratorStrategy(ABC):
     @abstractmethod
     def generate(self, data,targets=None):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 class DefaultRnnGenerator(GeneratorStrategy):
     def __init__(self, sequence_length=7, batch_size=1):

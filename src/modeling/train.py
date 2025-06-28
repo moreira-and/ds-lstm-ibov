@@ -20,7 +20,7 @@ from src.utils.train.model_builder import RegressionRobustModelBuilder
 from src.utils.train.compile_strategy import RegressionCompileStrategy
 from src.utils.train.train_strategy import RegressionTrainStrategy
 
-from src.utils.log.logger_strategy import MLflowLogger
+from src.utils.log.log_strategy import MLflowLogger
 
 app = typer.Typer()
 
@@ -110,7 +110,7 @@ def main(
         elapsed_time=elapsed_time
     )
 
-    ml_logger.log_run(run_name=model.__class__.__name__,
+    ml_logger.run(run_name=model.__class__.__name__,
                       experiment_name=experiment_name)
 
     logger.success("Experiment logged successfully.")

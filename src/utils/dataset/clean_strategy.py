@@ -24,7 +24,7 @@ class CleanStrategy(ABC):
         Abstract method that should be implemented by any class that inherits from CleanHandler.
         This method should be used for cleaning the data (X) and optionally the target (y).
         """
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 # Pipeline for cleaning data by applying multiple cleaning steps sequentially
 class CleanPipeline(CleanStrategy):

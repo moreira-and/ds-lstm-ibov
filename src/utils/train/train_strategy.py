@@ -7,7 +7,7 @@ from src.utils.train.callbacks_strategy import RegressionCallbacksStrategy
 class TrainStrategy(ABC):
     @abstractmethod
     def train(self, model, X_train, y_train):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 class RegressionTrainStrategy(TrainStrategy):
     def __init__(self, epochs= 200, batch_size= 16, validation_len = 32, callbacks = RegressionCallbacksStrategy.get()):

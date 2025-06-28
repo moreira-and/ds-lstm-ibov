@@ -11,11 +11,11 @@ from src.utils.train.compile_strategy import CompileStrategy,RegressionCompileSt
 class TunerBuilder(ABC):
     @abstractmethod
     def _build_model(self,hp: HyperParameters):
-        return
+        raise NotImplementedError("Implement in subclass")
 
     @abstractmethod
     def build_tuner(self):
-        return
+        raise NotImplementedError("Implement in subclass")
 
 class RegressionRobustModelTuner(TunerBuilder):
 

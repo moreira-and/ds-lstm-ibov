@@ -9,7 +9,7 @@ from src.utils.train.callbacks_strategy import CallbacksStrategy, RegressionCall
 class SearchStrategy(ABC):
     @abstractmethod
     def search(self, model, X_train, y_train):
-        pass
+        raise NotImplementedError("Implement in subclass")
 
 class RegressionTuneStrategy(SearchStrategy):
     def __init__(self, epochs : int = 200, batch_size : int = 16, validation_len : int = 32, callbacks : callbacks = None):
