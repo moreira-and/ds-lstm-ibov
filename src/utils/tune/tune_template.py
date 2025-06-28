@@ -34,4 +34,4 @@ class TunerKerasPipeline(TuneTemplate):
 
         except Exception as e:
             logger.error(f'Error running {self.__class__.__name__}: {e}')
-            return None, None
+            raise

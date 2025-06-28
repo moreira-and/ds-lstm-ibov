@@ -10,14 +10,21 @@ class TrainStrategy(ABC):
         pass
 
 class RegressionTrainStrategy(TrainStrategy):
-    def __init__(self, epochs= 200, batch_size= 16, validation_len = 20, callbacks = RegressionCallbacksStrategy.get()):
+    def __init__(self, epochs= 200, batch_size= 16, validation_len = 32, callbacks = RegressionCallbacksStrategy.get()):
         self.epochs = epochs
         self.batch_size = batch_size
         self.validation_len = validation_len
         self.callbacks = callbacks
+        
+        if self.validation_len < self.batch_size:
+            raise ValueError(f"Validation length ({self.validation_len}) must be >= batch size ({self.batch_size})")
 
     def train(self, model, X, y):
         try:
+
+            if X is None or y is None:
+                raise ValueError("X or y is None. Ensure the dataset is properly loaded.")
+            
             # Separação manual por tempo
             X_train, X_val = X[:-self.validation_len], X[-self.validation_len:]
             y_train, y_val = y[:-self.validation_len], y[-self.validation_len:]
@@ -33,4 +40,4 @@ class RegressionTrainStrategy(TrainStrategy):
         
         except Exception as e:
             logger.error(f'Error training {self.__class__.__name__}: {e}')
-            return model
+            raise

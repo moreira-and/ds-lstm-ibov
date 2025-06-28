@@ -8,7 +8,8 @@ import typer
 import numpy as np
 
 import tensorflow as tf
-tf.compat.v1.enable_eager_execution()
+#tf.config.run_functions_eagerly(True)
+
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import Huber
 
@@ -34,20 +35,20 @@ def main(
     # -----------------------------------------
     epochs: int = 2**8,
     batch_size: int = 2**6,
-    validation_len: int = 2**5,
+    validation_len: int = 2**6,
     # -----------------------------------------
     experiment_name: str = "default_experiment",
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
-    if not tf.executing_eagerly():
-        tf.config.run_functions_eagerly(True)
+    #if not tf.executing_eagerly():
+    #    tf.config.run_functions_eagerly(True)
 
     start_time = time.time()
     logger.info("Loading training dataset...")
 
-    X_train = np.load(X_path)
-    y_train = np.load(y_path)
+    X_train = np.nan_to_num(np.load(X_path), nan=0)
+    y_train = np.nan_to_num(np.load(y_path), nan=0)
 
     input_shape = X_train.shape[1:]
     output_shape = y_train.shape[1:]
@@ -56,7 +57,7 @@ def main(
     tuner_builder = RegressionRobustModelTuner(
         input_shape=input_shape
         ,output_shape=output_shape
-        ,max_trials = 14
+        ,max_trials = 2**6
         ,project_name = "default"
         ,compile_strategy = RegressionCompileStrategy(
                 optimizer = Adam(learning_rate=0.001)
@@ -79,17 +80,20 @@ def main(
         ,searcher = searcher
     )
 
+    assert tf.executing_eagerly(), "TensorFlow is not executing eagerly!"
+
     logger.info("Tuning model...")
 
     best_model, best_hps = template.run(X_train,y_train)
 
-    print("\nMelhores Hiperparâmetros Encontrados:")
-    print("-" * 40)
-    for param in best_hps.values.keys():
-        print(f"{param:<20}: {best_hps.get(param)}")
-    print("-" * 40)
+    if best_hps.values.keys() is not None:
+        print("\nMelhores Hiperparâmetros Encontrados:")
+        print("-" * 40)
+        for param in best_hps.values.keys():
+            print(f"{param:<20}: {best_hps.get(param)}")
+        print("-" * 40)
 
-    model_name = 'best_model_tuned.keras'
+        model_name = 'best_model_tuned.keras'
 
     
 

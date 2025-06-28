@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from tensorflow.keras.metrics import Precision, Recall, AUC
+
+import tensorflow as tf
 import tensorflow.keras.backend as K
 from tensorflow.keras.utils import register_keras_serializable
 
@@ -11,6 +12,7 @@ class MetricStrategy(ABC):
 class RegressionMetricStrategy(MetricStrategy):
     def get_metrics(self):
         return ['mae', 'mse',smape,rmse,r2_score]
+        #return ['mae', 'mse', smape, rmse, R2Score()]
 
 class ClassificationMetricStrategy(MetricStrategy):
     def get_metrics(self):
@@ -35,3 +37,27 @@ def r2_score(y_true, y_pred):
     ss_res = K.sum(K.square(y_true - y_pred))
     ss_tot = K.sum(K.square(y_true - K.mean(y_true)))
     return 1 - ss_res / (ss_tot + K.epsilon())
+
+
+@register_keras_serializable()
+class R2Score(tf.keras.metrics.Metric):
+    def __init__(self, name="r2_score", **kwargs):
+        super().__init__(name=name, **kwargs)
+        self.ssr = self.add_weight(name="ssr", initializer="zeros")
+        self.sst = self.add_weight(name="sst", initializer="zeros")
+        self.count = self.add_weight(name="count", initializer="zeros")
+
+    def update_state(self, y_true, y_pred, sample_weight=None):
+        ss_res = K.sum(K.square(y_true - y_pred))
+        ss_tot = K.sum(K.square(y_true - K.mean(y_true)))
+        self.ssr.assign_add(ss_res)
+        self.sst.assign_add(ss_tot)
+        self.count.assign_add(1.0)
+
+    def result(self):
+        return 1 - self.ssr / (self.sst + K.epsilon())
+
+    def reset_states(self):
+        self.ssr.assign(0.0)
+        self.sst.assign(0.0)
+        self.count.assign(0.0)

@@ -73,6 +73,7 @@ class RegressionSimpleModelBuilder(ModelBuilder):
             ])
         except Exception as e:
             logger.error(f'Error building {self.__class__.__name__}: {e}')
+            raise
 
 
 class RegressionMultiLayersModelBuilder(ModelBuilder):
