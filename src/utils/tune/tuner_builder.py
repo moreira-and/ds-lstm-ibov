@@ -19,12 +19,12 @@ class TunerBuilder(ABC):
 
 class RegressionRobustModelTuner(TunerBuilder):
 
-    def __init__(self, input_shape, output_shape,max_trials : int =10,project_name : str = "default", compile_strategy : CompileStrategy = RegressionCompileStrategy()):
+    def __init__(self, input_shape, output_shape,max_trials : int =10, project_name : str = "default", compile_strategy = None):
         self.input_shape = input_shape
         self.output_shape = output_shape
         self.max_trials = max_trials
         self.project_name = project_name
-        self.compile_strategy = compile_strategy
+        self.compile_strategy = compile_strategy or RegressionCompileStrategy()
 
     def _build_model(self,hp: HyperParameters):
 

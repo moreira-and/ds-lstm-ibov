@@ -59,11 +59,7 @@ def main(
     )
     
     logger.info("Selecting compile strategy...")
-    compiler = RegressionCompileStrategy(
-        optimizer = Adam(learning_rate=0.001) if optimizer is None else optimizer, 
-        loss = Huber(delta=1.0) if loss is None else loss, 
-        metrics = RegressionMetricStrategy().get_metrics()  if metrics is None else metrics
-    )
+    compiler = RegressionCompileStrategy()
 
     logger.info("Selecting training strategy...")
     trainer = RegressionTrainStrategy(

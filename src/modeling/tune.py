@@ -61,11 +61,7 @@ def main(
         ,output_shape=output_shape
         ,max_trials = 2**6
         ,project_name = "default"
-        ,compile_strategy = RegressionCompileStrategy(
-                optimizer = Adam(learning_rate=0.001)
-                ,loss = Huber(delta=1.0)
-                ,metrics = RegressionMetricStrategy().get_metrics()
-            )
+        ,compile_strategy = RegressionCompileStrategy()
     )
 
     logger.info("Selecting Tuning strategy...")
@@ -108,25 +104,6 @@ def main(
     elapsed_time = end_time - start_time
 
     logger.info(f"Elapsed time: {elapsed_time:.2f} seconds")
-
-    '''
-    logger.info("Logging experiment into mlflow.")
-
-    ml_logger = MLflowLogger(
-        model=best_model,
-        history=history,
-        validation_len=validation_len,
-        batch_size=batch_size,
-        X_train=X_train,
-        y_train=y_train,
-        elapsed_time=elapsed_time
-    )
-
-    ml_logger.log_run(run_name=best_model.__class__.__name__,
-                      experiment_name=experiment_name)
-
-    logger.success("Experiment logged successfully.")
-    '''
 
     # -----------------------------------------
 

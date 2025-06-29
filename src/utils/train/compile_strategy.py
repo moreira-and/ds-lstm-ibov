@@ -13,10 +13,10 @@ class CompileStrategy(ABC):
         raise NotImplementedError("Implement in subclass")
 
 class ClassificationCompileStrategy(CompileStrategy):
-    def __init__(self, optimizer = Adam(learning_rate=0.01), loss = 'binary_crossentropy', metrics = ClassificationMetricStrategy().get_metrics()):
-        self.optimizer = optimizer
+    def __init__(self, loss = 'binary_crossentropy', optimizer_fn = None, metrics = None):
         self.loss = loss
-        self.metrics = metrics
+        self.optimizer = optimizer_fn or Adam(learning_rate=0.01)
+        self.metrics = metrics or ClassificationMetricStrategy().get_metrics()
 
     def compile(self, model):
         try:
@@ -29,17 +29,18 @@ class ClassificationCompileStrategy(CompileStrategy):
             logger.error(f'Error compilling {self.__class__.__name__}: {e}')
 
 class RegressionCompileStrategy(CompileStrategy):
-    def __init__(self, optimizer = Adam(learning_rate=0.001), loss = Huber(delta=1.0), metrics = RegressionMetricStrategy().get_metrics()):
-        self.optimizer = optimizer
-        self.loss = loss
-        self.metrics = metrics
+    def __init__(self, optimizer_fn=None, loss=None, metrics=None):
+        self.optimizer_fn = optimizer_fn or (lambda: Adam(learning_rate=0.001))
+        self.loss = loss or Huber(delta=1.0)
+        self.metrics = metrics or RegressionMetricStrategy().get_metrics()
 
     def compile(self, model):
         try:
+            optimizer = self.optimizer_fn()
             model.compile(
-                optimizer = self.optimizer,
-                loss = self.loss,
-                metrics = self.metrics
+                optimizer=optimizer,
+                loss=self.loss,
+                metrics=self.metrics
             )
         except Exception as e:
             logger.error(f'Error compilling {self.__class__.__name__}: {e}')

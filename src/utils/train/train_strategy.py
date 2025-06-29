@@ -10,11 +10,11 @@ class TrainStrategy(ABC):
         raise NotImplementedError("Implement in subclass")
 
 class RegressionTrainStrategy(TrainStrategy):
-    def __init__(self, epochs= 200, batch_size= 16, validation_len = 32, callbacks = RegressionCallbacksStrategy.get()):
+    def __init__(self, epochs= 200, batch_size= 16, validation_len = 32, callbacks = None):
         self.epochs = epochs
         self.batch_size = batch_size
         self.validation_len = validation_len
-        self.callbacks = callbacks
+        self.callbacks = callbacks or RegressionCallbacksStrategy.get()
         
         if self.validation_len < self.batch_size:
             raise ValueError(f"Validation length ({self.validation_len}) must be >= batch size ({self.batch_size})")
