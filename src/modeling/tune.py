@@ -9,6 +9,8 @@ import numpy as np
 
 import tensorflow as tf
 tf.config.run_functions_eagerly(True)
+tf.data.experimental.enable_debug_mode()
+#tf.compat.v1.reset_default_graph instead
 
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import Huber
@@ -33,9 +35,9 @@ def main(
     X_path: Path = PROCESSED_DATA_DIR / "X_train.npy",
     y_path: Path = PROCESSED_DATA_DIR / "y_train.npy",
     # -----------------------------------------
-    epochs: int = 2**8,
-    batch_size: int = 2**6,
-    validation_len: int = 2**6,
+    epochs: int = 2**8,    
+    validation_len: int = 2**7,
+    batch_size: int = 2**7,
     # -----------------------------------------
     experiment_name: str = "default_experiment",
     # -----------------------------------------
