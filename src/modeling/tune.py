@@ -61,7 +61,7 @@ def main(
         ,output_shape=output_shape
         ,max_trials = 2**6
         ,project_name = "default"
-        ,compile_strategy = RegressionCompileStrategy()
+        #,compile_strategy = RegressionCompileStrategy()
     )
 
     logger.info("Selecting Tuning strategy...")
@@ -69,7 +69,7 @@ def main(
         batch_size=batch_size
         ,epochs=epochs
         ,validation_len=validation_len
-        ,callbacks=RegressionCallbacksStrategy.get()
+        #,callbacks=RegressionCallbacksStrategy.get()
     )
 
     logger.info("Building model training pipeline template...")   

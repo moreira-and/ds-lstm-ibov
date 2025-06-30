@@ -18,24 +18,14 @@ app = typer.Typer()
 def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
     input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
-    length: int = 20,
     preprocessor_path: Path = PROCESSED_DATA_DIR / "preprocessor.pkl",
-    model_path: Path = MODELS_DIR / "Sequential_epoch111_loss0.1866.keras",    
+    model_path: Path = MODELS_DIR / "best_model_tuned.keras",    
     postprocessor_path: Path = PROCESSED_DATA_DIR / "postprocessor.pkl",
     output_path: Path = PROCESSED_DATA_DIR / "dataset_report.csv",
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
     logger.info("Performing inference for model...")
-
-    # Carrega dados de entrada
-    df = pd.read_csv(input_path, index_col=0,parse_dates=True)
-    logger.info(f"Input data shape: {df.tail(length+1).shape}")
-    
-    with open(preprocessor_path, "rb") as f:
-        preprocessor = cloudpickle.load(f)
-    # Aplica pipeline de predição
-    X_processed = preprocessor.transform(df.tail(length+1))
 
     model = keras.models.load_model(
         model_path, 
@@ -44,7 +34,19 @@ def main(
             "rmse": rmse,
             "r2_score": r2_score
         }
-)
+    )
+
+    length = model.input_shape[1]
+
+    # Carrega dados de entrada
+    df = pd.read_csv(input_path, index_col=0,parse_dates=True)
+    logger.info(f"Input data shape: {df.tail(length).shape}")
+    
+    with open(preprocessor_path, "rb") as f:
+        preprocessor = cloudpickle.load(f)
+    # Aplica pipeline de predição
+    X_processed = preprocessor.transform(df.tail(length+1))
+
     predictions = model.predict(X_processed)
 
     with open(postprocessor_path, "rb") as f:
