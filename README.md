@@ -8,11 +8,11 @@
   <img src="https://img.shields.io/badge/LinkedIn--blue?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Badge"/>
 </a>
 
-## Aboult
+## ℹ Aboult
 
 This project implements a robust time series forecasting pipeline to predict the closing prices of the IBOVESPA index, Brazil’s main stock market benchmark. It combines advanced data preprocessing techniques using scikit-learn with a deep learning architecture that integrates convolutional layers (Conv1D), recurrent layers (LSTM and GRU), and dense layers. The model incorporates regularization (L2) and dropout to prevent overfitting. Additionally, the training experiments and results are systematically tracked using MLflow to ensure reproducibility and facilitate hyperparameter tuning.
 
-### Project flow
+### ▶ Project flow
 
 Open the notebook [0.0-amp-main.ipynb](/notebooks/0.0-amp-main.ipynb) and run all cells.
 
@@ -34,13 +34,13 @@ flowchart LR
     F --> G
 ```
 
-### Key features include:
+### 🔑 Key features include:
 - Data normalization and inverse transformation with scikit-learn for effective model training and interpretability.
 - A hybrid neural network architecture designed for sequential financial data.
 - Use of MLflow for experiment tracking and model management.
 - Modular codebase enabling experimentation with training parameters and architectures.
 
-### Technical Highlights:
+### 💡 Technical Highlights:
 - Modular architecture with strategy and template patterns for easy extensibility and maintenance.
 - Reproducible ML pipelines orchestrated and tracked with MLflow.
 - Decoupled configuration using .yaml files.
@@ -68,7 +68,7 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
-## Project Organization
+## 🏢 Project Organization
 
 <a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
     <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
