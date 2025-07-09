@@ -101,9 +101,9 @@ pip install -r requirements.txt
 │   ├── dataset.py           <- Data loading and orchestration logic.
 │   ├── features.py          <- Feature extraction from data.
 │   ├── modeling/            <- Model training, tuning, and prediction.
-│   │   ├── train.py
-│   │   ├── tune.py
-│   │   └── predict.py
+│   │   ├── train.py         <- Script to train the machine learning model.
+│   │   ├── tune.py          <- Script to optimize model hyperparameters.
+│   │   └── predict.py       <- Script to make predictions with the trained model.
 │   ├── plots.py             <- Custom plotting and visualization.
 │   └── utils/               <- Domain-specific strategies and utilities.
 │       ├── dataset/         <- Cleaning, calendar, and loading strategies.
