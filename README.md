@@ -60,7 +60,7 @@ cd time-series-prediction-rnn
 #### 2. (Optional) Create and activate a virtual environment
 ```bash
 python -m venv .venv
-.env\Scripts\activate   # On Linux e macOS: source .venv/bin/activate
+.venv\Scripts\activate.bat   # On Linux e macOS: source .venv/bin/activate
 ```
 
 #### 3. Install dependencies
