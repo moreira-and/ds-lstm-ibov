@@ -1,10 +1,20 @@
-# Data
-/tests/*
-/data/raw/*
-/data/processed/*
-/data/predicted/*
-/mlruns/*
-/models/*
+# Ignora arquivos dentro das subpastas de /data/
+data/raw/*
+data/processed/*
+data/predicted/*
+mlruns/*
+models/*
+tests/*
+
+# Exceto os arquivos .gitkeep em cada pasta
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+!data/predicted/.gitkeep
+!mlruns/.gitkeep
+!models/.gitkeep
+!tests/.gitkeep
+
+
 # Mac OS-specific storage files
 .DS_Store
 
