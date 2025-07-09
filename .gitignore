@@ -1,6 +1,8 @@
 # Data
 /tests/*
-/data/*
+/data/raw/*
+/data/processed/*
+/data/predicted/*
 /mlruns/*
 /models/*
 # Mac OS-specific storage files
