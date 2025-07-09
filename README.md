@@ -17,7 +17,7 @@ Run the following commands in your terminal (requires-python = "~=3.10.0"):
 #### 1. Clone the repository
 ```bash
 git clone https://github.com/moreira-and/time-series-prediction-rnn.git
-cd your-repo-name
+cd time-series-prediction-rnn
 ```
 
 #### 2. (Optional) Create and activate a virtual environment
