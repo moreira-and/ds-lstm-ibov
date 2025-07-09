@@ -17,13 +17,13 @@ Run the following commands in your terminal:
 #### 1. Clone the repository
 ```bash
 git clone https://github.com/moreira-and/time-series-prediction-rnn.git
-cd your-repo-name
+cd time-series-prediction-rnn
 ```
 
 #### 2. (Optional) Create and activate a virtual environment
 ```bash
-python -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
+python -m venv .venv
+source .venv/bin/activate   # On Windows: .venv\Scripts\activate
 ```
 
 #### 3. Install dependencies
