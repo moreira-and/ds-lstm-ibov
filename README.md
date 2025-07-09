@@ -1,6 +1,12 @@
 # time-series-prediction-rnn
 
-[🎦 Click here to watch tutorial videos in Portuguese.](https://www.youtube.com/playlist?list=PL3iMuuZjTaTJu01noBWHrLnX1ayRrzTiu)
+<a href="https://www.youtube.com/playlist?list=PL3iMuuZjTaTJu01noBWHrLnX1ayRrzTiu" target="_blank" style="display: inline-block;">
+  <img src="https://img.shields.io/badge/YouTube-red?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube Badge"/>
+</a>
+
+<a href="https://www.linkedin.com/in/moreira-and/" target="_blank" style="display: inline-block;">
+  <img src="https://img.shields.io/badge/LinkedIn--blue?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Badge"/>
+</a>
 
 ## Aboult
 
