@@ -40,6 +40,7 @@ def main(
     batch_size: int = 2**5,
     # -----------------------------------------
     experiment_name: str = "default_experiment",
+    model_name: str = "default_model",
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
@@ -83,7 +84,7 @@ def main(
     final_epoch = history.epoch[-1]
     final_loss = history.history['loss'][-1]
 
-    model_name = f'{model.__class__.__name__}_epoch{final_epoch}_loss{final_loss:.4f}.keras'
+    model_name = f'{model_name}.keras'
 
     logger.info(f"Saving '{model_name}' in '{MODELS_DIR}'...")
 

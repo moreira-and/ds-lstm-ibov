@@ -8,7 +8,7 @@ from tqdm import tqdm
 import typer
 
 from src import config, utils
-from src.config import MODELS_DIR, PROCESSED_DATA_DIR
+from src.config import MODELS_DIR, PROCESSED_DATA_DIR, PREDICTED_DATA_DIR
 from src.utils.train.metric_strategy import smape, rmse, r2_score
 
 app = typer.Typer()
@@ -19,9 +19,9 @@ def main(
     # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
     input_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
     preprocessor_path: Path = PROCESSED_DATA_DIR / "preprocessor.pkl",
-    model_path: Path = MODELS_DIR / "best_model_tuned.keras",    
+    model_path: Path = MODELS_DIR / "default_model.keras",    
     postprocessor_path: Path = PROCESSED_DATA_DIR / "postprocessor.pkl",
-    output_path: Path = PROCESSED_DATA_DIR / "dataset_report.csv",
+    output_path: Path = PREDICTED_DATA_DIR / "dataset_report.csv",
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----

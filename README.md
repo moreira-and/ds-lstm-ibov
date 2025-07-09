@@ -12,7 +12,7 @@ Key features include:
 
 ## 🛠️ Installation (CLI)
 
-Run the following commands in your terminal:
+Run the following commands in your terminal (requires-python = "~=3.10.0"):
 
 #### 1. Clone the repository
 ```bash
@@ -22,8 +22,8 @@ cd your-repo-name
 
 #### 2. (Optional) Create and activate a virtual environment
 ```bash
-python -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
+python -m venv .venv
+.env\Scripts\activate   # On Linux e macOS: source .venv/bin/activate
 ```
 
 #### 3. Install dependencies
@@ -31,7 +31,27 @@ source venv/bin/activate   # On Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
+## Project flow
 
+Open the notebook [0.0-amp-main.ipynb](/notebooks/0.0-amp-main.ipynb) and run all cells.
+
+```mermaid
+flowchart LR
+    A["🔄 Start"]
+    B["📦 dataset.py"]
+    C["🧮 features.py"]
+    D["🎯 tuning.py"]
+    E["🤖 train.py"]
+    F["🔮 predict.py"]
+    G["🏁 End"]
+
+    A --> B --> C
+    C --> D
+    C --> E
+    D --> F
+    E --> F
+    F --> G
+```
 
 ## Project Organization
 
