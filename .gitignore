@@ -1,4 +1,5 @@
 # Data
+/tests/
 /data/
 /mlruns/
 /models/
