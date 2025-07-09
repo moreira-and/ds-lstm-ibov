@@ -1,12 +1,43 @@
-# ds-lstm-ibov
+# time-series-prediction-rnn
+
+## Aboult
+
+This project implements a robust time series forecasting pipeline to predict the closing prices of the IBOVESPA index, Brazil’s main stock market benchmark. It combines advanced data preprocessing techniques using scikit-learn with a deep learning architecture that integrates convolutional layers (Conv1D), recurrent layers (LSTM and GRU), and dense layers. The model incorporates regularization (L2) and dropout to prevent overfitting. Additionally, the training experiments and results are systematically tracked using MLflow to ensure reproducibility and facilitate hyperparameter tuning.
+
+Key features include:
+- Data normalization and inverse transformation with scikit-learn for effective model training and interpretability.
+- A hybrid neural network architecture designed for sequential financial data.
+- Use of MLflow for experiment tracking and model management.
+- Modular codebase enabling experimentation with training parameters and architectures.
+
+## 🛠️ Installation (CLI)
+
+Run the following commands in your terminal:
+
+#### 1. Clone the repository
+```bash
+git clone https://github.com/moreira-and/time-series-prediction-rnn.git
+cd your-repo-name
+```
+
+#### 2. (Optional) Create and activate a virtual environment
+```bash
+python -m venv venv
+source venv/bin/activate   # On Windows: venv\Scripts\activate
+```
+
+#### 3. Install dependencies
+```bash
+pip install -r requirements.txt
+```
+
+
+
+## Project Organization
 
 <a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
     <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
 </a>
-
-A time series forecasting model using Long Short-Term Memory (LSTM) neural networks to predict the closing price of the IBOVESPA index, Brazil’s main stock market index.
-
-## Project Organization
 
 ```
 ├── LICENSE            <- Open-source license if one is chosen
