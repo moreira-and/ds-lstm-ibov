@@ -17,11 +17,12 @@ This project implements a robust time series forecasting pipeline to predict the
 
 ```mermaid
 flowchart LR
-    A[Input (DataFrame)] --> B[Preprocessor (preprocessor.pkl)]
-    B --> C[Model (Keras)]
-    C --> D[Postprocessor (postprocessor.pkl)]
-    D --> E[Transformed Output]
+    input[Input (DataFrame)] --> preproc[Preprocessor (preprocessor.pkl)]
+    preproc --> model[Model (Keras)]
+    model --> postproc[Postprocessor (postprocessor.pkl)]
+    postproc --> output[Transformed Output]
 ```
+
 
 ### ▶ Project flow
 
