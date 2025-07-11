@@ -79,6 +79,25 @@ python -m venv .venv
 pip install -r requirements.txt
 ```
 
+## ⚙️ Time Series Configuration (`dataset.yaml`)
+
+This file maps external data series by source. It supports:
+- **`yfinance`**: Financial tickers from [Yahoo Finance](https://finance.yahoo.com/markets/) (e.g., `^BVSP`, `BTC-USD`).
+- **`bcb`**: Economic indicators from Brazil's Central Bank (SGS). Find series IDs at [www3.bcb.gov.br/sgspub](https://www3.bcb.gov.br/sgspub/localizarseries/localizarSeries.do?method=prepararTelaLocalizarSeries).
+- **`DataReader`**: Macroeconomic series (e.g., FRED/USA). Use [fred.stlouisfed.org](https://fred.stlouisfed.org/) to find codes like `DEXBZUS`, `CPIAUCSL`.
+
+The strategies load data dynamically based on these IDs. Just update the YAML—no code changes needed.
+
+## 📈 Visualize Experiments with MLflow UI
+
+After running the notebook [0.0-amp-main.ipynb](/notebooks/0.0-amp-main.ipynb), all experiments and metrics are tracked using **MLflow**.
+
+To open the MLflow tracking UI locally, run the command below in the root directory:
+
+```bash
+mlflow ui
+```
+
 ## 🏢 Project Organization
 
 <a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
