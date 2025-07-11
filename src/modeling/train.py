@@ -7,9 +7,6 @@ import typer
 
 import numpy as np
 
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.losses import Huber
-
 from src.config import MODELS_DIR, PROCESSED_DATA_DIR, logger
 
 from src.utils.train.metric_strategy import RegressionMetricStrategy
@@ -20,7 +17,7 @@ from src.utils.train.model_builder import RegressionRobustModelBuilder
 from src.utils.train.compile_strategy import RegressionCompileStrategy
 from src.utils.train.train_strategy import RegressionTrainStrategy
 
-from src.utils.log.log_strategy import MLflowLogger
+from src.utils.log.log_strategy import KerasExperimentMlFlowLogger
 
 app = typer.Typer()
 
@@ -78,11 +75,8 @@ def main(
     )
 
     logger.info("Training model...")
-
     model, history = template.run(X_train,y_train)
-        
-    final_epoch = history.epoch[-1]
-    final_loss = history.history['loss'][-1]
+    logger.info("Model training complete.")
 
     model_name = f'{model_name}.keras'
 
@@ -97,18 +91,19 @@ def main(
 
     logger.info("Logging experiment into mlflow.")
 
-    ml_logger = MLflowLogger(
+    ml_logger = KerasExperimentMlFlowLogger(
         model=model,
         history=history,
         validation_len=validation_len,
         batch_size=batch_size,
-        X_train=X_train,
-        y_train=y_train,
         elapsed_time=elapsed_time
     )
 
-    ml_logger.run(run_name=model.__class__.__name__,
-                      experiment_name=experiment_name)
+    ml_logger.run(
+        run_name="training_run",
+        experiment_name=experiment_name,
+        model_name="regression-pipeline",        
+        purpose_tag = "regression-pipeline")
 
     logger.success("Experiment logged successfully.")
 
