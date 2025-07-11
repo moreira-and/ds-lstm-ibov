@@ -92,7 +92,7 @@ The strategies load data dynamically based on these IDs. Just update the YAML—
 
 After running the notebook [0.0-amp-main.ipynb](/notebooks/0.0-amp-main.ipynb), all experiments and metrics are tracked using **MLflow**.
 
-To open the MLflow tracking UI locally, run the command below in the root directory:
+To open the MLflow tracking UI locally, activate a virtual environment and run the command below in the root directory:
 
 ```bash
 mlflow ui
