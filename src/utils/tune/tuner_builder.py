@@ -5,10 +5,10 @@ import keras_tuner as kt
 from keras_tuner import HyperParameters
 
 from src.utils.train.model_builder import RegressionRobustModelBuilder
-from src.utils.train.compile_strategy import CompileStrategy,RegressionCompileStrategy
+from src.utils.train.compile_strategy import ICompileStrategy,RegressionCompileStrategy
 
 
-class TunerBuilder(ABC):
+class ITunerBuilder(ABC):
     @abstractmethod
     def _build_model(self,hp: HyperParameters):
         raise NotImplementedError("Implement in subclass")
@@ -17,7 +17,7 @@ class TunerBuilder(ABC):
     def build_tuner(self):
         raise NotImplementedError("Implement in subclass")
 
-class RegressionRobustModelTuner(TunerBuilder):
+class RegressionRobustModelTuner(ITunerBuilder):
 
     def __init__(self, input_shape, output_shape,max_trials : int =10, project_name : str = "default", compile_strategy = None):
         self.input_shape = input_shape

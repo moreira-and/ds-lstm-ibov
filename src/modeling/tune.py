@@ -12,15 +12,11 @@ tf.config.run_functions_eagerly(True)
 tf.data.experimental.enable_debug_mode()
 #tf.compat.v1.reset_default_graph instead
 
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras.losses import Huber
-
-
 from src.config import MODELS_DIR, PROCESSED_DATA_DIR, logger
 
-from src.utils.train.compile_strategy import RegressionCompileStrategy
-from src.utils.train.callbacks_strategy import RegressionCallbacksStrategy
-from src.utils.train.metric_strategy import RegressionMetricStrategy
+#from src.utils.train.compile_strategy import RegressionCompileStrategy
+#from src.utils.train.callbacks_strategy import RegressionCallbacksStrategy
+#from src.utils.train.metric_strategy import RegressionMetricStrategy
 
 from src.utils.tune.tune_template import TunerKerasPipeline
 from src.utils.tune.tuner_builder import RegressionRobustModelTuner

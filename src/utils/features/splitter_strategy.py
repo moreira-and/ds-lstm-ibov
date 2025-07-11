@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
 from src.config import logger
 
-class SplitterStrategy(ABC):
+class ISplitterStrategy(ABC):
     @abstractmethod
     def split(self,X, y=None):
         raise NotImplementedError("Implement in subclass")
 
 
-class SequentialSplitter(SplitterStrategy):
+class SequentialSplitter(ISplitterStrategy):
     def __init__(self, train_size_ratio=0.9):
         self.train_size_ratio = train_size_ratio
 

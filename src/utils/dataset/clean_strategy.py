@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Abstract base class for data cleaning handlers
-class CleanStrategy(ABC):
+class ICleanStrategy(ABC):
     @abstractmethod
     def clear(self, 
               X: Union[pd.DataFrame, np.ndarray], 
@@ -27,7 +27,7 @@ class CleanStrategy(ABC):
         raise NotImplementedError("Implement in subclass")
 
 # Pipeline for cleaning data by applying multiple cleaning steps sequentially
-class CleanPipeline(CleanStrategy):
+class CleanPipeline(ICleanStrategy):
     '''
     This class allows for applying a series of cleaning steps to the data in sequence.
     '''
@@ -52,7 +52,7 @@ class CleanPipeline(CleanStrategy):
         return X, y
 
 # Class to handle missing values in the data by filling forward and backward
-class CleanMissingValues(CleanStrategy):
+class CleanMissingValues(ICleanStrategy):
     def clear(self, 
               X: Union[pd.DataFrame, np.ndarray], 
               y: Optional[Union[pd.Series, np.ndarray]] = None
@@ -84,7 +84,7 @@ class CleanMissingValues(CleanStrategy):
         return X_new, y_new
 
 # Class to remove features with low variance
-class CleanLowVariance(CleanStrategy):
+class CleanLowVariance(ICleanStrategy):
     def __init__(self, threshold: float = 0.01):
         """
         Initialize the class with a threshold for variance.
@@ -122,7 +122,7 @@ class CleanLowVariance(CleanStrategy):
         return X_new, y
 
 # Class to remove features that are highly correlated
-class CleanHighCorrelation(CleanStrategy):
+class CleanHighCorrelation(ICleanStrategy):
     def __init__(self, correlation_threshold: float = 0.95):
         """
         Initialize the class with a correlation threshold.
@@ -158,7 +158,7 @@ class CleanHighCorrelation(CleanStrategy):
         return X_new, y
 
 # Class to select features based on univariate statistical tests (e.g., ANOVA F-test)
-class CleanGenericUnivariate(CleanStrategy):
+class CleanGenericUnivariate(ICleanStrategy):
     '''
     Score functions (f_classif, f_regression, chi2, etc.)
     mode ("percentile","k_best","fpr","fdr","fwe")
@@ -204,7 +204,7 @@ class CleanGenericUnivariate(CleanStrategy):
         return X_new, y
 
 # Class to apply sequential feature selection
-class CleanSequential(CleanStrategy):
+class CleanSequential(ICleanStrategy):
     def __init__(self, model=None, n_features_to_select=None, direction=None):
         """
         Initialize the class with the model and parameters for sequential feature selection.

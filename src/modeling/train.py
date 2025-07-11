@@ -9,7 +9,6 @@ import numpy as np
 
 from src.config import MODELS_DIR, PROCESSED_DATA_DIR, logger
 
-from src.utils.train.metric_strategy import RegressionMetricStrategy
 from src.utils.train.callbacks_strategy import RegressionCallbacksStrategy
 
 from src.utils.train.model_template import ModelKerasPipeline

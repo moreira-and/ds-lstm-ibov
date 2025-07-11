@@ -8,12 +8,12 @@ from tensorflow.keras.regularizers import l2
 import tensorflow.keras.backend as K
 
 
-class ModelBuilder(ABC):
+class IModelBuilder(ABC):
     @abstractmethod
     def build_model(self):
         raise NotImplementedError("Implement in subclass")
     
-class RegressionRobustModelBuilder(ModelBuilder):
+class RegressionRobustModelBuilder(IModelBuilder):
 
     def __init__(self, input_shape, output_shape,l2_rate = 1e-4,dropout_rate=0.3, conv1D_units = 128, lstm_units = 32, dense_units = 32, gru_units = 32 ):
         self.input_shape = input_shape
@@ -51,7 +51,7 @@ class RegressionRobustModelBuilder(ModelBuilder):
             logger.error(f'Error building {self.__class__.__name__}: {e}')
 
 
-class RegressionSimpleModelBuilder(ModelBuilder):
+class RegressionSimpleModelBuilder(IModelBuilder):
 
     def __init__(self, input_shape, output_shape):
         self.input_shape = input_shape
@@ -76,7 +76,7 @@ class RegressionSimpleModelBuilder(ModelBuilder):
             raise
 
 
-class RegressionMultiLayersModelBuilder(ModelBuilder):
+class RegressionMultiLayersModelBuilder(IModelBuilder):
     def __init__(self, input_shape, output_shape,exo_dim=None):
         self.input_shape = input_shape
         self.output_shape = output_shape

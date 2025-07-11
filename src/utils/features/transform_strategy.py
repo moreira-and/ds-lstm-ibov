@@ -5,9 +5,9 @@ import numpy as np
 from sklearn.compose import ColumnTransformer, make_column_selector
 from sklearn.preprocessing import OneHotEncoder, RobustScaler
 
-from src.utils.features.postprocessor_strategy import (BlankPostprocessor, PostprocessorStrategy,DefaultRnnPostprocessor)
+from src.utils.features.postprocessor_strategy import (BlankPostprocessor, IPostprocessorStrategy,DefaultRnnPostprocessor)
 
-class TransformStrategy(ABC):
+class ITransformStrategy(ABC):
     @abstractmethod
     def fit(self, X, y=None):
         raise NotImplementedError("Implement in subclass")
@@ -25,10 +25,10 @@ class TransformStrategy(ABC):
         raise NotImplementedError("Implement in subclass")
 
     @abstractmethod
-    def get_postprocessor(self,y_train) -> PostprocessorStrategy:
+    def get_postprocessor(self,y_train) -> IPostprocessorStrategy:
         raise NotImplementedError("Implement in subclass")
 
-class DefaultRnnTransformStrategy(TransformStrategy):
+class DefaultRnnTransformStrategy(ITransformStrategy):
     def __init__(
         self, 
         numeric_transformer=RobustScaler(),
@@ -57,13 +57,13 @@ class DefaultRnnTransformStrategy(TransformStrategy):
     def fit_transform(self, X, y=None):
         return self.column_transformer.fit_transform(X, y)
     
-    def get_postprocessor(self, y_train) -> PostprocessorStrategy:
+    def get_postprocessor(self, y_train) -> IPostprocessorStrategy:
         return DefaultRnnPostprocessor(self._numeric_transformer,y_train=y_train)
     
     def get_feature_names(self, input_features = None):
         return self.column_transformer.get_feature_names_out(input_features=input_features)
 
-class BlankTransformStrategy(TransformStrategy):
+class BlankTransformStrategy(ITransformStrategy):
     def __init__(self, X_column_names=None,y_column_names=None):
         self.X_column_names = X_column_names
         self.y_column_names = y_column_names
@@ -82,5 +82,5 @@ class BlankTransformStrategy(TransformStrategy):
     def get_feature_names(self):
         return self.X_column_names
 
-    def get_postprocessor(self, y_train) -> PostprocessorStrategy:
+    def get_postprocessor(self, y_train) -> IPostprocessorStrategy:
         return BlankPostprocessor(column_names=self.get_feature_names())

@@ -13,14 +13,14 @@ import yfinance as yf
 from pandas_datareader import data as pdr
 import requests
 
-class DatasetLoadingStrategy(ABC):
+class IDatasetLoadingStrategy(ABC):
     @abstractmethod
     def load(self) -> Any:
         raise NotImplementedError("Implement in subclass")
 
 
-class DatasetMultiLoader(DatasetLoadingStrategy):
-    def __init__(self, strategies: List[DatasetLoadingStrategy]):
+class DatasetMultiLoader(IDatasetLoadingStrategy):
+    def __init__(self, strategies: List[IDatasetLoadingStrategy]):
         self.strategies = strategies
 
     def load(self) -> Dict[str, pd.DataFrame]:
@@ -37,7 +37,7 @@ class DatasetMultiLoader(DatasetLoadingStrategy):
         return dataset
 
 
-class YfinanceLoadingStrategy(DatasetLoadingStrategy):
+class YfinanceLoadingStrategy(IDatasetLoadingStrategy):
     def __init__(self, start_date: str, end_date: str):
         self.start_date = start_date
         self.end_date = end_date
@@ -68,7 +68,7 @@ class YfinanceLoadingStrategy(DatasetLoadingStrategy):
 
 
     
-class BcbLoadingStrategy(DatasetLoadingStrategy):
+class BcbLoadingStrategy(IDatasetLoadingStrategy):
     def __init__(self, start_date: str, end_date: str):
         self.start_date = pd.to_datetime(start_date, dayfirst=True)
         self.end_date = pd.to_datetime(end_date, dayfirst=True)
@@ -123,7 +123,7 @@ class BcbLoadingStrategy(DatasetLoadingStrategy):
 
 
 
-class DataReaderLoadingStrategy(DatasetLoadingStrategy):
+class DataReaderLoadingStrategy(IDatasetLoadingStrategy):
     def __init__(self, start_date: str, end_date: str):
         self.start_date = start_date
         self.end_date = end_date

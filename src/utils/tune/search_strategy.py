@@ -4,14 +4,14 @@ from src.config import logger
 
 from keras import callbacks
 import numpy as np
-from src.utils.train.callbacks_strategy import CallbacksStrategy, RegressionCallbacksStrategy
+from src.utils.train.callbacks_strategy import ICallbacksStrategy, RegressionCallbacksStrategy
 
-class SearchStrategy(ABC):
+class ISearchStrategy(ABC):
     @abstractmethod
     def search(self, model, X_train, y_train):
         raise NotImplementedError("Implement in subclass")
 
-class RegressionTuneStrategy(SearchStrategy):
+class RegressionTuneStrategy(ISearchStrategy):
     def __init__(self, epochs : int = 200, batch_size : int = 16, validation_len : int = 32, callbacks : callbacks = None):
         self.epochs = epochs
         self.batch_size = batch_size

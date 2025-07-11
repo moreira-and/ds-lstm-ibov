@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 import pandas as pd
 
-class PostprocessorStrategy(ABC):  
+class IPostprocessorStrategy(ABC):  
     @abstractmethod
     def inverse_transform(self, y_predicted):
         raise NotImplementedError("Implement in subclass")
 
-class DefaultRnnPostprocessor(PostprocessorStrategy):
+class DefaultRnnPostprocessor(IPostprocessorStrategy):
 
     def __init__(self, transformer,y_train):
         self.__transformer = transformer.fit(y_train)
@@ -26,7 +26,7 @@ class DefaultRnnPostprocessor(PostprocessorStrategy):
         return pd.DataFrame(y_inversed, columns=column_names)
 
 
-class BlankPostprocessor(PostprocessorStrategy):  
+class BlankPostprocessor(IPostprocessorStrategy):  
     
     def __init__(self,column_names=None):
         self.column_names = column_names

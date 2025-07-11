@@ -15,7 +15,7 @@ mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 
 
 
-class ExperimentTemplate(ABC):
+class IExperimentTemplate(ABC):
 
     @abstractmethod
     def run(self):
@@ -68,7 +68,7 @@ class ExperimentTemplate(ABC):
         mlflow.log_model_input_example(input_example)
 
 
-class LSTMRegressionExperiment(ExperimentTemplate):
+class LSTMRegressionExperiment(IExperimentTemplate):
     def __init__(self, model_path: Path, preprocessor_path: Path, postprocessor_path: Path, X_test, y_test, py_func:PyFuncModelTemplate ,tags: dict = None):
         self.model = cloudpickle.dump(self.model, open(model_path, "wb"))
         self.preprocessor = cloudpickle.dump(self.preprocessor, open(preprocessor_path, "wb"))

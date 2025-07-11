@@ -4,14 +4,14 @@ from typing import List
 from keras import callbacks
 
 
-class CallbacksStrategy(ABC):
+class ICallbacksStrategy(ABC):
     @staticmethod
     @abstractmethod
     def get() -> List:
         raise NotImplementedError("Implement in subclass")
 
 
-class RegressionCallbacksStrategy(CallbacksStrategy):
+class RegressionCallbacksStrategy(ICallbacksStrategy):
     @staticmethod
     def get():
         early_stop = callbacks.EarlyStopping(monitor='val_loss', patience=2**6, restore_best_weights=True,mode='min', verbose=0)

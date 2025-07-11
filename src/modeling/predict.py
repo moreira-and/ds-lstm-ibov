@@ -7,7 +7,6 @@ from loguru import logger
 from tqdm import tqdm
 import typer
 
-from src import config, utils
 from src.config import MODELS_DIR, PROCESSED_DATA_DIR, PREDICTED_DATA_DIR
 from src.utils.train.metric_strategy import smape, rmse, r2_score
 

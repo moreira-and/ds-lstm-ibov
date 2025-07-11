@@ -1,11 +1,11 @@
 from abc import ABC, abstractmethod
 
-class PredictTemplate(ABC):
+class IPredictTemplate(ABC):
     @abstractmethod
     def predict(self, X):
         raise NotImplementedError("Implement in subclass")
 
-class DefaultPredictTemplate(PredictTemplate):
+class DefaultPredictTemplate(IPredictTemplate):
     def __init__(self, model, preprocessor = None , postprocessor = None):
         self.preprocessor = preprocessor
         self.model = model

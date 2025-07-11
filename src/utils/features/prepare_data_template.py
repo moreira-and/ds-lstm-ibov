@@ -2,15 +2,15 @@ from typing import Any
 
 import numpy as np
 
-from src.utils.features.splitter_strategy import SplitterStrategy
-from src.utils.features.transform_strategy import TransformStrategy
-from src.utils.features.generator_strategy import GeneratorStrategy
+from src.utils.features.splitter_strategy import ISplitterStrategy
+from src.utils.features.transform_strategy import ITransformStrategy
+from src.utils.features.generator_strategy import IGeneratorStrategy
 from src.utils.features.preprocessor_strategy import DefaultRnnPreprocessor
 
 from abc import ABC, abstractmethod
 
 
-class PrepareDataTemplate(ABC):
+class IPrepareDataTemplate(ABC):
     @abstractmethod
     def prepare_data(self):
         raise NotImplementedError("Implement in subclass")
@@ -24,8 +24,8 @@ class PrepareDataTemplate(ABC):
         raise NotImplementedError("Implement in subclass")
 
 
-class DefaultRnnPrepareDataTemplate(PrepareDataTemplate):
-    def __init__(self, dataset,targets, splitter: SplitterStrategy, transformer: TransformStrategy, generator: GeneratorStrategy):
+class DefaultRnnPrepareDataTemplate(IPrepareDataTemplate):
+    def __init__(self, dataset,targets, splitter: ISplitterStrategy, transformer: ITransformStrategy, generator: IGeneratorStrategy):
         self.dataset = dataset
         self.targets = targets
         self.splitter = splitter

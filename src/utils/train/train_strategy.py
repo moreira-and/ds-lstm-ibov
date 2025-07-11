@@ -4,12 +4,12 @@ from src.config import logger
 
 from src.utils.train.callbacks_strategy import RegressionCallbacksStrategy
 
-class TrainStrategy(ABC):
+class ITrainStrategy(ABC):
     @abstractmethod
     def train(self, model, X_train, y_train):
         raise NotImplementedError("Implement in subclass")
 
-class RegressionTrainStrategy(TrainStrategy):
+class RegressionTrainStrategy(ITrainStrategy):
     def __init__(self, epochs= 200, batch_size= 16, validation_len = 32, callbacks = None):
         self.epochs = epochs
         self.batch_size = batch_size

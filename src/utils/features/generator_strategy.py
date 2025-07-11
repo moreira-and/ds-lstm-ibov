@@ -3,12 +3,12 @@ from src.config import logger
 
 from tensorflow.keras.preprocessing.sequence import TimeseriesGenerator
 
-class GeneratorStrategy(ABC):
+class IGeneratorStrategy(ABC):
     @abstractmethod
     def generate(self, data,targets=None):
         raise NotImplementedError("Implement in subclass")
 
-class DefaultRnnGenerator(GeneratorStrategy):
+class DefaultRnnGenerator(IGeneratorStrategy):
     def __init__(self, sequence_length=7, batch_size=1):
         self._sequence_length = sequence_length
         self._batch_size = batch_size

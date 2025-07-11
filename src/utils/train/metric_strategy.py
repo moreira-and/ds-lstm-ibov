@@ -4,17 +4,17 @@ import tensorflow as tf
 import tensorflow.keras.backend as K
 from tensorflow.keras.utils import register_keras_serializable
 
-class MetricStrategy(ABC):
+class IMetricStrategy(ABC):
     @abstractmethod
     def get_metrics(self):
         raise NotImplementedError("Implement in subclass")
 
-class RegressionMetricStrategy(MetricStrategy):
+class RegressionMetricStrategy(IMetricStrategy):
     def get_metrics(self):
         return ['mae', 'mse',smape,rmse,r2_score]
         #return ['mae', 'mse']
 
-class ClassificationMetricStrategy(MetricStrategy):
+class ClassificationMetricStrategy(IMetricStrategy):
     def get_metrics(self):
         return ['accuracy', 'precision', 'recall']
     
