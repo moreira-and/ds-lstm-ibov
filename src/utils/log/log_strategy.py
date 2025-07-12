@@ -12,12 +12,12 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import mlflow
 import mlflow.keras
-import mlflow.pyfunc
 import tensorflow as tf
 
 from abc import ABC, abstractmethod
 from src import config
 from src.config import logger
+from src.utils.log.PythonModelPipeline import PythonModelPipeline
 
 mlflow.set_tracking_uri(config.MLFLOW_TRACKING_URI)
 
@@ -26,21 +26,6 @@ class ILogStrategy(ABC):
     @abstractmethod
     def run(self):
         raise NotImplementedError("Implement in subclass")
-
-class FullPipelineModel(mlflow.pyfunc.PythonModel):
-    def load_context(self, context):
-        with open(context.artifacts["preprocessor"], "rb") as f:
-            self.preprocessor = pickle.load(f)
-        with open(context.artifacts["postprocessor"], "rb") as f:
-            self.postprocessor = pickle.load(f)
-        with open(context.artifacts["model"], "rb") as f:
-            self.model = pickle.load(f)
-
-    def predict(self, context: mlflow.pyfunc.PythonModelContext, model_input: pd.DataFrame) -> np.ndarray:
-        X_transformed = self.preprocessor.transform(model_input)
-        y_pred = self.model.predict(X_transformed)
-        return self.postprocessor.inverse_transform(y_pred.reshape(-1, 1)).flatten()
-
 
 
 class KerasExperimentMlFlowLogger(ILogStrategy):
@@ -166,7 +151,7 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
 
                 mlflow.pyfunc.log_model(
                     artifact_path="pyfunc_model",
-                    python_model=FullPipelineModel(),
+                    python_model=PythonModelPipeline(),
                     artifacts={
                         "preprocessor": prep_dest,
                         "postprocessor": post_dest,
