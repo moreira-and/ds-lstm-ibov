@@ -12,7 +12,7 @@ from src.config import MODELS_DIR, PROCESSED_DATA_DIR, logger
 from src.utils.train.callbacks_strategy import RegressionCallbacksStrategy
 
 from src.utils.train.model_template import ModelKerasPipeline
-from src.utils.train.model_builder import RegressionRobustModelBuilder
+from src.utils.train.model_builder import RegressionRobustModelBuilder,LoadKerasModelBuilder
 from src.utils.train.compile_strategy import RegressionCompileStrategy
 from src.utils.train.train_strategy import RegressionTrainStrategy
 
@@ -27,16 +27,18 @@ def main(
     X_path: Path = PROCESSED_DATA_DIR / "X_train.npy",
     y_path: Path = PROCESSED_DATA_DIR / "y_train.npy",
     # -----------------------------------------
-    optimizer: str = None,
-    loss: str = None,
-    metrics: str = None,
-    # -----------------------------------------
-    epochs: int = 2**8,    
+    epochs: int = 3, #2**8,    
     validation_len: int = 2**6,
     batch_size: int = 2**5,
     # -----------------------------------------
     experiment_name: str = "default_experiment",
     model_name: str = "default_model",
+    # -----------------------------------------
+    model_path: Path = None, # MODELS_DIR / "default_model.keras", 
+    # -----------------------------------------
+    optimizer: str = None,
+    loss: str = None,
+    metrics: str = None,
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
@@ -50,10 +52,15 @@ def main(
     output_shape = y_train.shape[1:]
     
     logger.info("Selecting builder strategy...")
-    model_builder = RegressionRobustModelBuilder(
-        input_shape=input_shape,
-        output_shape=output_shape
-    )
+    if model_path:
+        model_builder = LoadKerasModelBuilder(model_path=model_path)
+        logger.info(f"Loading model from {model_path}")
+    else:
+        logger.info("Building new model...")
+        model_builder = RegressionRobustModelBuilder(
+            input_shape=input_shape,
+            output_shape=output_shape
+        )
     
     logger.info("Selecting compile strategy...")
     compiler = RegressionCompileStrategy()
