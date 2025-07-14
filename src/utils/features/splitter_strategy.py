@@ -12,13 +12,16 @@ class SequentialSplitter(ISplitterStrategy):
         self.train_size_ratio = train_size_ratio
 
     def split(self, X, y=None):
+        
         logger.info("Splitting dataset into training and testing sets...")
 
-        X_train_size = int(len(X) * self.train_size_ratio)
+        if len(X) == 0:
+            raise ValueError("Input data X is empty.")
+        
+
+        train_size = int(len(X) * self.train_size_ratio)
 
         if y is None:
-            return X[:X_train_size], X[X_train_size:]
-        
-        y_train_size = int(len(y) * self.train_size_ratio)
+            return X[:train_size], X[train_size:]
 
-        return X[:X_train_size], X[X_train_size:], y[:y_train_size], y[X_train_size:]
+        return X[:train_size], X[train_size:], y[:train_size], y[train_size:]
