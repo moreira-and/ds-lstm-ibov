@@ -17,16 +17,16 @@ class ITransformStrategy(ABC):
         raise NotImplementedError("Implement in subclass")
 
     @abstractmethod
-    def fit_transform(self, X, y=None):
-        raise NotImplementedError("Implement in subclass")
-
-    @abstractmethod
     def get_feature_names(self):
         raise NotImplementedError("Implement in subclass")
 
     @abstractmethod
     def get_postprocessor(self,y_train) -> IPostprocessorStrategy:
         raise NotImplementedError("Implement in subclass")
+    
+    def fit_transform(self, X, y=None):
+        self.fit(X, y)
+        return self.transform(X, y)
 
 class DefaultRnnTransformStrategy(ITransformStrategy):
     def __init__(
@@ -53,9 +53,6 @@ class DefaultRnnTransformStrategy(ITransformStrategy):
 
     def transform(self, X, y=None):
         return self.column_transformer.transform(X), y
-
-    def fit_transform(self, X, y=None):
-        return self.column_transformer.fit_transform(X, y)
     
     def get_postprocessor(self, y_train) -> IPostprocessorStrategy:
         return DefaultRnnPostprocessor(self._numeric_transformer,y_train=y_train)
@@ -74,10 +71,6 @@ class BlankTransformStrategy(ITransformStrategy):
 
     def transform(self, X, y=None):
         return np.array(X), np.array(y) if y is not None else None
-
-    def fit_transform(self, X, y=None):
-        self.fit(X, y)
-        return self.transform(X, y)
 
     def get_feature_names(self):
         return self.X_column_names
