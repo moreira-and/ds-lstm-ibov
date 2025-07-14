@@ -11,6 +11,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import mlflow
+from mlflow.models.signature import infer_signature
 import mlflow.keras
 import tensorflow as tf
 
@@ -43,6 +44,30 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
         self.batch_size = batch_size
         self.elapsed_time = elapsed_time
 
+    def log_Keras(self, model_name):
+        """
+        Logs the Keras model to MLflow with the specified model name.
+        """
+        logger.info("Logging Keras model...")
+
+        X_path = config.PROCESSED_DATA_DIR / "X_train.npy"
+        y_path = config.PROCESSED_DATA_DIR / "y_train.npy"
+
+        X_val = np.load(X_path)[-(self.batch_size+1):]
+        y_val = np.load(y_path)[-(self.batch_size+1):]
+
+        # Cria a assinatura do modelo
+        signature = infer_signature(X_val, y_val)
+
+        # Salva o modelo com a assinatura
+        mlflow.keras.log_model(
+            self.model,
+            artifact_path="artifacts/model",
+            registered_model_name=model_name,            
+            signature=signature
+        )
+        
+
     def plot_history(self):
         plt.figure(figsize=(10, 5))
         for key, values in self.history.history.items():
@@ -52,6 +77,56 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
         plt.title("Training History")
         plt.legend()
         plt.grid(True)
+        return plt
+    
+    def plot_predictions(self):
+
+        X_path = config.PROCESSED_DATA_DIR / "X_train.npy"
+        y_path = config.PROCESSED_DATA_DIR / "y_train.npy"
+
+        X_val = np.load(X_path)[-(self.batch_size+1):]
+        y_val = np.load(y_path)[-(self.batch_size+1):]
+        y_pred = self.model.predict(X_val)
+        
+
+        if y_pred.ndim == 1:
+            y_pred = y_pred.reshape(-1, 1)
+        if y_val.ndim == 1:
+            y_val = y_val.reshape(-1, 1)
+
+        post = config.PROCESSED_DATA_DIR / "postprocessor.pkl"
+        postprocessor = pickle.load(open(post, "rb"))
+
+        # y_val and y_pred should be DataFrames after inverse_transform
+        y_val = postprocessor.inverse_transform(y_val)
+        y_pred = postprocessor.inverse_transform(y_pred)
+
+        # If they are still numpy arrays, convert to DataFrame with matching column names
+        if not isinstance(y_val, pd.DataFrame):
+            y_val = pd.DataFrame(y_val, columns=[f"Output {i+1}" for i in range(y_val.shape[1])])
+        if not isinstance(y_pred, pd.DataFrame):
+            y_pred = pd.DataFrame(y_pred, columns=y_val.columns)
+
+        # Number of output variables
+        n_outputs = y_val.shape[1]
+        fig, axs = plt.subplots(n_outputs, 1, figsize=(10, 5 * n_outputs), sharex=True)
+
+        # Ensure axs is iterable even if there is only one plot
+        if n_outputs == 1:
+            axs = [axs]
+
+        # Plot each output with proper axis labeling
+        for i, col in enumerate(y_val.columns):
+            axs[i].plot(y_val[col], label="True", color="blue")
+            axs[i].plot(y_pred[col], label="Predicted", color="orange")
+            axs[i].set_ylabel(col)
+            axs[i].legend()
+            axs[i].grid(True)
+
+        axs[-1].set_xlabel("Time")
+        fig.suptitle("Model Predictions vs True Values")
+        fig.tight_layout(rect=[0, 0, 1, 0.96])
+
         return plt
 
     def log_environment(self):
@@ -89,9 +164,8 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
 
             mlflow.set_tag("pipeline_version", "1.0.0")
             self.log_environment()
-
-            # Keras model
-            mlflow.keras.log_model(self.model, "artifacts/model", registered_model_name=model_name)
+            
+            self.log_Keras(model_name)
 
             with tempfile.TemporaryDirectory() as tmpdir:
                 # Model backup
@@ -113,6 +187,12 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
 
                 plot = self.plot_history()
                 plot_path = os.path.join(tmpdir, "training_plot.png")
+                plot.savefig(plot_path)
+                mlflow.log_artifact(plot_path, artifact_path="plots")
+                plt.close()
+
+                plot = self.plot_predictions()
+                plot_path = os.path.join(tmpdir, "model_output_plot.png")
                 plot.savefig(plot_path)
                 mlflow.log_artifact(plot_path, artifact_path="plots")
                 plt.close()
@@ -143,11 +223,30 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
                 if not dataset_path.exists():
                     raise FileNotFoundError(f"Dataset not found: {dataset_path}")
 
-                input_example = pd.read_csv(dataset_path, index_col=0)[-(self.batch_size+1):]
+                input_example = pd.read_csv(dataset_path, index_col=0)
+
+                # Carrega o preprocessor
+                with open(pre, "rb") as f:
+                    preprocessor = pickle.load(f)
+
+                # Verifica se ele possui o atributo `_generator._sequence_length`
                 try:
-                    _ = pickle.load(open(pre, "rb")).transform(input_example)
+                    sequence_length = preprocessor._generator._sequence_length
+                except AttributeError:
+                    raise ValueError("The preprocessor does not expose _generator._sequence_length")
+
+                # Ajusta o input_example com base na sequência e batch size
+                n_required = sequence_length + self.batch_size + 1
+                if len(input_example) < n_required:
+                    raise ValueError(f"Input example must have at least {n_required} rows.")
+
+                input_example = input_example[-n_required:]
+
+                try:
+                    _ = preprocessor.transform(input_example)
                 except Exception as e:
-                    raise ValueError(f"Invalid input_example: {e}")
+                    raise ValueError(f"input_example is not valid for the preprocessor: {e}")
+
 
                 mlflow.pyfunc.log_model(
                     artifact_path="pyfunc_model",
