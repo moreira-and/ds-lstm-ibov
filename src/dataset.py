@@ -83,10 +83,10 @@ def main(
     X = df_raw.drop(columns=target_col)
 
     clean_pipeline = CleanPipeline([
-            CleanMissingValues(),
-            CleanLowVariance(),
-            CleanGenericUnivariate(f_classif, "percentile", 99),    
-            CleanGenericUnivariate(f_regression, "percentile", 99)
+            #CleanMissingValues(),
+            #CleanLowVariance(),
+            #CleanGenericUnivariate(f_classif, "percentile", 95),    
+            CleanGenericUnivariate(f_regression, "percentile", 95)
             ])
 
     X_clean, y_clean = clean_pipeline.clear(X, y)
