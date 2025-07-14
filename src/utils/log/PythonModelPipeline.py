@@ -18,4 +18,4 @@ class PythonModelPipeline(mlflow.pyfunc.PythonModel):
     def predict(self, context: mlflow.pyfunc.PythonModelContext, model_input: pd.DataFrame) -> np.ndarray:
         X_transformed = self.preprocessor.transform(model_input)
         y_pred = self.model.predict(X_transformed)
-        return self.postprocessor.inverse_transform(y_pred.reshape(-1, 1)).flatten()
+        return self.postprocessor.transform(y_pred)
