@@ -50,7 +50,7 @@ class DefaultRnnPrepareDataTemplate(IPrepareDataTemplate):
             X_all = train_X # concat to generate
         else:
             test_X = self.transformer.transform(X = test_data)
-            X_all = np.concatenate([train_X, test_X]) # concat to generate
+            X_all = np.concatenate([train_X[0], test_X[0]]) # concat to generate
 
         if self.targets is None or len(self.targets) == 0:
             # if no targets, generate features for all data

@@ -18,9 +18,8 @@ class SequentialSplitter(ISplitterStrategy):
         if len(X) == 0:
             raise ValueError("Input data X is empty.")
         
-        X = X.sort_index()
-        if y is not None:
-            y = y.sort_index()
+        if not (0 < self.train_size_ratio < 1):
+            raise ValueError("train_size_ratio must be between 0 and 1.")
 
         train_size = int(len(X) * self.train_size_ratio)
 
