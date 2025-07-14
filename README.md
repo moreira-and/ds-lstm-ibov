@@ -1,12 +1,19 @@
 # time-series-prediction-rnn
 
-<a href="https://www.youtube.com/playlist?list=PL3iMuuZjTaTJu01noBWHrLnX1ayRrzTiu" target="_blank" style="display: inline-block;">
-  <img src="https://img.shields.io/badge/YouTube-red?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube Badge"/>
-</a>
+<div style="white-space: nowrap;">
+  <a href="https://www.youtube.com/playlist?list=PL3iMuuZjTaTJu01noBWHrLnX1ayRrzTiu" target="_blank" style="display: inline-block; margin-right: 8px;">
+    <img src="https://img.shields.io/badge/YouTube-red?style=for-the-badge&logo=youtube&logoColor=white" alt="YouTube Badge"/>
+  </a>
 
-<a href="https://www.linkedin.com/in/moreira-and/" target="_blank" style="display: inline-block;">
-  <img src="https://img.shields.io/badge/LinkedIn--blue?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Badge"/>
-</a>
+  <a href="https://www.linkedin.com/in/moreira-and/" target="_blank" style="display: inline-block; margin-right: 8px;">
+    <img src="https://img.shields.io/badge/LinkedIn--blue?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn Badge"/>
+  </a>
+
+  <a href="https://github1s.com/moreira-and/time-series-prediction-rnn/" target="_blank" style="display: inline-block;">
+    <img src="https://img.shields.io/badge/VS_Code-007ACC?style=for-the-badge&logo=visual-studio-code&logoColor=white" alt="Visual Studio Code Badge"/>
+  </a>
+</div>
+
 
 ## ℹ Aboult
 
