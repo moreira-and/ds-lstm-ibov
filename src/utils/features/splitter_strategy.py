@@ -8,7 +8,7 @@ class ISplitterStrategy(ABC):
 
 
 class SequentialSplitter(ISplitterStrategy):
-    def __init__(self, train_size_ratio=0.9):
+    def __init__(self, train_size_ratio=0.95):
         self.train_size_ratio = train_size_ratio
 
     def split(self, X, y=None):

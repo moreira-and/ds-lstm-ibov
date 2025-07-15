@@ -79,7 +79,7 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
         plt.grid(True)
         return plt
     
-    def plot_predictions(self):
+    def plot_val_predictions(self):
 
         X_path = config.PROCESSED_DATA_DIR / "X_train.npy"
         y_path = config.PROCESSED_DATA_DIR / "y_train.npy"
@@ -124,7 +124,57 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
             axs[i].grid(True)
 
         axs[-1].set_xlabel("Time")
-        fig.suptitle("Model Predictions vs True Values")
+        fig.suptitle("Model Predictions vs True Values on Validation Set")
+        fig.tight_layout(rect=[0, 0, 1, 0.96])
+
+        return plt
+    
+    def plot_test_predictions(self):
+
+        X_path = config.PROCESSED_DATA_DIR / "X_test.npy"
+        y_path = config.PROCESSED_DATA_DIR / "y_test.npy"
+
+        X_test = np.load(X_path)[-(self.batch_size+1):]
+        y_test = np.load(y_path)[-(self.batch_size+1):]
+        y_pred = self.model.predict(X_test)
+        
+
+        if y_pred.ndim == 1:
+            y_pred = y_pred.reshape(-1, 1)
+        if y_test.ndim == 1:
+            y_test = y_test.reshape(-1, 1)
+
+        post = config.PROCESSED_DATA_DIR / "postprocessor.pkl"
+        postprocessor = pickle.load(open(post, "rb"))
+
+        # y_val and y_pred should be DataFrames after inverse_transform
+        y_test = postprocessor.inverse_transform(y_test)
+        y_pred = postprocessor.inverse_transform(y_pred)
+
+        # If they are still numpy arrays, convert to DataFrame with matching column names
+        if not isinstance(y_test, pd.DataFrame):
+            y_test = pd.DataFrame(y_test, columns=[f"Output {i+1}" for i in range(y_test.shape[1])])
+        if not isinstance(y_pred, pd.DataFrame):
+            y_pred = pd.DataFrame(y_pred, columns=y_test.columns)
+
+        # Number of output variables
+        n_outputs = y_test.shape[1]
+        fig, axs = plt.subplots(n_outputs, 1, figsize=(10, 5 * n_outputs), sharex=True)
+
+        # Ensure axs is iterable even if there is only one plot
+        if n_outputs == 1:
+            axs = [axs]
+
+        # Plot each output with proper axis labeling
+        for i, col in enumerate(y_test.columns):
+            axs[i].plot(y_test[col], label="True", color="blue")
+            axs[i].plot(y_pred[col], label="Predicted", color="orange")
+            axs[i].set_ylabel(col)
+            axs[i].legend()
+            axs[i].grid(True)
+
+        axs[-1].set_xlabel("Time")
+        fig.suptitle("Model Predictions vs True Values on Test Set")
         fig.tight_layout(rect=[0, 0, 1, 0.96])
 
         return plt
@@ -140,6 +190,55 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
         mlflow.set_tag("gpu_available", bool(gpus))
         mlflow.set_tag("gpu_count", len(gpus))
         mlflow.set_tag("gpu_names", ", ".join([gpu.name for gpu in gpus]) if gpus else "None")
+
+    def log_metrics(self):
+        """
+        Logs the training metrics to MLflow.
+        """
+        logger.info("Logging training metrics...")
+
+        for metric, values in self.history.history.items():
+            if values:
+                mlflow.log_metric(f"final_{metric}", values[-1])
+                for epoch, val in enumerate(values):
+                    mlflow.log_metric(metric, val, step=epoch)
+
+
+        X_test = np.load(config.PROCESSED_DATA_DIR / "X_test.npy")
+        y_test = np.load(config.PROCESSED_DATA_DIR / "y_test.npy")
+
+        test_results = self.model.evaluate(X_test, y_test, batch_size=self.batch_size, verbose=0)
+       
+        metric_names = []
+        for m in self.model.metrics:
+            if hasattr(m, 'metrics'):
+                # if the metric is a container of multiple metrics
+                metric_names.extend([subm.name for subm in m.metrics])
+            else:
+                metric_names.append(m.name)
+
+
+        for name, value in zip(metric_names, test_results):
+            mlflow.log_metric(f"test_{name}", value)
+
+    def log_param(self):
+        """
+        Logs the training parameters to MLflow.
+        """
+        logger.info("Logging training parameters...")
+
+        X_path = config.PROCESSED_DATA_DIR / "X_train.npy"
+
+        if not X_path.exists():
+            raise FileNotFoundError(f"Training data not found: {X_path}")
+
+        X_train = np.load(X_path)
+        
+        mlflow.log_param("train_size", len(X_train))
+        mlflow.log_param("validation_len", self.validation_len)
+        mlflow.log_param("batch_size", self.batch_size)
+        mlflow.log_param("epochs", len(self.history.history.get("loss", [])))
+        mlflow.log_param("training_time_sec", self.elapsed_time)
 
     def run(
         self,
@@ -164,8 +263,6 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
 
             mlflow.set_tag("pipeline_version", "1.0.0")
             self.log_environment()
-            
-            self.log_Keras(model_name)
 
             with tempfile.TemporaryDirectory() as tmpdir:
                 # Model backup
@@ -191,8 +288,14 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
                 mlflow.log_artifact(plot_path, artifact_path="plots")
                 plt.close()
 
-                plot = self.plot_predictions()
-                plot_path = os.path.join(tmpdir, "model_output_plot.png")
+                plot = self.plot_val_predictions()
+                plot_path = os.path.join(tmpdir, "model_output_val_plot.png")
+                plot.savefig(plot_path)
+                mlflow.log_artifact(plot_path, artifact_path="plots")
+                plt.close()
+
+                plot = self.plot_test_predictions()
+                plot_path = os.path.join(tmpdir, "model_output_test_plot.png")
                 plot.savefig(plot_path)
                 mlflow.log_artifact(plot_path, artifact_path="plots")
                 plt.close()
@@ -247,6 +350,7 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
                 except Exception as e:
                     raise ValueError(f"input_example is not valid for the preprocessor: {e}")
 
+                # self.log_Keras(model_name)
 
                 mlflow.pyfunc.log_model(
                     artifact_path="pyfunc_model",
@@ -260,23 +364,9 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
                     registered_model_name=model_name,
                 )
 
-            X_path = config.PROCESSED_DATA_DIR / "X_train.npy"
-            if not X_path.exists():
-                raise FileNotFoundError(f"Training data not found: {X_path}")
+            self.log_param()
 
-            X_train = np.load(X_path)
-
-            mlflow.log_param("train_size", len(X_train))
-            mlflow.log_param("validation_len", self.validation_len)
-            mlflow.log_param("batch_size", self.batch_size)
-            mlflow.log_param("epochs", len(self.history.history.get("loss", [])))
-            mlflow.log_param("training_time_sec", self.elapsed_time)
-
-            for metric, values in self.history.history.items():
-                if values:
-                    mlflow.log_metric(f"final_{metric}", values[-1])
-                    for epoch, val in enumerate(values):
-                        mlflow.log_metric(metric, val, step=epoch)
+            self.log_metrics()
 
             source_file = globals().get("__file__")
             if source_file and os.path.isfile(source_file):

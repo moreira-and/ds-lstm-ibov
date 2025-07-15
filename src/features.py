@@ -26,9 +26,9 @@ def main(
     train_dir: Path = PROCESSED_DATA_DIR,
     test_dir: Path = PROCESSED_DATA_DIR,
     targets: List[str] = ["^BVSP"],
-    train_size_ratio: float = 0.9,
+    train_size_ratio: float = 0.95,
     batch_size: int = 1,
-    sequence_length: int = 20
+    sequence_length: int = 32
     # -----------------------------------------
 ):
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
