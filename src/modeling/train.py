@@ -27,9 +27,9 @@ def main(
     X_path: Path = PROCESSED_DATA_DIR / "X_train.npy",
     y_path: Path = PROCESSED_DATA_DIR / "y_train.npy",
     # -----------------------------------------
-    epochs: int = 3, #2**8,    
-    validation_len: int = 2**6,
-    batch_size: int = 2**5,
+    epochs: int = 256,    
+    validation_len: int = 64,
+    batch_size: int = 32,
     # -----------------------------------------
     experiment_name: str = "default_experiment",
     model_name: str = "default_model",
@@ -50,6 +50,7 @@ def main(
 
     input_shape = X_train.shape[1:]
     output_shape = y_train.shape[1:]
+    logger.info(f"Input shape: {input_shape}, Output shape: {output_shape}")
     
     logger.info("Selecting builder strategy...")
     if model_path:
