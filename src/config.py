@@ -3,6 +3,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 from loguru import logger
 
+import mlflow
+
 # Load environment variables from .env file if it exists
 load_dotenv()
 
@@ -20,6 +22,7 @@ PREDICTED_DATA_DIR = DATA_DIR / "predicted"
 MODELS_DIR = PROJ_ROOT / "models"
 
 MLFLOW_TRACKING_URI = PROJ_ROOT / "mlruns"
+mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 
 REPORTS_DIR = PROJ_ROOT / "reports"
 
