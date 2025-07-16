@@ -20,8 +20,6 @@ from src import config
 from src.config import logger
 from src.utils.log.PythonModelPipeline import PythonModelPipeline
 
-mlflow.set_tracking_uri(config.MLFLOW_TRACKING_URI)
-
 
 class ILogStrategy(ABC):
     @abstractmethod
@@ -53,8 +51,8 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
         X_path = config.PROCESSED_DATA_DIR / "X_train.npy"
         y_path = config.PROCESSED_DATA_DIR / "y_train.npy"
 
-        X_val = np.load(X_path)[-(self.batch_size+1):]
-        y_val = np.load(y_path)[-(self.batch_size+1):]
+        X_val = np.load(X_path)[-self.validation_len:]
+        y_val = np.load(y_path)[-self.validation_len:]
 
         # Cria a assinatura do modelo
         signature = infer_signature(X_val, y_val)
@@ -84,8 +82,8 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
         X_path = config.PROCESSED_DATA_DIR / "X_train.npy"
         y_path = config.PROCESSED_DATA_DIR / "y_train.npy"
 
-        X_val = np.load(X_path)[-(self.batch_size+1):]
-        y_val = np.load(y_path)[-(self.batch_size+1):]
+        X_val = np.load(X_path)[-self.validation_len:]
+        y_val = np.load(y_path)[-self.validation_len:]
         y_pred = self.model.predict(X_val)
         
 
@@ -134,8 +132,8 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
         X_path = config.PROCESSED_DATA_DIR / "X_test.npy"
         y_path = config.PROCESSED_DATA_DIR / "y_test.npy"
 
-        X_test = np.load(X_path)[-(self.batch_size+1):]
-        y_test = np.load(y_path)[-(self.batch_size+1):]
+        X_test = np.load(X_path)
+        y_test = np.load(y_path)
         y_pred = self.model.predict(X_test)
         
 
@@ -338,8 +336,8 @@ class KerasExperimentMlFlowLogger(ILogStrategy):
                 except AttributeError:
                     raise ValueError("The preprocessor does not expose _generator._sequence_length")
 
-                # Ajusta o input_example com base na sequência e batch size
-                n_required = sequence_length + self.batch_size + 1
+                # Ajusta o input_example com base na sequência
+                n_required = sequence_length + 1
                 if len(input_example) < n_required:
                     raise ValueError(f"Input example must have at least {n_required} rows.")
 
