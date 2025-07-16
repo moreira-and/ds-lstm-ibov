@@ -31,7 +31,7 @@ class ClassificationCompileStrategy(ICompileStrategy):
 class RegressionCompileStrategy(ICompileStrategy):
     def __init__(self, optimizer_fn=None, loss=None, metrics=None):
         self.optimizer_fn = optimizer_fn or (lambda: Adam(learning_rate=0.001))
-        self.loss = loss or Huber(delta=1.0)
+        self.loss = loss or Huber(delta=2.0)
         self.metrics = metrics or RegressionMetricStrategy().get_metrics()
 
     def compile(self, model):
