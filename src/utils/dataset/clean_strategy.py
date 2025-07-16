@@ -71,6 +71,8 @@ class CleanMissingValues(ICleanStrategy):
         X.sort_index(inplace=True)
         y.sort_index(inplace=True)
 
+        assert (X.index == y.index).all(), "X and y indices do not match after sorting"
+
         # Fill missing values using forward and backward filling
         X_new = X.ffill().bfill()
 
@@ -85,7 +87,7 @@ class CleanMissingValues(ICleanStrategy):
 
 # Class to remove features with low variance
 class CleanLowVariance(ICleanStrategy):
-    def __init__(self, threshold: float = 0.01):
+    def __init__(self, threshold: float = 1e-4):
         """
         Initialize the class with a threshold for variance.
 
@@ -117,7 +119,9 @@ class CleanLowVariance(ICleanStrategy):
         
         X_new = pd.DataFrame(X_new, columns=selected_columns, index=X.index)
         
-        logger.info(f"Columns removed due to low variance: {X_new.columns.difference(X.columns)}")
+        # Get dropped columns
+        dropped_columns = X.columns.difference(selected_columns)
+        logger.info(f"Columns removed due to low variance: {list(dropped_columns)}")
 
         return X_new, y
 
