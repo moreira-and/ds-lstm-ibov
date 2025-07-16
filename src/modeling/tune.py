@@ -31,9 +31,9 @@ def main(
     X_path: Path = PROCESSED_DATA_DIR / "X_train.npy",
     y_path: Path = PROCESSED_DATA_DIR / "y_train.npy",
     # -----------------------------------------
-    epochs: int = 2**8,    
-    validation_len: int = 2**7,
-    batch_size: int = 2**7,
+    epochs: int = 256,    
+    validation_len: int = 128,
+    batch_size: int = 64,
     # -----------------------------------------
     experiment_name: str = "default_experiment",
     # -----------------------------------------
@@ -55,9 +55,8 @@ def main(
     tuner_builder = RegressionRobustModelTuner(
         input_shape=input_shape
         ,output_shape=output_shape
-        ,max_trials = 2**6
+        ,max_trials = 128
         ,project_name = "default"
-        #,compile_strategy = RegressionCompileStrategy()
     )
 
     logger.info("Selecting Tuning strategy...")
