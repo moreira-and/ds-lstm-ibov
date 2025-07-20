@@ -1,23 +1,6 @@
-from abc import ABC, abstractmethod
-
-import tensorflow as tf
 import tensorflow.keras.backend as K
 from tensorflow.keras.utils import register_keras_serializable
 
-class IMetricStrategy(ABC):
-    @abstractmethod
-    def get_metrics(self):
-        raise NotImplementedError("Implement in subclass")
-
-class RegressionMetricStrategy(IMetricStrategy):
-    def get_metrics(self):
-        return ['mae', 'mse',smape,rmse,r2_score]
-        #return ['mae', 'mse']
-
-class ClassificationMetricStrategy(IMetricStrategy):
-    def get_metrics(self):
-        return ['accuracy', 'precision', 'recall']
-    
 # Custom metrics for regression
 # SMAPE - Symmetric Mean Absolute Percentage Error
 @register_keras_serializable()

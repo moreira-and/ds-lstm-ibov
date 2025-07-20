@@ -1,18 +1,8 @@
-from abc import ABC, abstractmethod
-
-from src.config.config import logger
-
-from src.utils.train.model_builder import IModelBuilder
-from src.utils.train.compile_strategy import ICompileStrategy
-from src.utils.train.train_strategy import ITrainStrategy
-
-class IModelTemplate(ABC):
-    @abstractmethod
-    def run(self, X_train, y_train):
-        raise NotImplementedError("Implement in subclass")
+from src.config import logger
+from train.interface import ITrainerRunner, IModelBuilder, ICompileStrategy, ITrainStrategy
 
 
-class ModelKerasPipeline(IModelTemplate):
+class TrainerKerasRunner(ITrainerRunner):
     def __init__(self, model_builder: IModelBuilder, compiler: ICompileStrategy, trainer: ITrainStrategy):
         self.model_builder = model_builder
         self.compiler = compiler
