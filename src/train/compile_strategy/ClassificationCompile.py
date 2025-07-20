@@ -1,7 +1,7 @@
 from src.config import logger
-from train.interface import ICompileStrategy
+from src.train.interfaces import ICompileStrategy
 
-from train.metrics_strategy import ClassificationMetricStrategy
+from train.metric_strategy import ClassificationMetricStrategy
 
 
 from tensorflow.keras.optimizers import Adam

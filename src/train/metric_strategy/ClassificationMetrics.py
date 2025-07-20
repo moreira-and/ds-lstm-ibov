@@ -1,4 +1,4 @@
-from train.interface import IMetricStrategy
+from src.train.interfaces import IMetricStrategy
 
 class ClassificationMetrics(IMetricStrategy):
     def get_metrics(self):

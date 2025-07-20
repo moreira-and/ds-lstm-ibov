@@ -1,5 +1,5 @@
 from src import config
-from log.interface import ILogStrategy
+from src.log.interfaces import ILogStrategy
 
 import numpy as np
 from mlflow import log_metric

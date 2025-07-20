@@ -1,5 +1,5 @@
 from src.config import logger
-from train.interface import ITrainerRunner, IModelBuilder, ICompileStrategy, ITrainStrategy
+from src.train.interfaces import ITrainerRunner, IModelBuilder, ICompileStrategy, ITrainStrategy
 
 
 class TrainerKerasRunner(ITrainerRunner):

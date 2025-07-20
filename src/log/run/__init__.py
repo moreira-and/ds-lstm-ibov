@@ -1,4 +1,4 @@
-from log.interface import ILogStrategy, IPipelineRunner
+from src.log.interfaces import ILogStrategy, IPipelineRunner
 
 __all__ = [
     "PipelineRunner",

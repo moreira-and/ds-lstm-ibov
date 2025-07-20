@@ -1,5 +1,5 @@
 from src.config import logger
-from train.interface import IModelBuilder
+from src.train.interfaces import IModelBuilder
 
 from tensorflow.keras.layers import Input, Conv1D, LayerNormalization, Dropout, \
     Bidirectional, LSTM, GRU, Dense, Add, Multiply, Lambda, Concatenate, Softmax

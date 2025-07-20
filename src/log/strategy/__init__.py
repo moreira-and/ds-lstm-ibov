@@ -1,4 +1,4 @@
-from log.interface import ILogStrategy
+from src.log.interfaces import ILogStrategy
 
 __all__ = [
     "LogDictArtifacts",

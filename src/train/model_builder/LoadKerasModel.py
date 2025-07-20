@@ -1,5 +1,5 @@
 from src.config import logger
-from train.interface import IModelBuilder
+from src.train.interfaces import IModelBuilder
 from tensorflow.keras.models import load_model
 
 class LoadKerasModel(IModelBuilder):

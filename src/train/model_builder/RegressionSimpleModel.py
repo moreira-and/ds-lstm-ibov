@@ -1,5 +1,5 @@
 from src.config import logger
-from train.interface import IModelBuilder
+from src.train.interfaces import IModelBuilder
 
 from tensorflow.keras.layers import Input, LayerNormalization, Dropout, LSTM, Dense
 from tensorflow.keras.models import Sequential

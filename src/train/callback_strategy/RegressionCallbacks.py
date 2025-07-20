@@ -1,4 +1,4 @@
-from train.interface import ICallbacksStrategy
+from src.train.interfaces import ICallbacksStrategy
 from keras.callbacks import EarlyStopping,ReduceLROnPlateau
 
 class RegressionCallbacks(ICallbacksStrategy):

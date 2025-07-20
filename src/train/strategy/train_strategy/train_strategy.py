@@ -1,15 +1,18 @@
 from src.train.interfaces import ITrainStrategy
-from src.config import logger
 
-from train.callback_strategy import RegressionCallbacks
+from src.config.config import logger
 
-class RegressionForecast(ITrainStrategy):
+from src.utils.train.callbacks_strategy import RegressionCallbacksStrategy
+
+
+
+class RegressionTrainStrategy(ITrainStrategy):
     def __init__(self, epochs= 200, batch_size= 16, validation_len = 32, callbacks = None):
         self.epochs = epochs
         self.batch_size = batch_size
         self.validation_len = validation_len
-        self.callbacks = callbacks or RegressionCallbacks.get()
-
+        self.callbacks = callbacks or RegressionCallbacksStrategy.get()
+        A
         if self.validation_len < self.batch_size:
             raise ValueError(f"Validation length ({self.validation_len}) must be >= batch size ({self.batch_size})")
 
