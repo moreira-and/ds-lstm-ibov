@@ -1,0 +1,44 @@
+from pathlib import Path
+
+PROJ_ROOT = Path(__file__).resolve().parents[1]
+
+CONFIG_DIR = PROJ_ROOT / "configs"
+DATA_DIR = PROJ_ROOT / "data"
+ARTIFACTS_DIR = PROJ_ROOT / "artifacts"
+REPORTS_DIR = PROJ_ROOT / "reports"
+
+FIGURES_DIR = REPORTS_DIR / "figures"
+
+# Data paths
+RAW_DATA_DIR = DATA_DIR / "raw"
+MAIN_RAW_FILE = RAW_DATA_DIR / "raw_dataset.csv"
+TEST_RAW_FILE = RAW_DATA_DIR / "test_raw_dataset.csv"
+
+PROCESSED_DATA_DIR = DATA_DIR / "processed"
+MAIN_PROCESSED_FILE = PROCESSED_DATA_DIR / "processed_dataset.csv"
+
+PROCESSED_DATA_TRAIN_DIR = PROCESSED_DATA_DIR / "train"
+X_PROCESSED_DATA_TRAIN_FILE = PROCESSED_DATA_TRAIN_DIR / "X_train.npy"
+Y_PROCESSED_DATA_TRAIN_FILE = PROCESSED_DATA_TRAIN_DIR / "Y_train.npy"
+
+PROCESSED_DATA_TEST_DIR = PROCESSED_DATA_DIR / "test"
+X_PROCESSED_DATA_TEST_FILE = PROCESSED_DATA_TEST_DIR / "X_test.npy"
+Y_PROCESSED_DATA_TEST_FILE = PROCESSED_DATA_TEST_DIR / "Y_test.npy"
+
+PREDICTED_DATA_DIR = DATA_DIR / "predicted"
+MAIN_PREDICTED_FILE = PREDICTED_DATA_DIR / "predicted_dataset.csv"
+
+# Parameters paths
+DATASET_PARAMS_FILE = CONFIG_DIR / "dataset.yaml"
+PROCESS_PARAMS_FILE = CONFIG_DIR / "process.yaml"
+TRAIN_PARAMS_FILE = CONFIG_DIR / "train.yaml"
+
+# Artifacts paths
+MODELS_DIR = ARTIFACTS_DIR / "models"
+MAIN_MODEL_FILE = MODELS_DIR / "main_model.pkl"
+
+PREPROCESSOR_DIR = ARTIFACTS_DIR / "preprocessors"
+MAIN_PREPROCESSOR_FILE = PREPROCESSOR_DIR / "main_preprocessor.pkl"
+
+POSTPROCESSOR_DIR = ARTIFACTS_DIR / "postprocessors"
+MAIN_POSTPROCESSOR_FILE = POSTPROCESSOR_DIR / "main_postprocessor.pkl"

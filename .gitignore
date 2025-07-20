@@ -1,17 +1,24 @@
 # Ignora arquivos dentro das subpastas de /data/
-data/raw/*
-data/processed/*
-data/predicted/*
+data/*
 mlruns/*
-models/*
+artifacts/*
 tests/*
 
 # Exceto os arquivos .gitkeep em cada pasta
+!data/.gitkeep
 !data/raw/.gitkeep
 !data/processed/.gitkeep
+!data/processed/train/.gitkeep
+!data/processed/test/.gitkeep
 !data/predicted/.gitkeep
+
 !mlruns/.gitkeep
-!models/.gitkeep
+
+!artifacts/.gitkeep
+!artifacts/models/.gitkeep
+!artifacts/postprocessors/.gitkeep
+!artifacts/preprocessors/.gitkeep
+
 !tests/.gitkeep
 
 
