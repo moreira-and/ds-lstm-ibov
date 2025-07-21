@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class ITrainerRunner(ABC):
+class IDatasetLoader(ABC):
     @abstractmethod
-    def train(self, X_train, y_train):
+    def load(self):
         pass

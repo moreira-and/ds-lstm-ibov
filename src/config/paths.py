@@ -1,6 +1,6 @@
 from pathlib import Path
 
-PROJ_ROOT = Path(__file__).resolve().parents[1]
+PROJ_ROOT = Path(__file__).resolve().parents[2]
 
 CONFIG_DIR = PROJ_ROOT / "configs"
 DATA_DIR = PROJ_ROOT / "data"
