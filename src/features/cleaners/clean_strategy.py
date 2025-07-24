@@ -24,18 +24,7 @@ logger = logging.getLogger(__name__)
     df_raw = df_raw.pct_change(periods=1,fill_method=None)
     df_raw = df_raw.replace([np.inf, -np.inf], 0).fillna(0)'''
 
-# Abstract base class for data cleaning handlers
-class ICleanStrategy(ABC):
-    @abstractmethod
-    def clear(self, 
-              X: Union[pd.DataFrame, np.ndarray], 
-              y: Optional[Union[pd.Series, np.ndarray]] = None
-             ) -> Tuple[Union[pd.DataFrame, np.ndarray], Optional[Union[pd.Series, np.ndarray]]]:
-        """
-        Abstract method that should be implemented by any class that inherits from CleanHandler.
-        This method should be used for cleaning the data (X) and optionally the target (y).
-        """
-        raise NotImplementedError("Implement in subclass")
+
 
 # Pipeline for cleaning data by applying multiple cleaning steps sequentially
 class CleanPipeline(ICleanStrategy):

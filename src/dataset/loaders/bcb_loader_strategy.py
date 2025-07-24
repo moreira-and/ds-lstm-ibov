@@ -1,7 +1,7 @@
 
 from config import logger
 from dataset.interfaces import IDatasetLoader
-from dataset.utils import MarketConfig
+from dataset.helpers import MarketConfig
 
 from typing import Dict, Optional
 

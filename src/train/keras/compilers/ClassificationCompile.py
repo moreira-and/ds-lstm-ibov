@@ -1,6 +1,6 @@
 from config import logger
 from train.keras.interfaces import ICompileStrategy
-from train.keras.metric_strategy import ClassificationMetrics
+from train.keras.measurers import ClassificationMetrics
 
 from tensorflow.keras.optimizers import Adam
 

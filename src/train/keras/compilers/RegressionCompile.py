@@ -1,6 +1,6 @@
 from src.config import logger
 from src.train.keras.interfaces import ICompileStrategy
-from train.keras.metric_strategy import RegressionMetrics
+from train.keras.measurers import RegressionMetrics
 
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.losses import Huber

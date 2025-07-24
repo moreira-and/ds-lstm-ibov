@@ -1,4 +1,4 @@
-from log import ILogStrategy, IPipelineRunner
+from log.interfaces import ILogStrategy, IPipelineRunner
 from typing import List
 from mlflow import set_experiment, start_run
 

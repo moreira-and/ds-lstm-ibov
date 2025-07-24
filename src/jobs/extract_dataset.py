@@ -6,7 +6,7 @@ import typer
 from config.paths import MAIN_RAW_FILE, RAW_DATA_DIR
 
 from dataset.loaders import DataLoaderPipeline, YfinanceLoader, BcbLoader, DataReaderLoader
-from dataset.utils.calendar import enrich_calendar
+from dataset.helpers.calendar import enrich_calendar
 
 import datetime as dt
 import pandas as pd

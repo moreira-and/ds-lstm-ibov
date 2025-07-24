@@ -1,5 +1,5 @@
 from train.keras.interfaces import IMetricStrategy
-from train.keras.metric_strategy.CustomMetrics import smape, rmse, r2_score
+from train.keras.measurers.CustomMetrics import smape, rmse, r2_score
 
 class RegressionMetrics(IMetricStrategy):
     def get_metrics(self):

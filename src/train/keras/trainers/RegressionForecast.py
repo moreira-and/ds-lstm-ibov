@@ -1,7 +1,7 @@
 from config import logger
 
 from train.keras.interfaces import ITrainStrategy
-from train.keras.callback_strategy import RegressionCallbacks
+from train.keras.callbacks import RegressionCallbacks
 
 class RegressionForecast(ITrainStrategy):
     def __init__(self, epochs= 200, batch_size= 16, validation_len = 32, callbacks = None):
