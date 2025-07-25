@@ -1,11 +1,6 @@
-from abc import ABC, abstractmethod
+from .interfaces import IPredictTemplate
 
-class IPredictTemplate(ABC):
-    @abstractmethod
-    def predict(self, X):
-        raise NotImplementedError("Implement in subclass")
-
-class DefaultPredictTemplate(IPredictTemplate):
+class PredictorPipeline(IPredictTemplate):
     def __init__(self, model, preprocessor = None , postprocessor = None):
         self.preprocessor = preprocessor
         self.model = model

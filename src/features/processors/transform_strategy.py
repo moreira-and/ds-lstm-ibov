@@ -7,27 +7,6 @@ from sklearn.preprocessing import OneHotEncoder, RobustScaler
 
 from src.utils.features.postprocessor_strategy import (BlankPostprocessor, IPostprocessorStrategy,DefaultRnnPostprocessor)
 
-class ITransformStrategy(ABC):
-    @abstractmethod
-    def fit(self, X, y=None):
-        raise NotImplementedError("Implement in subclass")
-
-    @abstractmethod
-    def transform(self, X, y=None):
-        raise NotImplementedError("Implement in subclass")
-
-    @abstractmethod
-    def get_feature_names(self):
-        raise NotImplementedError("Implement in subclass")
-
-    @abstractmethod
-    def get_postprocessor(self,y_train) -> IPostprocessorStrategy:
-        raise NotImplementedError("Implement in subclass")
-    
-    def fit_transform(self, X, y=None):
-        self.fit(X, y)
-        return self.transform(X, y)
-
 class DefaultRnnTransformStrategy(ITransformStrategy):
     def __init__(
         self, 

@@ -10,20 +10,6 @@ from src.utils.features.preprocessor_strategy import DefaultRnnPreprocessor
 from abc import ABC, abstractmethod
 
 
-class IPrepareDataTemplate(ABC):
-    @abstractmethod
-    def prepare_data(self):
-        raise NotImplementedError("Implement in subclass")
-    
-    @abstractmethod
-    def get_preprocessor(self): 
-        raise NotImplementedError("Implement in subclass")
-
-    @abstractmethod
-    def get_postprocessor(self): 
-        raise NotImplementedError("Implement in subclass")
-
-
 class DefaultRnnPrepareDataTemplate(IPrepareDataTemplate):
     def __init__(self, dataset,targets, splitter: ISplitterStrategy, transformer: ITransformStrategy, generator: IGeneratorStrategy):
         self.dataset = dataset

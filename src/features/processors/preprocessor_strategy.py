@@ -1,10 +1,5 @@
 from abc import ABC, abstractmethod
 
-class IPreprocessorStrategy(ABC):
-    @abstractmethod
-    def transform(self, X, y=None):
-        raise NotImplementedError("Implement in subclass")
-
 class DefaultRnnPreprocessor(IPreprocessorStrategy):
 
     def __init__(self, transformer, generator):

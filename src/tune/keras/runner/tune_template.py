@@ -1,16 +1,12 @@
-from abc import ABC,abstractmethod
-
-from src.config.config import logger
+from src.config import logger
+from ...interfaces import ITuneRunner
 
 from src.utils.tune.search_strategy import ISearchStrategy
 from src.utils.tune.tuner_builder import ITunerBuilder
 
-class ITuneTemplate(ABC):
-    @abstractmethod
-    def run(self, X_train, y_train):
-        raise NotImplementedError("Implement in subclass")
 
-class TunerKerasPipeline(ITuneTemplate):
+
+class TunerKerasPipeline(ITuneRunner):
     def __init__(self, tuner_builder: ITunerBuilder, searcher: ISearchStrategy):
         self.tuner_builder = tuner_builder
         self.searcher = searcher

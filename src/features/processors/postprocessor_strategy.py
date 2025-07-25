@@ -1,17 +1,6 @@
 from abc import ABC, abstractmethod
 import pandas as pd
 
-class IPostprocessorStrategy(ABC):  
-    
-    @abstractmethod
-    def inverse_transform(self, y_predicted):
-        raise NotImplementedError("Implement in subclass")
-    
-    def transform(self, y_predicted):
-        return self.inverse_transform(y_predicted)
-    
-    
-
 class DefaultRnnPostprocessor(IPostprocessorStrategy):
 
     def __init__(self, transformer,y_train):

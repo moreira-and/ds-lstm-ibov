@@ -1,22 +1,15 @@
-from abc import ABC, abstractmethod
-from src.config.config import MODELS_DIR, logger
 
-import keras_tuner as kt
-from keras_tuner import HyperParameters
+from src.config.paths import MODELS_DIR
+from ..interfaces import ITunerBuilder
+
+from keras_tuner import (HyperParameters,BayesianOptimization)
+
 from tensorflow.keras.losses import Huber
 
 from src.utils.train.model_builder import RegressionRobustModelBuilder
 from src.utils.train.compile_strategy import ICompileStrategy,RegressionCompileStrategy
 
 
-class ITunerBuilder(ABC):
-    @abstractmethod
-    def _build_model(self,hp: HyperParameters):
-        raise NotImplementedError("Implement in subclass")
-
-    @abstractmethod
-    def build_tuner(self):
-        raise NotImplementedError("Implement in subclass")
 
 class RegressionRobustModelTuner(ITunerBuilder):
 
@@ -27,7 +20,7 @@ class RegressionRobustModelTuner(ITunerBuilder):
         self.project_name = project_name
         self.compile_strategy = None
 
-    def _build_model(self,hp: HyperParameters):
+    def get_model(self,hp: HyperParameters):
 
         delta_rate = hp.Float("delta_rate", min_value=0.8, max_value=3.0, step=0.1)
         self.compile_strategy= RegressionCompileStrategy(loss = Huber(delta=delta_rate))
@@ -62,8 +55,8 @@ class RegressionRobustModelTuner(ITunerBuilder):
         return model
 
     def build_tuner(self):
-        return kt.BayesianOptimization(
-            self._build_model,
+        return BayesianOptimization(
+            self.get_model,
             objective="val_loss",
             max_trials=self.max_trials ,
             executions_per_trial=1,
