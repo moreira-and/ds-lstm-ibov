@@ -1,6 +1,5 @@
-from .yfinance_loader_strategy import YfinanceLoader
-from .bcb_loader_strategy import BcbLoader
-from .data_reader_loader_strategy import DataReaderLoader
-from .data_loader_pipeline import DataLoaderPipeline
+from .yfinance_loader import YfinanceLoader
+from .bcb_loader import BcbLoader
+from .data_reader_loader import DataReaderLoader
 
 __all__ = ["YfinanceLoader", "BcbLoader", "DataReaderLoader", "DataLoaderPipeline"]

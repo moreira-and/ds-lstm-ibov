@@ -1,46 +1,47 @@
-import time
-from pathlib import Path
+from config import logger
+from config.paths import (
+    PROCESS_PARAMS_FILE,
+    MAIN_RAW_FILE, TEST_RAW_FILE, MAIN_PROCESSED_FILE,
+    MAIN_PREPROCESSOR_FILE, MAIN_POSTPROCESSOR_FILE,
+    X_PROCESSED_DATA_TRAIN_FILE,X_PROCESSED_DATA_TEST_FILE,
+    Y_PROCESSED_DATA_TRAIN_FILE,Y_PROCESSED_DATA_TEST_FILE
+    )
+
+from utils.config_wrapper import ConfigWrapper
+
+from features.runners import DefaultRnnPrepareDataTemplate
+from features.processors.default_rnn_processors import *
+from features.splitters import SequentialSplitter
 
 import cloudpickle
-import typer
-from typing import List
 
-from src.config import logger, PROCESSED_DATA_DIR
-
-
-
-
-from src.features.runners import DefaultRnnPrepareDataTemplate
-from src.utils.features.splitter_strategy import SequentialSplitter
-from src.utils.features.transform_strategy import DefaultRnnTransformStrategy
-from src.utils.features.generator_strategy import DefaultRnnGenerator
-
+import time
 import numpy as np
 import pandas as pd
 
 
+import typer
 app = typer.Typer()
 
 
 @app.command()
-def main(
-    # ---- REPLACE DEFAULT PATHS AS APPROPRIATE ----
-    dataset_path: Path = PROCESSED_DATA_DIR / "dataset.csv",
-    train_dir: Path = PROCESSED_DATA_DIR,
-    test_dir: Path = PROCESSED_DATA_DIR,
-    targets: List[str] = ["^BVSP"],
-    train_size_ratio: float = 0.95,
-    batch_size: int = 1,
-    sequence_length: int = 32
-    # -----------------------------------------
-):
+def main():
+
     # ---- REPLACE THIS WITH YOUR OWN CODE ----
     start_time = time.time()
+
+    features_wapper = ConfigWrapper(PROCESS_PARAMS_FILE)
+
+    targets = features_wapper.get("targets")
+    train_size_ratio = features_wapper.get("train_size_ratio")
+    batch_size = features_wapper.get("batch_size")
+    sequence_length = features_wapper.get("sequence_length")
+
     logger.info("Generating features from dataset...")
 
     try:
         prepare_data_template = DefaultRnnPrepareDataTemplate(
-            dataset = pd.read_csv(dataset_path, index_col=0).sort_index(),
+            dataset = pd.read_csv(MAIN_RAW_FILE, index_col=0).sort_index(),
             targets = targets,
             splitter =SequentialSplitter(train_size_ratio=train_size_ratio),
             transformer = DefaultRnnTransformStrategy(), #BlankTransformStrategy(),
@@ -51,24 +52,24 @@ def main(
 
         X_train,X_test,y_train, y_test = prepare_data_template.get_data()
 
-        logger.success(f"Saving train features in {train_dir}...")
-        np.save(train_dir / 'X_train.npy',X_train)
-        np.save(train_dir / 'y_train.npy',y_train)
+        logger.success(f"Saving train features...")
+        np.save(X_PROCESSED_DATA_TRAIN_FILE,X_train)
+        np.save(Y_PROCESSED_DATA_TRAIN_FILE,y_train)
 
-        logger.success(f"Saving test features in {test_dir}...")
-        np.save(train_dir / 'X_test.npy',X_test)
-        np.save(test_dir / 'y_test.npy',y_test)
+        logger.success(f"Saving test features...")
+        np.save(X_PROCESSED_DATA_TEST_FILE,X_test)
+        np.save(Y_PROCESSED_DATA_TEST_FILE,y_test)
     
         logger.success("Features generation complete.")
 
         logger.info("Saving transformers...")
         
         preprocessor = prepare_data_template.get_preprocessor()
-        with open(train_dir / "preprocessor.pkl", "wb") as f:
+        with open(MAIN_PREPROCESSOR_FILE, "wb") as f:
             cloudpickle.dump(preprocessor, f)
 
         postprocessor = prepare_data_template.get_postprocessor()
-        with open(train_dir / "postprocessor.pkl", "wb") as f:
+        with open(MAIN_POSTPROCESSOR_FILE, "wb") as f:
             cloudpickle.dump(postprocessor, f)
 
     except Exception as e:

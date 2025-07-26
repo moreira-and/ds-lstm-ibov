@@ -6,7 +6,8 @@ import typer
 from src.utils import ConfigWrapper
 from config.paths import MAIN_RAW_FILE, RAW_DATA_DIR, DATASET_PARAMS_FILE
 
-from dataset.loaders import DataLoaderPipeline, YfinanceLoader, BcbLoader, DataReaderLoader
+from dataset.runners import DataLoaderPipeline
+from dataset.loaders import YfinanceLoader, BcbLoader, DataReaderLoader
 from dataset.helpers.calendar import enrich_calendar
 
 import datetime as dt

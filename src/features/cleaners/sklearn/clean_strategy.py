@@ -1,30 +1,12 @@
-from abc import ABC, abstractmethod
-from typing import Any, Optional, Tuple, Union
+from config import logger
+from ..interfaces import ICleanStrategy
 
-import pandas as pd
-import numpy as np
-
+from typing import Optional, Tuple, Union
 from sklearn.feature_selection import (GenericUnivariateSelect, VarianceThreshold, SequentialFeatureSelector)
 from sklearn.linear_model import LinearRegression
 
-import logging
-
-# Configure the logger
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
-
-
-'''    # Supondo df como seu DataFrame
-    target_cols = [col for col in df_raw.columns if asset in col]
-    target_col = [col for col in target_cols if asset_focus in col]
-    
-    df_raw = df_raw.dropna(subset=target_col).sort_index()
-    df_raw = df_raw.ffill().bfill()
-    df_raw = df_raw.pct_change(periods=1,fill_method=None)
-    df_raw = df_raw.replace([np.inf, -np.inf], 0).fillna(0)'''
-
-
+import pandas as pd
+import numpy as np
 
 # Pipeline for cleaning data by applying multiple cleaning steps sequentially
 class CleanPipeline(ICleanStrategy):

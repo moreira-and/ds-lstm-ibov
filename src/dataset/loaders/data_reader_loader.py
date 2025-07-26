@@ -1,6 +1,6 @@
 from config import logger
 from dataset.helpers import MarketConfig
-from dataset.interfaces import IDatasetLoader
+from dataset.interfaces import IDatasetLoaderStrategy
 
 from typing import Dict, Optional
 import time
@@ -9,7 +9,7 @@ import pandas as pd
 from pandas_datareader import data as pdr
 
 
-class DataReaderLoader(IDatasetLoader):
+class DataReaderLoader(IDatasetLoaderStrategy):
     def __init__(self, start_date: str, end_date: str):
         self.start_date = start_date
         self.end_date = end_date

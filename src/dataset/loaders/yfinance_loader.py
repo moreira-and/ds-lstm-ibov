@@ -1,5 +1,5 @@
 from config import logger
-from dataset.interfaces import IDatasetLoader
+from dataset.interfaces import IDatasetLoaderStrategy
 from dataset.helpers import MarketConfig
 
 from typing import Dict
@@ -8,7 +8,7 @@ import time
 import yfinance as yf
 import pandas as pd
 
-class YfinanceLoader(IDatasetLoader):
+class YfinanceLoader(IDatasetLoaderStrategy):
     def __init__(self, start_date: str, end_date: str):
         self.start_date = start_date
         self.end_date = end_date

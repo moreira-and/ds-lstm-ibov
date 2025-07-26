@@ -1,6 +1,5 @@
-
 from config import logger
-from dataset.interfaces import IDatasetLoader
+from dataset.interfaces import IDatasetLoaderStrategy
 from dataset.helpers import MarketConfig
 
 from typing import Dict, Optional
@@ -9,7 +8,7 @@ import requests
 import time
 import pandas as pd
 
-class BcbLoader(IDatasetLoader):
+class BcbLoader(IDatasetLoaderStrategy):
     def __init__(self, start_date: str, end_date: str):
         self.start_date = pd.to_datetime(start_date, dayfirst=True)
         self.end_date = pd.to_datetime(end_date, dayfirst=True)
