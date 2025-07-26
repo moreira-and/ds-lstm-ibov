@@ -1,6 +1,4 @@
-from .yfinance_loader_strategy import YfinanceLoader
-from .bcb_loader_strategy import BcbLoader
-from .data_reader_loader_strategy import DataReaderLoader
-from .data_loader_pipeline import DataLoaderPipeline
+from . import default_rnn_processors
+from . import blank_processors
 
-__all__ = ["YfinanceLoader", "BcbLoader", "DataReaderLoader", "DataLoaderPipeline"]
+__all__ = ["default_rnn_processors","blank_processors"]

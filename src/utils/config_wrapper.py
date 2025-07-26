@@ -5,9 +5,9 @@ from typing import Any, Dict
 class ConfigWrapper:
     def __init__(self, config_path: str):
         self.path = Path(config_path)
-        self.config = self._load()
+        self.config = self.__load()
 
-    def _load(self) -> Dict[str, Any]:
+    def __load(self) -> Dict[str, Any]:
         if not self.path.exists():
             raise FileNotFoundError(f"Config not found: {self.path}")
         with open(self.path, "r") as f:

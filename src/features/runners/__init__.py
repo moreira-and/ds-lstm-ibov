@@ -1,6 +1,3 @@
-from .yfinance_loader_strategy import YfinanceLoader
-from .bcb_loader_strategy import BcbLoader
-from .data_reader_loader_strategy import DataReaderLoader
-from .data_loader_pipeline import DataLoaderPipeline
+from .default_rnn_prepare_data_template import DefaultRnnPrepareDataTemplate
 
-__all__ = ["YfinanceLoader", "BcbLoader", "DataReaderLoader", "DataLoaderPipeline"]
+__all__ = ["DefaultRnnPrepareDataTemplate"]

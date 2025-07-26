@@ -5,9 +5,12 @@ import cloudpickle
 import typer
 from typing import List
 
-from src.config.config import logger, PROCESSED_DATA_DIR
+from src.config import logger, PROCESSED_DATA_DIR
 
-from src.utils.features.prepare_data_template import DefaultRnnPrepareDataTemplate
+
+
+
+from src.features.runners import DefaultRnnPrepareDataTemplate
 from src.utils.features.splitter_strategy import SequentialSplitter
 from src.utils.features.transform_strategy import DefaultRnnTransformStrategy
 from src.utils.features.generator_strategy import DefaultRnnGenerator

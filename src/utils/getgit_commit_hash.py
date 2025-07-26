@@ -1,8 +1,7 @@
-from git import subprocess
+import subprocess
 
-def getgit_commit_hash():
+def get_git_commit_hash():
     try:
-        commit_hash = subprocess.check_output(["git", "rev-parse", "HEAD"]).decode().strip()
-        return commit_hash
-    except Exception:
+        return subprocess.check_output(["git", "rev-parse", "HEAD"]).decode().strip()
+    except subprocess.CalledProcessError:
         return "unavailable"

@@ -3,7 +3,8 @@ import time
 from loguru import logger
 import typer
 
-from config.paths import MAIN_RAW_FILE, RAW_DATA_DIR
+from src.utils import ConfigWrapper
+from config.paths import MAIN_RAW_FILE, RAW_DATA_DIR, DATASET_PARAMS_FILE
 
 from dataset.loaders import DataLoaderPipeline, YfinanceLoader, BcbLoader, DataReaderLoader
 from dataset.helpers.calendar import enrich_calendar
@@ -15,15 +16,14 @@ app = typer.Typer()
 
 
 @app.command()
-def main(
-    # ----  DEFAULT PATHS --------------------------
-    years: int = 3
-    # ----------------------------------------------
-):
+def main():
     # -----------------------------------------
     start_time = time.time()
     logger.info("Starting raw data loading...")
-    
+
+    dataset_param = ConfigWrapper(DATASET_PARAMS_FILE)
+    years = dataset_param.get("years")
+        
     end_date = dt.datetime.now().date()
     start_date = (end_date - dt.timedelta(days=years*365))
     
@@ -38,9 +38,7 @@ def main(
         DataReaderLoader(start_date, end_date)
     ])
 
-    dict_raw = loaders.load()
-
-    
+    dict_raw = loaders.load()    
 
     for lib,dict in dict_raw.items():
         for name, df in dict.items():
@@ -55,9 +53,6 @@ def main(
     
     df_raw = enrich_calendar(df_raw)
     df_raw.to_csv(MAIN_RAW_FILE)
-    
-    df_raw = pd.read_csv(RAW_DATA_DIR / 'dataset.csv', index_col=0) # ensure coupling
-
     print(df_raw.tail(3))
 
     logger.success("Raw data successfully loaded...")
