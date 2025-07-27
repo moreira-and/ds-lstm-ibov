@@ -1,6 +1,6 @@
 from config import logger
 from dataset.helpers import MarketConfig
-from dataset.interfaces import IDatasetLoaderStrategy
+from dataset.loaders.interfaces import IDatasetLoaderStrategy
 
 from typing import Dict, Optional
 import time

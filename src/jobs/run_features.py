@@ -9,8 +9,8 @@ from config.paths import (
 
 from utils.config_wrapper import ConfigWrapper
 
-from features.runners import DefaultRnnPrepareDataTemplate
-from features.processors.default_rnn_processors import *
+from features.preprocessors.runners import RnnDataPreparationPipeline
+from features.preprocessors.rnn_processors import *
 from features.splitters import SequentialSplitter
 
 import cloudpickle
@@ -40,11 +40,11 @@ def main():
     logger.info("Generating features from dataset...")
 
     try:
-        prepare_data_template = DefaultRnnPrepareDataTemplate(
+        prepare_data_template = RnnDataPreparationPipeline(
             dataset = pd.read_csv(MAIN_RAW_FILE, index_col=0).sort_index(),
             targets = targets,
             splitter =SequentialSplitter(train_size_ratio=train_size_ratio),
-            transformer = DefaultRnnTransformStrategy(), #BlankTransformStrategy(),
+            transformer = DefaultRnnTransformStrategy(),
             generator = DefaultRnnGenerator(batch_size=batch_size,sequence_length=sequence_length)
         )
         

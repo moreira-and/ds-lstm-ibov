@@ -1,0 +1,9 @@
+keras:
+  sequence_length: 32
+  batch_size: 8
+  epochs: 200
+  validation_len: 32
+  patience: 16
+  learning_rate: 0.01
+  clipnorm: 1
+  delta: 0.7

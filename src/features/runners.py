@@ -1,140 +1,99 @@
-from config import logger
-from .interfaces import (
-    IPrepareDataTemplate,
-    ISplitterStrategy,
-    ITransformStrategy,
-    IGeneratorStrategy
+"""
+features_pipeline.py
+
+This module defines the `FeaturesPipeline` class, which orchestrates a modular and sequential execution
+of key feature engineering steps: cleaning, splitting, selection, and preprocessing. Each step is
+represented by a dedicated pipeline or strategy adhering to a consistent interface contract, enabling
+flexibility, extensibility, and reuse.
+
+### Interfaces Used:
+- ISplitterStrategy: Interface for data splitting logic (e.g., train-test split, time-based split).
+- CleanPipeline: Composite pipeline of ICleanStrategy implementations applied sequentially.
+- SelectPipeline: Composite pipeline of ISelectStrategy implementations, supporting fitting and selection.
+- PreprocessorPipeline: Composite pipeline of IPreprocessorStrategy implementations, supporting fitting and transformation.
+
+### Typical usage:
+```python
+pipeline = FeaturesPipeline(
+    splitter=SequentialLengthSplitter(),
+    clean_pipeline=CleanPipeline([...]),
+    select_pipeline=SelectPipeline([...]),
+    preprocess_pipeline=PreprocessorPipeline([...])
 )
-from .processors.default_rnn_processors import DefaultRnnPreprocessor
 
-import numpy as np
+X_train, y_train, X_test, y_test, artifacts = pipeline.run(X_raw, y_raw)
+"""
 
-class DefaultRnnPrepareData(IPrepareDataTemplate):
+from splitters.interfaces import ISplitterStrategy
+from cleaners.runners import CleanPipeline
+from selectors.runners import SelectPipeline
+from preprocessors.runners import PreprocessorPipeline
+
+class FeaturesPipeline:
     """
-    Template implementation for preparing data for RNN models using a modular strategy pattern.
-
-    This class orchestrates the pipeline to:
-    1. Split the input dataset into train and test sets using a splitter strategy.
-    2. Transform the datasets using a transformation strategy (scaling, encoding, etc.).
-    3. Generate sequences/windows using a generator strategy.
-    4. Separate the generated data into X_train, X_test, y_train, y_test.
-
-    Attributes
-    ----------
-    dataset : pd.DataFrame
-        The original input dataset (features + targets).
-    targets : List[str] or None
-        Column names to be used as targets (optional).
-    splitter : ISplitterStrategy
-        Strategy object responsible for splitting the dataset.
-    transformer : ITransformStrategy
-        Strategy object for transforming the dataset.
-    generator : IGeneratorStrategy
-        Strategy object that generates sequences or windows from the data.
+    Orchestrates modular feature engineering steps:
+    - Clean
+    - Split
+    - Select
+    - Preprocess
     """
 
-    def __init__(self, dataset, targets, splitter: ISplitterStrategy,
-                 transformer: ITransformStrategy, generator: IGeneratorStrategy):
-        self.dataset = dataset
-        self.targets = targets
+    def __init__(
+        self,
+        preprocess_pipeline: PreprocessorPipeline,
+        clean_pipeline: CleanPipeline = None,
+        splitter: ISplitterStrategy = None,
+        select_pipeline: SelectPipeline = None
+    ):
+        self.preprocess_pipeline = preprocess_pipeline
+        self.clean_pipeline = clean_pipeline
         self.splitter = splitter
-        self.transformer = transformer
-        self.generator = generator
+        self.select_pipeline = select_pipeline
 
-        self._X_train = None
-        self._X_test = None
-        self._y_train = None
-        self._y_test = None
-
-    def prepare_data(self):
+    def run(self, X, y=None):
         """
-        Executes the data preparation pipeline:
-        - Split
-        - Transform
-        - Generate sequences
-        - Separate into train/test datasets
-        """
-        logger.info("Starting data preparation pipeline.")
-
-        logger.debug("Splitting dataset.")
-        train_data, test_data = self.splitter.split(X=self.dataset)
-
-        logger.debug("Fitting transformer on training data.")
-        train_X = self.transformer.fit_transform(X=train_data)
-
-        if test_data is None or len(test_data) == 0:
-            logger.warning("No test data provided. Will use only train data for generation.")
-            test_X = None
-            X_all = train_X
-        else:
-            logger.debug("Transforming test data.")
-            test_X = self.transformer.transform(X=test_data)
-            logger.debug("Concatenating transformed train and test data for generator.")
-            X_all = np.concatenate([train_X[0], test_X[0]])
-
-        if self.targets is None or len(self.targets) == 0:
-            logger.warning("No target columns specified. Generator will use all data.")
-            generator = self.generator.generate(data=X_all)
-        else:
-            logger.debug("Identifying target features by name matching.")
-            feature_names = self.transformer.get_feature_names()
-            y_features = [
-                (i, feature)
-                for i, feature in enumerate(feature_names)
-                if any(t in feature for t in self.targets)
-            ]
-            y_index = [i for i, _ in y_features]
-            logger.debug(f"Target feature indices identified: {y_index}")
-            generator = self.generator.generate(data=X_all, targets=X_all[:, y_index])
-
-        n_test = len(test_data)
-        n_total = len(generator)
-        train_end = n_total - n_test
-
-        logger.debug(f"Splitting generated sequences: {train_end} train / {n_test} test")
-        self._X_train = np.array([generator[i][0][0] for i in range(train_end)])
-        self._y_train = np.array([generator[i][1][0] for i in range(train_end)])
-        self._X_test = np.array([generator[i][0][0] for i in range(train_end, n_total)])
-        self._y_test = np.array([generator[i][1][0] for i in range(train_end, n_total)])
-
-        logger.info("Data preparation pipeline completed.")
-
-    def get_data(self):
-        """
-        Returns:
-        --------
-        tuple : (X_train, X_test, y_train, y_test)
-        """
-        return self._X_train, self._X_test, self._y_train, self._y_test
-
-    def get_preprocessor(self):
-        """
-        Returns a preprocessor object that can be used to inverse transform or serialize processing.
+        Executes the pipelines in sequence.
 
         Returns:
-        --------
-        DefaultRnnPreprocessor
+            Tuple:
+                - X_train
+                - y_train
+                - X_test
+                - y_test
+                - artifacts: dict with keys:
+                    - "clean"
+                    - "split"
+                    - "select"
+                    - "preprocess"
         """
-        return DefaultRnnPreprocessor(self.transformer, self.generator)
+        artifacts = {}
 
-    def get_postprocessor(self):
-        """
-        Returns a postprocessor to convert model outputs back to the original scale or domain.
+        # Clean
+        if self.clean_pipeline is not None:
+            X, y, clean_artifact = self.clean_pipeline.clear(X, y)
+            artifacts["clean"] = clean_artifact
 
-        Returns:
-        --------
-        object
-            Postprocessor object compatible with the transformer's logic.
-        """
-        X, _ = self.splitter.split(X=self.dataset)
-
-        if self.targets is None or len(self.targets) == 0:
-            filtered_columns = X.columns.tolist()
+        # Split
+        if self.splitter is not None:
+            X_train, X_test, y_train, y_test, split_artifact = self.splitter.split(X, y)
+            artifacts["split"] = split_artifact
         else:
-            filtered_columns = [
-                feature for feature in X
-                if any(t in feature for t in self.targets)
-            ]
+            X_train, y_train = X, y
+            X_test = y_test = None
 
-        logger.debug(f"Creating postprocessor for columns: {filtered_columns}")
-        return self.transformer.get_postprocessor(X.loc[:, filtered_columns])
+        # Select
+        if self.select_pipeline is not None:
+            X_train, y_train, select_artifact = self.select_pipeline.fit_select(X_train, y_train)
+            artifacts["select"] = select_artifact
+
+        # Preprocess (train)
+        X_train, y_train, preprocess_artifact = self.preprocess_pipeline.fit_transform(X_train, y_train)
+        artifacts["preprocess"] = preprocess_artifact
+
+        # Preprocess (test)
+        if X_test is not None and y_test is not None:
+            if self.select_pipeline is not None:
+                X_test, y_test = self.select_pipeline.select(X_test, y_test)
+            X_test, y_test = self.preprocess_pipeline.transform(X_test, y_test)
+
+        return X_train, y_train, X_test, y_test, artifacts

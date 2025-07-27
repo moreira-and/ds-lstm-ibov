@@ -1,5 +1,5 @@
 from config import logger
-from dataset.interfaces import IDatasetLoaderStrategy
+from dataset.loaders.interfaces import IDatasetLoaderStrategy
 from dataset.helpers import MarketConfig
 
 from typing import Dict

@@ -5,11 +5,7 @@ class IModelBuilder(ABC):
     def build_model(self):
         pass
 
-class ICallbacksStrategy(ABC):
-    @staticmethod
-    @abstractmethod
-    def get():
-        pass
+
 
 class ICompileStrategy(ABC):
     @abstractmethod
@@ -24,4 +20,16 @@ class IMetricStrategy(ABC):
 class ITrainStrategy(ABC):
     @abstractmethod
     def train(self, model, X_train, y_train):
+        pass
+
+class IGeneratorStrategy(ABC):
+    @abstractmethod
+    def generate(
+        self,
+        data: Union[pd.DataFrame, np.ndarray],
+        targets: Optional[list[str]] = None
+    ) -> Union[pd.DataFrame, np.ndarray]:
+        """
+        Defines an interface for generating new data or features.
+        """
         pass

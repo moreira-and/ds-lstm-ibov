@@ -13,28 +13,14 @@ from typing import Optional, Tuple, Union
 import pandas as pd
 import numpy as np
 
-
-
-
-class ICleanStrategy(ABC):
+class ISplitterStrategy(ABC):
     @abstractmethod
-    def clear(
+    def split(
         self,
         X: Union[pd.DataFrame, np.ndarray],
         y: Optional[Union[pd.Series, np.ndarray]] = None
-    ) -> Tuple[Union[pd.DataFrame, np.ndarray], Optional[Union[pd.Series, np.ndarray]]]:
+    ) -> Tuple:
         """
-        Defines an interface for cleaning raw datasets.
-
-        Parameters:
-        ----------
-        X : pd.DataFrame | np.ndarray
-            Feature matrix to be cleaned.
-        y : pd.Series | np.ndarray | None, default=None
-            Optional target variable.
-
-        Returns:
-        -------
-        Tuple containing cleaned X and y.
+        Defines an interface to split data into train/test sets or time-based folds.
         """
         pass

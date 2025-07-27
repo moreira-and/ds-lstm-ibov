@@ -1,12 +1,13 @@
-from .interfaces import ICleanStrategy
+from .interfaces import ISelectStrategy
 from typing import List
 
+
 # Pipeline for cleaning data by applying multiple cleaning steps sequentially
-class CleanPipeline(ICleanStrategy):
+class SelectPipeline(ISelectStrategy):
     '''
     This class allows for applying a series of cleaning steps to the data in sequence.
     '''
-    def __init__(self, steps: List[ICleanStrategy]):
+    def __init__(self, steps: List[ISelectStrategy]):
         """
         Initializes the pipeline with a list of cleaning steps.
 
@@ -14,7 +15,7 @@ class CleanPipeline(ICleanStrategy):
         """
         self.steps = steps
 
-    def clear(self, X, y=None):
+    def select(self, X, y=None):
         """
         Apply all the cleaning steps sequentially.
 
@@ -23,5 +24,7 @@ class CleanPipeline(ICleanStrategy):
         :return: Cleaned data (X) and target data (y).
         """
         for step in self.steps:
-            X, y = step.clear(X, y)
+            X, y = step.select(X, y)
         return X, y
+    
+    

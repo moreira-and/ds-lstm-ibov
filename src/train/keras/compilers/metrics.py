@@ -1,6 +1,13 @@
 import tensorflow.keras.backend as K
 from tensorflow.keras.utils import register_keras_serializable
 
+
+def regression_metrics():
+    return ['mae', 'mse',smape,rmse,r2_score]
+
+def classification_metrics():
+    return ['accuracy', 'precision', 'recall']
+
 # Custom metrics for regression
 # SMAPE - Symmetric Mean Absolute Percentage Error
 @register_keras_serializable()
@@ -23,3 +30,4 @@ def r2_score(y_true, y_pred):
     ss_tot = K.sum(K.square(y_true - K.mean(y_true)))
     return 1.0 - ss_res / K.maximum(ss_tot, K.epsilon())
 r2_score.__name__ = "r2_score"
+

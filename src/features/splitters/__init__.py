@@ -1,3 +1,4 @@
-from .sequential_splitter import SequentialSplitter
+from . import interfaces
+from .sequential_splitter import SequentialLengthSplitter
 
-__all__ = ["SequentialSplitter"]
+__all__ = ["interfaces","SequentialLengthSplitter"]

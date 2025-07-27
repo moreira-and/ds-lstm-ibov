@@ -23,9 +23,15 @@ class MissingValueFiller(ICleanStrategy):
     def __init__(self, targets: Optional[List[str]] = None):
         self.targets = targets
 
-    def clear(self, X: pd.DataFrame, y=None):
+    def clear(self, X: pd.DataFrame, y:pd.DataFrame =None):
+
+        X.sort_index(inplace=True)
+
+        if y is not None:
+            y.sort_index(inplace=True)
+            assert (X.index == y.index).all(), "X and y indices do not match after sorting"
+
         combined = pd.concat([X, y], axis=1) if y is not None else X.copy()
-        combined = combined.sort_index()
 
         if self.targets is not None:
             combined = combined.dropna(subset=self.targets)

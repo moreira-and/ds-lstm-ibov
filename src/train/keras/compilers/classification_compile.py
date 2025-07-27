@@ -1,15 +1,18 @@
 from config import logger
-from train.keras.interfaces import ICompileStrategy
-from train.keras.measurers import ClassificationMetrics
+
 
 from tensorflow.keras.optimizers import Adam
+
+from .interfaces import ICompileStrategy
+from .measurers import classification_metrics
+
 
 
 class ClassificationCompile(ICompileStrategy):
     def __init__(self, loss = 'binary_crossentropy', optimizer_fn = None, metrics = None):
         self.loss = loss
         self.optimizer = optimizer_fn or Adam(learning_rate=0.01,clipnorm=1.0)
-        self.metrics = metrics or ClassificationMetrics().get_metrics()
+        self.metrics = metrics or classification_metrics().get_metrics()
 
     def compile(self, model):
         try:

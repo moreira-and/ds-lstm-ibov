@@ -13,28 +13,34 @@ from typing import Optional, Tuple, Union
 import pandas as pd
 import numpy as np
 
-
-
-
-class ICleanStrategy(ABC):
+class ISelectStrategy(ABC):
+    
     @abstractmethod
-    def clear(
+    def fit(
+        self,
+        X: Union[pd.DataFrame, np.ndarray],
+        y: Optional[Union[pd.Series, np.ndarray]] = None
+    ) -> None:
+        """
+        Defines an interface for selecting relevant features or samples from a dataset.
+        """
+        pass
+
+    @abstractmethod
+    def select(
         self,
         X: Union[pd.DataFrame, np.ndarray],
         y: Optional[Union[pd.Series, np.ndarray]] = None
     ) -> Tuple[Union[pd.DataFrame, np.ndarray], Optional[Union[pd.Series, np.ndarray]]]:
         """
-        Defines an interface for cleaning raw datasets.
-
-        Parameters:
-        ----------
-        X : pd.DataFrame | np.ndarray
-            Feature matrix to be cleaned.
-        y : pd.Series | np.ndarray | None, default=None
-            Optional target variable.
-
-        Returns:
-        -------
-        Tuple containing cleaned X and y.
+        Defines an interface for selecting relevant features or samples from a dataset.
         """
         pass
+
+    def fit_select(
+        self,
+        X: Union[pd.DataFrame, np.ndarray],
+        y: Optional[Union[pd.Series, np.ndarray]] = None
+    ) -> Tuple[Union[pd.DataFrame, np.ndarray], Optional[Union[pd.Series, np.ndarray]]]:
+        self.fit(X, y)
+        return self.select(X, y)
