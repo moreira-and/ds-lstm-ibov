@@ -40,8 +40,12 @@ def main():
     logger.info("Generating features from dataset...")
 
     try:
+
+        ## SUBSTITUIR POR LEITURA DO BLOB -> DADO EM MEMÓRIA (ReadFromBlob(), on helpers in dataset module)
+        dataset = pd.read_csv(MAIN_RAW_FILE, index_col=0).sort_index()
+
         prepare_data_template = RnnDataPreparationPipeline(
-            dataset = pd.read_csv(MAIN_RAW_FILE, index_col=0).sort_index(),
+            dataset = dataset,
             targets = targets,
             splitter =SequentialSplitter(train_size_ratio=train_size_ratio),
             transformer = DefaultRnnTransformStrategy(),

@@ -1,9 +1,23 @@
 keras:
+  #Generator
   sequence_length: 32
   batch_size: 8
+  targets: ["Close_^BVSP","High_^BVSP","Low_^BVSP","Open_^BVSP","Volume_^BVSP"]
+
+  #Trainer
   epochs: 200
   validation_len: 32
-  patience: 16
+
+  #Callbacks
+  early_stop_patience: 16
+  monitor: "val_loss"
+  mode: "min"
+  reduce_lr_patience: 8
+  reduce_lr_factor: 0.5
+  min_lr: 1e-5
+
+
+  #Compiler
   learning_rate: 0.01
   clipnorm: 1
-  delta: 0.7
+  delta: 0.
