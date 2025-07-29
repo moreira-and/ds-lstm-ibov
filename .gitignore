@@ -4,6 +4,10 @@ mlruns/*
 artifacts/*
 tests/*
 
+# Environment variables
+.env
+.env.*
+
 # Exceto os arquivos .gitkeep em cada pasta
 !data/.gitkeep
 !data/raw/.gitkeep

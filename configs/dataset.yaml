@@ -28,6 +28,7 @@ bcb:
   SELIC: 11
   CDI: 12
   SELIC_Anual: 1178
+  poupanca: 195
   SELIC_Meta_Anual: 432
   IPCA_Mensal: 433
   IGP_M_Mensal: 189

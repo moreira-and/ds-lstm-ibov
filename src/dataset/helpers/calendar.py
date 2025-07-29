@@ -29,8 +29,31 @@ def update_df(old_df, new_df):
 
 def enrich_calendar(df_input):
     df = df_input.copy()
-    df.index = pd.to_datetime(df.index)
-
+    
+    # Converter índice para datetime de forma mais robusta
+    try:
+        # Primeiro, tentar converter diretamente
+        df.index = pd.to_datetime(df.index)
+    except (ValueError, TypeError):
+        # Se falhar, tentar converter cada valor individualmente
+        new_index = []
+        for idx in df.index:
+            try:
+                if pd.isna(idx):
+                    new_index.append(pd.NaT)
+                else:
+                    # Tentar converter para timestamp primeiro se for número
+                    if isinstance(idx, (int, float)):
+                        new_index.append(pd.to_datetime(idx, unit='s'))
+                    else:
+                        new_index.append(pd.to_datetime(idx))
+            except:
+                new_index.append(pd.NaT)
+        df.index = pd.DatetimeIndex(new_index)
+    
+    # Remover linhas com índice NaT
+    df = df[~df.index.isna()]
+    
     # Calendário base
     df['month_name'] = df.index.to_series().dt.strftime('%B')  # Nome do mês (ex: 'June')
     df['week_of_month'] = df.index.to_series().apply(week_of_month)

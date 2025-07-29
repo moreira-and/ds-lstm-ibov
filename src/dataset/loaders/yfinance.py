@@ -1,8 +1,8 @@
-from config import logger
-from dataset.loaders.interfaces import IDatasetLoaderStrategy
-from dataset.helpers import MarketConfig
-
 from typing import Dict
+
+from src.config import logger
+from src.dataset.loaders.interfaces import IDatasetLoaderStrategy
+from src.dataset.helpers import MarketConfig
 
 import time
 import yfinance as yf

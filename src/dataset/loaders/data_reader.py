@@ -1,8 +1,8 @@
-from config import logger
-from dataset.helpers import MarketConfig
-from dataset.loaders.interfaces import IDatasetLoaderStrategy
-
 from typing import Dict, Optional
+
+from src.config import logger
+from src.dataset.helpers import MarketConfig
+from src.dataset.loaders.interfaces import IDatasetLoaderStrategy
 import time
 import pandas as pd
 
