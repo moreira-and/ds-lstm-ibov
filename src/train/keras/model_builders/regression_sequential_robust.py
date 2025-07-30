@@ -1,5 +1,5 @@
 from config import logger
-from train.keras.interfaces import IModelBuilder
+from .interfaces import IModelBuilder
 
 from tensorflow.keras.layers import Input, Conv1D, Dropout, \
     LSTM, TimeDistributed, GRU, Dense, LeakyReLU, LayerNormalization
@@ -29,6 +29,7 @@ class RegressionSequentialRobust(IModelBuilder):
 
                 Conv1D(self.conv1D_units, kernel_size=self.kernel_rate, activation='relu', padding='causal', kernel_regularizer=l2(self.l2_rate)),
                 Dropout(self.dropout_rate),
+                LayerNormalization(),
 
                 GRU(self.gru_units, return_sequences=True, kernel_regularizer=l2(self.l2_rate),recurrent_dropout=self.dropout_rate),
                 Dropout(self.dropout_rate),
@@ -47,4 +48,4 @@ class RegressionSequentialRobust(IModelBuilder):
                 Dense(self.output_shape[0], activation='linear')
             ])
         except Exception as e:
-            logger.error(f'Error building {self.__class__.__name__}: {e}')
+            logger.exception(f'Error building {self.__class__.__name__}: {e}')

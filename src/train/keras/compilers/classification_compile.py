@@ -26,4 +26,4 @@ class ClassificationCompile(ICompileStrategy):
                 metrics = self.metrics
             )
         except Exception as e:
-            logger.error(f'Error compilling {self.__class__.__name__}: {e}')
+            logger.exception(f'Error compilling {self.__class__.__name__}: {e}')

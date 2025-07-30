@@ -52,7 +52,10 @@ def main():
     #except Exception as e:
     #    logger.error(f"Error loading raw data: {e}")
     
-    df_raw = enrich_calendar(df_raw)
+    #df_raw = enrich_calendar(df_raw)
+
+    df_raw = df_raw.ffill().bfill().fillna(0)
+
     df_raw.to_csv(MAIN_RAW_FILE)
     print(df_raw.tail(3))
 

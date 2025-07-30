@@ -1,9 +1,9 @@
 from config import logger
-from train.keras.interfaces import IModelBuilder
+from .interfaces import IModelBuilder
 
 from tensorflow.keras.models import load_model
 
-class KerasModelLoader(IModelBuilder):
+class ModelLoader(IModelBuilder):
     def __init__(self, model_path):
         self.model_path = model_path
 
@@ -11,5 +11,5 @@ class KerasModelLoader(IModelBuilder):
         try:
             return load_model(self.model_path)
         except Exception as e:
-            logger.error(f'Error loading model from {self.model_path}: {e}')
+            logger.exception(f'Error loading model from {self.model_path}: {e}')
             raise

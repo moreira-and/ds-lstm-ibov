@@ -1,5 +1,5 @@
 from config import logger
-from train.keras.interfaces import IModelBuilder
+from .interfaces import IModelBuilder
 
 from tensorflow.keras.layers import Input, Conv1D, Dropout, LSTM, GRU, Dense, \
     LeakyReLU, LayerNormalization, MultiHeadAttention, GlobalAveragePooling1D
@@ -62,4 +62,4 @@ class RegressionMultiHead(IModelBuilder):
             return Model(inputs=inp, outputs=out)
 
         except Exception as e:
-            logger.error(f'Error building {self.__class__.__name__}: {e}')
+            logger.exception(f'Error building {self.__class__.__name__}: {e}')

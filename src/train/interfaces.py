@@ -5,7 +5,7 @@ import pandas as pd
 class ITrainerRunner(ABC):
     
     @abstractmethod
-    def train(self, X_train: pd.DataFrame, y_train: pd.Series) -> Any:
+    def fit(self, X_train: pd.DataFrame, y_train: pd.Series) -> Any:
         pass
 
     @abstractmethod

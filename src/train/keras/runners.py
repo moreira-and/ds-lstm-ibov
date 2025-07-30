@@ -3,7 +3,6 @@ from ..interfaces import ITrainerRunner
 from .model_builders.interfaces import IModelBuilder
 from .compilers.interfaces import ICompileStrategy
 from .trainers.interfaces import ITrainStrategy
-from .trainers.generators import sliding_window_generator
 
 import pandas as pd
 from typing import Tuple, Optional
@@ -22,25 +21,32 @@ class TrainerKerasRunner(ITrainerRunner):
         self.trainer = trainer
         self.model: Optional[Model] = None
 
-    def train(self, df: pd.DataFrame) -> Tuple[Model, dict]:
-        if self.model is None:
-            self.model = self.model_builder.build_model()
-
+    def fit(self, df: pd.DataFrame) -> Tuple[Model, dict]:
         try:
+            if self.model is None:
+                self.model = self.model_builder.build_model()
+        
             self.compiler.compile(self.model)
             history = self.trainer.train(self.model, df)
 
             if hasattr(history, "history") and isinstance(history.history, dict):
                 return self.model, history.history
             else:
-                raise TypeError("Expected Keras History object with `.history` attribute")
+                logger.exception("Expected Keras History object with `.history` attribute")
+                raise
 
         except Exception as e:
-            logger.error(f"Error during training in {self.__class__.__name__}: {e}")
+            logger.exception(f"Error during training in {self.__class__.__name__}: {e}")
             raise
 
     def predict(self, X: pd.DataFrame):
-        if self.model is None:
-            raise RuntimeError(f"Model has not been trained yet in {self.__class__.__name__}")
+        try:
+            if self.model is None:
+                logger.error(f"Model has not been trained yet in {self.__class__.__name__}")
+                raise
+            
+            return self.model.predict(X)
         
-        return self.model.predict(sliding_window_generator(X))
+        except Exception as e:
+            logger.exception(f"Error during predict in {self.__class__.__name__}: {e}")
+            raise
