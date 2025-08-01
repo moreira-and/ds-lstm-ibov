@@ -1,0 +1,17 @@
+src/
+├── domain/            ← Regras de negócio puras (entidades + contratos)
+│   ├── entities/
+│   └── interfaces/
+├── application/       ← Casos de uso (orquestradores) + contratos
+│   ├── use_cases/
+│   └── interfaces/
+├── infrastructure/    ← Implementações concretas (ML, IO, etc.)
+│   ├── preprocessors/
+│   ├── models/
+│   ├── postprocessors/
+│   └── repositories/
+├── adapters/          ← Entrada e saída (REST, CLI, Job, etc.)
+│   ├── controllers/
+│   └── presenters/
+├── config/            ← Injeção de dependência (factories)
+└── main.py            ← Ponto de entrada
