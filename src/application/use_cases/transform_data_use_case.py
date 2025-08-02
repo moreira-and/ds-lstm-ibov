@@ -1,5 +1,5 @@
 from src.domain.entities.dto.raw_data_dto import RawDataDto
-from src.domain.interfaces.i_preprocessor import IPreProcessor
+from domain.interfaces.i_data_adapter import IPreProcessor
 from src.domain.interfaces.i_postprocessor import IPostProcessor
 
 from typing import Tuple
@@ -13,7 +13,7 @@ class ProcessDataUseCase:
         self.preprocessor = preprocessor
         self.postprocessor = postprocessor
 
-    def execute(self, raw_data: RawDataDto) -> Tuple:
+    def execute(self, data: RawDataDto) -> Tuple:
         #processed = self.preprocessor.fit(raw_data)
         #result = self.postprocessor.inverse_transform(processed)
         return self.preprocessor, self.preprocessor
